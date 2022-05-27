@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Dto\Transformer\Response;
+
+use App\Dto\ContactDTO;
+use App\Entity\Contacts;
+
+class ContactResponseDTOTransformer extends AbstractResponceDTOTransformer
+{
+    /**
+     * @param Contacts $contact
+     */
+    public function transformFromObject($contact)
+    {
+        $dto = new ContactDTO();
+        $dto->link = $contact->getlink();
+        $dto->source = $contact->getSource();
+        return $dto;
+    }
+}

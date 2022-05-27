@@ -5,7 +5,7 @@ services:
         stdin_open: true
         tty: true
         ports: 
-            - "8080:8080"
+            - "8086:8086"
         volumes:
             - "/app/node_modules" 
             - ".:/app"
