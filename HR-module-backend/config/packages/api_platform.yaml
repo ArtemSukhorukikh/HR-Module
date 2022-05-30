@@ -1,0 +1,10 @@
+#api_platform:$user = $userRepository->find($id);
+#        $usersContactsDTO = new UsersContactsDTO();
+#        $usersContactsDTO->contacts = $user->getContacts();
+#        return $this->json($usersContactsDTO, Response::HTTP_OK);
+#    mapping:
+#        paths: ['%kernel.project_dir%/src/Entity']
+#    patch_formats:
+#        json: ['application/merge-patch+json']
+#    swagger:
+#        versions: [3]

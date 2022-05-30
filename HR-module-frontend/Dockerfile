@@ -1,22 +1,11 @@
-FROM node:lts-alpine
+FROM alpine:3.7
+RUN apk add --update nginx python && rm -rf /var/cache/apk/*
+RUN mkdir -p /tmp/nginx/client-body
+RUN nginx -v
 
-# устанавливаем простой HTTP-сервер для статики
-RUN npm install -g http-server
+COPY docker_build/config/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY docker_build/config/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY dist /usr/share/nginx/html
 
-# делаем каталог 'app' текущим рабочим каталогом
-WORKDIR /
 
-# копируем оба 'package.json' и 'package-lock.json' (если есть)
-COPY package*.json ./
-
-# устанавливаем зависимости проекта
-RUN npm install
-
-# копируем файлы и каталоги проекта в текущий рабочий каталог (т.е. в каталог 'app')
-COPY . .
-
-# собираем приложение для production с минификацией
-RUN npm run build
-
-EXPOSE 8086
-CMD [ "http-server", "dist" ]
+CMD ["nginx", "-g", "daemon off;"]
