@@ -32,6 +32,18 @@ class Feedback
      */
     private $note;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="writing")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $authon;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=EducationalResources::class, inversedBy="makesRating")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $educationalResources;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +81,30 @@ class Feedback
     public function setNote(string $note): self
     {
         $this->note = $note;
+
+        return $this;
+    }
+
+    public function getAuthon(): ?User
+    {
+        return $this->authon;
+    }
+
+    public function setAuthon(?User $authon): self
+    {
+        $this->authon = $authon;
+
+        return $this;
+    }
+
+    public function getEducationalResources(): ?EducationalResources
+    {
+        return $this->educationalResources;
+    }
+
+    public function setEducationalResources(?EducationalResources $educationalResources): self
+    {
+        $this->educationalResources = $educationalResources;
 
         return $this;
     }

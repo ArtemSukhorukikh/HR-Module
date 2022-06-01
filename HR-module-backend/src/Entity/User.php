@@ -89,11 +89,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $developmentPlan;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Feedback::class, mappedBy="authon", orphanRemoval=true)
+     */
+    private $writing;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
         $this->grades = new ArrayCollection();
         $this->personalAchievements = new ArrayCollection();
+        $this->writing = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -348,6 +354,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDevelopmentPlan(?string $developmentPlan): self
     {
         $this->developmentPlan = $developmentPlan;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Feedback>
+     */
+    public function getWriting(): Collection
+    {
+        return $this->writing;
+    }
+
+    public function addWriting(Feedback $writing): self
+    {
+        if (!$this->writing->contains($writing)) {
+            $this->writing[] = $writing;
+            $writing->setAuthon($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWriting(Feedback $writing): self
+    {
+        if ($this->writing->removeElement($writing)) {
+            // set the owning side to null (unless already changed)
+            if ($writing->getAuthon() === $this) {
+                $writing->setAuthon(null);
+            }
+        }
 
         return $this;
     }
