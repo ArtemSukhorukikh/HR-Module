@@ -2,7 +2,8 @@
   <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link> |
-    <router-link to="/officemap">Карта офиса</router-link>
+    <router-link to="/officemap/floor2">Карта офиса этаж 2</router-link>|
+    <router-link to="/officemap/floor3">Карта офиса этаж 3</router-link>
   </nav>
   <router-view/>
 </template>

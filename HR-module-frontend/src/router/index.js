@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import OfficeMap from "@/components/OfficeMap";
-
+import OfficeMapFloor2View from "../views/OfficeMapFloor2View";
+import OfficeMapFloo3View from "@/views/OfficeMapFloo3View";
 const routes = [
   {
     path: '/',
@@ -17,9 +17,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
-    path: '/officemap',
-    name: 'Карта офиса',
-    component: OfficeMap
+    path: '/officemap/floor2',
+    name: 'Карта офиса этаж 2',
+    component: OfficeMapFloor2View
+  },
+  {
+    path: '/officemap/floor3',
+    name: 'Карта офиса этаж 3',
+    component: OfficeMapFloo3View
   }
 ]
 
