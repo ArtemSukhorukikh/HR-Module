@@ -1,4 +1,5 @@
 import {AuthApi} from "@/api/AuthApi/authApi";
+import {ApiInstance} from "@/api";
 export const ApiAuthModule = {
     namespace : true,
     state() {
@@ -39,11 +40,13 @@ export const ApiAuthModule = {
             AuthApi.login(login, password).then((res)=>{
                 commit('setToken', res.data.token)
                 commit('setRoles', res.data.roles)
+                ApiInstance.defaults.headers['authorization'] = `Bearer ${res.data.token}`
             })
         },
         onLogout({commit}) {
             commit('deleteToken')
             commit('deleteRoles')
+            delete ApiInstance.defaults.headers['authorization']
         }
     }
 }
