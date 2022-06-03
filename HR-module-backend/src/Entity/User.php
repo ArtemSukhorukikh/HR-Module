@@ -59,11 +59,47 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $personalAchievements;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $patronymic;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $position;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $dateOfHiring;
+
+    /**
+     * @ORM\Column(type="string", length=3000, nullable=true)
+     */
+    private $developmentPlan;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Feedback::class, mappedBy="authon", orphanRemoval=true)
+     */
+    private $writing;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
         $this->grades = new ArrayCollection();
         $this->personalAchievements = new ArrayCollection();
+        $this->writing = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -245,6 +281,108 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->personalAchievements->removeElement($personalAchievement)) {
             $personalAchievement->removeUserAchivment($this);
+        }
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getPatronymic(): ?string
+    {
+        return $this->patronymic;
+    }
+
+    public function setPatronymic(string $patronymic): self
+    {
+        $this->patronymic = $patronymic;
+
+        return $this;
+    }
+
+    public function getPosition(): ?string
+    {
+        return $this->position;
+    }
+
+    public function setPosition(string $position): self
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    public function getDateOfHiring(): ?\DateTimeInterface
+    {
+        return $this->dateOfHiring;
+    }
+
+    public function setDateOfHiring(\DateTimeInterface $dateOfHiring): self
+    {
+        $this->dateOfHiring = $dateOfHiring;
+
+        return $this;
+    }
+
+    public function getDevelopmentPlan(): ?string
+    {
+        return $this->developmentPlan;
+    }
+
+    public function setDevelopmentPlan(?string $developmentPlan): self
+    {
+        $this->developmentPlan = $developmentPlan;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Feedback>
+     */
+    public function getWriting(): Collection
+    {
+        return $this->writing;
+    }
+
+    public function addWriting(Feedback $writing): self
+    {
+        if (!$this->writing->contains($writing)) {
+            $this->writing[] = $writing;
+            $writing->setAuthon($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWriting(Feedback $writing): self
+    {
+        if ($this->writing->removeElement($writing)) {
+            // set the owning side to null (unless already changed)
+            if ($writing->getAuthon() === $this) {
+                $writing->setAuthon(null);
+            }
         }
 
         return $this;

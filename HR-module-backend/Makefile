@@ -12,6 +12,9 @@ down:
 clear:
 	@${CONSOLE} cache:clear
 
+entcreate:
+	@${CONSOLE} make:entity
+
 migration:
 	@${CONSOLE} make:migration
 
