@@ -1,49 +1,45 @@
 <template>
-  <form>
-    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+  <main class="position-absolute top-50 start-50 translate-middle">
+  <form class="w-100">
+    <h1 class="h3 mb-3 fw-normal">Вход</h1>
 
     <div class="form-floating">
-      <input v-model="login" type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
-      <label for="floatingInput">Email address</label>
+      <input v-model="username" type="text" class="form-control" id="floatingInput" placeholder="имя пользователя">
+      <label for="floatingInput">Имя пользователя</label>
     </div>
     <div class="form-floating">
-      <input v-model="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
-      <label for="floatingPassword">Password</label>
+      <input v-model="password" type="password" class="form-control" id="floatingPassword" placeholder="Пароль">
+      <label for="floatingPassword">Пароль</label>
     </div>
 
-    <div class="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"> Remember me
-      </label>
-    </div>
-    <button @submit="" class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-    <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
+    <button @click="login" class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
   </form>
+  </main>
 </template>
 
 <script>
+import axios from "axios";
 export default {
-  name: "Login",
+  name: "LoginView",
   data() {
     return {
-      'login': '',
+      'username': '',
       'password': '',
     }
   },
   methods: {
-    login(event) {
-      this.$store.dispatch('ApiAuthModule/onLogin', {
-        login: this.login,
-        password: this.password,
-      }).then(()=>{
-        this.$router.push({name: 'home'})
+    login() {
+      axios.post('http://localhost:84/api/v1/auth',{username: this.username, password: this.password}).then(responce => {
+        localStorage.setItem('token', responce.data.token)
+      }).catch(errors =>{
+        console.log(errors)
       })
     }
   },
 }
 </script>
 
-<style scoped>
+<style>
 .bd-placeholder-img {
   font-size: 1.125rem;
   text-anchor: middle;

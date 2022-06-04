@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Dto\Transformer\Request\UserRequestDTOTransformer;
 use App\Dto\UserAuthDto;
 use App\Dto\UserDto;
+use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerBuilder;
@@ -24,12 +26,14 @@ class ApiAuthController extends AbstractController
     private $serializer;
     private $validator;
     private $passwordHasher;
+    private $userTransformer;
 
-    public function __construct(ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher)
+    public function __construct(UserRequestDTOTransformer $userRequestDTOTransformer, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher)
     {
         $this->serializer = SerializerBuilder::create()->build();
         $this->validator = $validator;
         $this->passwordHasher = $passwordHasher;
+        $this->userTransformer = $userRequestDTOTransformer;
     }
 
     /**
@@ -73,7 +77,7 @@ class ApiAuthController extends AbstractController
      * )
      */
     #[Route('/auth', name: 'api_login', methods: ['POST'])]
-    public function login(): Response
+    public function login()
     {
         //auth
     }
@@ -152,7 +156,9 @@ class ApiAuthController extends AbstractController
                 'errors' => $jsonErrors,
             ], Response::HTTP_BAD_REQUEST);
         }
-        $user = \App\Entity\User::fromDto($userDto, $this->passwordHasher);
+        $user = new User;
+        $user = $this->userTransformer->transformToObject($userDto);
+        $user->setPassword($this->passwordHasher->hashPassword($user, $userDto->password));
         $entityManager->persist($user);
         $entityManager->flush();
         $userAuth = new UserAuthDto();
