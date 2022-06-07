@@ -14,7 +14,6 @@ class Task
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -54,6 +53,17 @@ class Task
      */
     private $userToDo;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Projects::class, inversedBy="tasks")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $projectTask;
+
+    /**
+     * @ORM\OneToOne(targetEntity=TaskEvaluation::class, mappedBy="toTask", cascade={"persist", "remove"})
+     */
+    private $taskEvaluation;
+
     public function __construct()
     {
         $this->userToDo = new ArrayCollection();
@@ -79,6 +89,12 @@ class Task
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    public function setId(int $id): self {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function setDescription(string $description): self
@@ -156,6 +172,35 @@ class Task
     public function removeUserToDo(User $userToDo): self
     {
         $this->userToDo->removeElement($userToDo);
+
+        return $this;
+    }
+
+    public function getProjectTask(): ?Projects
+    {
+        return $this->projectTask;
+    }
+
+    public function setProjectTask(?Projects $projectTask): self
+    {
+        $this->projectTask = $projectTask;
+
+        return $this;
+    }
+
+    public function getTaskEvaluation(): ?TaskEvaluation
+    {
+        return $this->taskEvaluation;
+    }
+
+    public function setTaskEvaluation(TaskEvaluation $taskEvaluation): self
+    {
+        // set the owning side of the relation if necessary
+        if ($taskEvaluation->getToTask() !== $this) {
+            $taskEvaluation->setToTask($this);
+        }
+
+        $this->taskEvaluation = $taskEvaluation;
 
         return $this;
     }

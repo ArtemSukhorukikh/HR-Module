@@ -2,12 +2,10 @@
 
 namespace App\Dto;
 
-
+use JMS\Serializer\Annotation as Serializer;
 class UserAuthDto
 {
-    /**
-     * @OA\Property(type="string", title="token")
-     */
+    #[Serializer\Type("string")]
     public string $token;
 
     public array $roles;
