@@ -45,6 +45,7 @@ security:
         - { path: ^/api/v1/register, role: PUBLIC_ACCESS }
         - { path: ^/api/v1/auth, roles: PUBLIC_ACCESS }
         - { path: ^/api/v1/doc, roles: PUBLIC_ACCESS }
+        - { path: ^/api/v1/sync, roles: PUBLIC_ACCESS }
         - { path: ^/api/v1/, roles: IS_AUTHENTICATED_FULLY }
 
 

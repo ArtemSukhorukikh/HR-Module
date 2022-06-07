@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use Redmine\Exception;
 
-#[Route('/api/v1')]
+#[Route('/api/v1/sync')]
 class ProjectsController extends AbstractController
 {
     public NativeCurlClient $client;
@@ -48,7 +48,7 @@ class ProjectsController extends AbstractController
         }
         $answer = new AnswearDTO();
         $answer->status = 'Sync';
-        $answer->messageAnswear = "Sync " . $projects['total'];
+        $answer->messageAnswear = "Sync " . $projects['total_count'];
         return $this->json($answer, Response::HTTP_OK);
     }
 }

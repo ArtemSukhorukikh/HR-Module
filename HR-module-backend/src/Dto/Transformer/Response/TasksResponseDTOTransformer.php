@@ -7,7 +7,7 @@ use App\Dto\TasksDTO;
 use App\Entity\Projects;
 use App\Entity\Task;
 
-class ProjectsResponseDTOTransformer extends AbstractResponceDTOTransformer
+class TasksResponseDTOTransformer extends AbstractResponceDTOTransformer
 {
     /**
      * @param Task $task

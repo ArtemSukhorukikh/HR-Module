@@ -67,7 +67,7 @@ class TasksController extends AbstractController
         }
         $answer = new AnswearDTO();
         $answer->status = 'Sync';
-        $answer->messageAnswear = "Sync " . $tasks['total'];
+        $answer->messageAnswear = "Sync " . $tasks['total_count'];
         return $this->json($answer, Response::HTTP_OK);
     }
 }
