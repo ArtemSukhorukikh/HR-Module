@@ -94,12 +94,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $writing;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ApplicationForTraining::class, mappedBy="compose")
+     */
+    private $applicationForTrainings;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ApplicationPurchaseOfTraining::class, mappedBy="compose")
+     */
+    private $applicationPurchaseOfTrainings;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ResponeSurvey::class, mappedBy="user_", orphanRemoval=true)
+     */
+    private $responeSurveys;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
         $this->grades = new ArrayCollection();
         $this->personalAchievements = new ArrayCollection();
         $this->writing = new ArrayCollection();
+        $this->applicationForTrainings = new ArrayCollection();
+        $this->applicationPurchaseOfTrainings = new ArrayCollection();
+        $this->responeSurveys = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -382,6 +400,96 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($writing->getAuthon() === $this) {
                 $writing->setAuthon(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApplicationForTraining>
+     */
+    public function getApplicationForTrainings(): Collection
+    {
+        return $this->applicationForTrainings;
+    }
+
+    public function addApplicationForTraining(ApplicationForTraining $applicationForTraining): self
+    {
+        if (!$this->applicationForTrainings->contains($applicationForTraining)) {
+            $this->applicationForTrainings[] = $applicationForTraining;
+            $applicationForTraining->setCompose($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplicationForTraining(ApplicationForTraining $applicationForTraining): self
+    {
+        if ($this->applicationForTrainings->removeElement($applicationForTraining)) {
+            // set the owning side to null (unless already changed)
+            if ($applicationForTraining->getCompose() === $this) {
+                $applicationForTraining->setCompose(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApplicationPurchaseOfTraining>
+     */
+    public function getApplicationPurchaseOfTrainings(): Collection
+    {
+        return $this->applicationPurchaseOfTrainings;
+    }
+
+    public function addApplicationPurchaseOfTraining(ApplicationPurchaseOfTraining $applicationPurchaseOfTraining): self
+    {
+        if (!$this->applicationPurchaseOfTrainings->contains($applicationPurchaseOfTraining)) {
+            $this->applicationPurchaseOfTrainings[] = $applicationPurchaseOfTraining;
+            $applicationPurchaseOfTraining->setCompose($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplicationPurchaseOfTraining(ApplicationPurchaseOfTraining $applicationPurchaseOfTraining): self
+    {
+        if ($this->applicationPurchaseOfTrainings->removeElement($applicationPurchaseOfTraining)) {
+            // set the owning side to null (unless already changed)
+            if ($applicationPurchaseOfTraining->getCompose() === $this) {
+                $applicationPurchaseOfTraining->setCompose(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ResponeSurvey>
+     */
+    public function getResponeSurveys(): Collection
+    {
+        return $this->responeSurveys;
+    }
+
+    public function addResponeSurvey(ResponeSurvey $responeSurvey): self
+    {
+        if (!$this->responeSurveys->contains($responeSurvey)) {
+            $this->responeSurveys[] = $responeSurvey;
+            $responeSurvey->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResponeSurvey(ResponeSurvey $responeSurvey): self
+    {
+        if ($this->responeSurveys->removeElement($responeSurvey)) {
+            // set the owning side to null (unless already changed)
+            if ($responeSurvey->getUser() === $this) {
+                $responeSurvey->setUser(null);
             }
         }
 

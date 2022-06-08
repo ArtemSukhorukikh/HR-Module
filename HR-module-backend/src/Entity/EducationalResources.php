@@ -54,9 +54,15 @@ class EducationalResources
      */
     private $makesRating;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ApplicationForTraining::class, mappedBy="included")
+     */
+    private $applicationForTrainings;
+
     public function __construct()
     {
         $this->makesRating = new ArrayCollection();
+        $this->applicationForTrainings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,6 +166,36 @@ class EducationalResources
             // set the owning side to null (unless already changed)
             if ($makesRating->getEducationalResources() === $this) {
                 $makesRating->setEducationalResources(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApplicationForTraining>
+     */
+    public function getApplicationForTrainings(): Collection
+    {
+        return $this->applicationForTrainings;
+    }
+
+    public function addApplicationForTraining(ApplicationForTraining $applicationForTraining): self
+    {
+        if (!$this->applicationForTrainings->contains($applicationForTraining)) {
+            $this->applicationForTrainings[] = $applicationForTraining;
+            $applicationForTraining->setIncluded($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplicationForTraining(ApplicationForTraining $applicationForTraining): self
+    {
+        if ($this->applicationForTrainings->removeElement($applicationForTraining)) {
+            // set the owning side to null (unless already changed)
+            if ($applicationForTraining->getIncluded() === $this) {
+                $applicationForTraining->setIncluded(null);
             }
         }
 

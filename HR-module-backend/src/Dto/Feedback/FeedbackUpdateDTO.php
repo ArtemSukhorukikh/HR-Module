@@ -4,13 +4,10 @@ namespace App\Dto\Feedback;
 
 use JMS\Serializer\Annotation as Serializer;
 
-class FeedbackDTO
+class FeedbackUpdateDTO
 {
     #[Serializer\Type("integer")]
-    public int $userId;
-
-    #[Serializer\Type("integer")]
-    public int $educationalResourcesId;
+    public int $id;
 
     #[Serializer\Type("integer")]
     public int $estimation;

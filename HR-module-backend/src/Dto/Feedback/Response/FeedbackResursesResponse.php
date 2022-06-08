@@ -7,7 +7,7 @@ use App\Dto\Feedback\FeedbackListDTO;
 use App\Entity\User;
 use App\Repository\FeedbackRepository;
 
-class FeedbackUserResponse
+class FeedbackResursesResponse
 {
     private FeedbackRepository $feedbackRepository;
 
@@ -22,7 +22,7 @@ class FeedbackUserResponse
     public function transformFromObject($object): FeedbackListDTO
     {
         $feedbacks = $this->feedbackRepository->findBy(
-            ['authon' => $object->getId()]);
+            ['educationalResources' => $object->getId()]);
         $dto = new FeedbackListDTO();
         $dto->feedbackDTO = [];
         foreach ($feedbacks as $feedback)
