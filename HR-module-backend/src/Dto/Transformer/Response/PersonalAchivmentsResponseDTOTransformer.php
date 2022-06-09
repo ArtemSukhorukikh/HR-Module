@@ -15,6 +15,7 @@ class PersonalAchivmentsResponseDTOTransformer extends AbstractResponceDTOTransf
     public function transformFromObject($achivment)
     {
         $dto = new PersonalAchievementsDTO();
+        $dto->id = $achivment->getId();
         $dto->name = $achivment->getName();
         $dto->description = $achivment->getDescription();
         $dto->value = $achivment->getValue();

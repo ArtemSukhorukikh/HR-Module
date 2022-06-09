@@ -1,13 +1,20 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link to="/officemap/floor2">Карта офиса этаж 2</router-link>|
-    <router-link to="/officemap/floor3">Карта офиса этаж 3</router-link>
-  </nav>
   <router-view/>
 </template>
+<script>
 
+export default {
+  name: "App",
+  beforeCreate() {
+    if (!localStorage.getItem("token")) {
+      this.$router.push("/login")
+    }
+    else {
+      this.$router.push("/")
+    }
+  },
+}
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -29,4 +36,5 @@ nav a {
 nav a.router-link-exact-active {
   color: #42b983;
 }
+
 </style>
