@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Dto\Transformer\Response\UserResponseDTOTransformer;
 use App\Dto\UserCurrentDto;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
@@ -14,10 +17,13 @@ use Nelmio\ApiDocBundle\Annotation\Security as SecurityOA;
 class ApiUserController extends AbstractController
 {
     private Security $security;
+    public UserResponseDTOTransformer $userResponseDTOTransformer;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security,
+                                UserResponseDTOTransformer $userResponseDTOTransformer)
     {
         $this->security = $security;
+        $this->userResponseDTOTransformer = $userResponseDTOTransformer;
     }
     /**
      * @OA\Get(
@@ -78,14 +84,26 @@ class ApiUserController extends AbstractController
     {
         $user = $this->security->getUser();
         if (!$user) {
+           $this->json([
+           'status_code' => Response::HTTP_UNAUTHORIZED,
+           'message' => 'User is not authenticated.'
+           ], Response::HTTP_UNAUTHORIZED);
+        }
+        $currentUser = $this->userResponseDTOTransformer->transformFromObject($user);
+        return $this->json($currentUser, Response::HTTP_OK);
+    }
+
+    #[Route('/search', name: 'user_search', methods: ['GET'])]
+    public function getUserSearch(Request $request, UserRepository $userRepository): Response
+    {
+        $user = $userRepository->findOneBy(['username' => $request->toArray()['username']]);
+        if (!$user) {
             $this->json([
-                'status_code' => Response::HTTP_UNAUTHORIZED,
-                'message' => 'User is not authenticated.'
+                'status_code' => Response::HTTP_BAD_REQUEST,
+                'message' => 'User is not find.'
             ], Response::HTTP_UNAUTHORIZED);
         }
-        $currentUser = new UserCurrentDto();
-        $currentUser->username = $user->getUserIdentifier();
-        $currentUser->roles = $user->getRoles();
+        $currentUser = $this->userResponseDTOTransformer->transformFromObject($user);
         return $this->json($currentUser, Response::HTTP_OK);
     }
 

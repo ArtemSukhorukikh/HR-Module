@@ -94,12 +94,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $writing;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Task::class, inversedBy="users")
+     */
+    private $Tasks;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
         $this->grades = new ArrayCollection();
         $this->personalAchievements = new ArrayCollection();
         $this->writing = new ArrayCollection();
+        $this->Tasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -172,13 +178,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public static function fromDto($userDto, UserPasswordHasherInterface $passwordHasher): User
-    {
-        $user = new self();
-        $user->setUsername($userDto->username);
-        $user->setPassword($passwordHasher->hashPassword($user,$userDto->password));
-        return $user;
-    }
 
     /**
      * @return Collection<int, Contacts>
@@ -384,6 +383,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $writing->setAuthon(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->Tasks;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->Tasks->contains($task)) {
+            $this->Tasks[] = $task;
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        $this->Tasks->removeElement($task);
 
         return $this;
     }
