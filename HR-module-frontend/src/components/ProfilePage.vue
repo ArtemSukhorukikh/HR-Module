@@ -181,11 +181,11 @@ export default {
     },
   },
   beforeCreate() {
-    let config = {
-      headers: {
-        
-      }
-    }
+    // let config = {
+    //   headers: {
+    //
+    //   }
+    // }
     axios.get("localhost:84/api/v1/users/current",)
   }
 }

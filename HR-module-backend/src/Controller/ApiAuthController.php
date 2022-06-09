@@ -6,6 +6,7 @@ use App\Dto\Transformer\Request\UserRequestDTOTransformer;
 use App\Dto\UserAuthDto;
 use App\Dto\UserDto;
 use App\Entity\User;
+use App\Repository\DepartmentRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerBuilder;
@@ -131,6 +132,7 @@ class ApiAuthController extends AbstractController
     public function register(
         Request $request,
         UserRepository $userRepository,
+        DepartmentRepository $departmentRepository,
         EntityManagerInterface $entityManager,
         JWTTokenManagerInterface $JWTTokenManager
     ): Response
@@ -159,6 +161,7 @@ class ApiAuthController extends AbstractController
         $user = new User;
         $user = $this->userTransformer->transformToObject($userDto);
         $user->setPassword($this->passwordHasher->hashPassword($user, $userDto->password));
+        $user->setWorks($departmentRepository->findOneBy(["name" => $userDto->department]));
         $entityManager->persist($user);
         $entityManager->flush();
         $userAuth = new UserAuthDto();
