@@ -153,8 +153,8 @@ export default {
   methods: {
     register() {
       this.v$.$validate()
-      console.log(this.v$.password)
-      if(this.v$.error === false){
+      console.log(this.v$)
+      if(!this.v$.error){
         console.log(this.dateofhiring)
         axios.post('http://localhost:84/api/v1/register',{
           username: this.username,

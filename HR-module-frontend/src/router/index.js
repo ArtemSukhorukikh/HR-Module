@@ -59,7 +59,7 @@ const routes = [
     component: RegistrationView,
   },
   {
-    path: '/knowledgeBaseView',
+    path: '/knowledgeBase',
     name: 'База знаний',
     component: KnowledgeBaseView,
   }

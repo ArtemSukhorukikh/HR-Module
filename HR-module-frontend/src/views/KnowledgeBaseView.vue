@@ -1,15 +1,24 @@
 <template>
   <FullNavbar/>
-  <div class="container-lg">
-    <div class="row">
-      <div class="col-3">
-        Список
-      </div>
-      <div class="col">
-        Иформация<p/>
-        qwe
+  <div class="container">
+
+
+    <div class="accordion" id="accordionExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            #1
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <div>qwe</div>
+          </div>
+        </div>
       </div>
     </div>
+
+
   </div>
 
 
@@ -32,10 +41,12 @@ export default {
     //
     //   }
     // }
+    console.log(localStorage.getItem('token'));
+    axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
         .get("http://localhost:84/api/v1/educationalResources/all",)
         .then(response => (this.info = response));
-    console.log()
+    console.log(this.info)
   }
 }
 </script>
