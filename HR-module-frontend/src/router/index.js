@@ -4,6 +4,7 @@ import OfficeMapFloor2View from "../views/OfficeMapFloor2View";
 import OfficeMapFloo3View from "@/views/OfficeMapFloo3View";
 import LoginView from "@/views/Auth/LoginView";
 import RegistrationView from "@/views/Auth/RegistrationView";
+import KnowledgeBaseView from "@/views/KnowledgeBaseView";
 
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
@@ -49,6 +50,11 @@ const routes = [
     path: '/registration',
     name: 'Регистрация',
     component: RegistrationView,
+  },
+  {
+    path: '/knowledgeBase',
+    name: 'База знаний',
+    component: KnowledgeBaseView,
   }
 ]
 

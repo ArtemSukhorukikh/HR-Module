@@ -8,6 +8,6 @@ class EducationResourcesCompetenceDTO
 {
     #[Serializer\Type("string")]
     public string $competence;
-    #[Serializer\Type("array<App\Dto\EducationResourcesDTO>")]
+    #[Serializer\Type("array<App\Dto\EducationResources\EducationResourcesDTO>")]
     public array $educationResourcesCompetence;
 }

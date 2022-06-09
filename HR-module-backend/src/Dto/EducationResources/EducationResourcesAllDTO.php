@@ -6,6 +6,6 @@ use JMS\Serializer\Annotation as Serializer;
 
 class EducationResourcesAllDTO
 {
-    #[Serializer\Type("array<App\Dto\EducationResourcesCompetenceDTO>")]
+    #[Serializer\Type("array<App\Dto\EducationResources\EducationResourcesCompetenceDTO>")]
     public array $educationResourcesAll;
 }

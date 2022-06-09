@@ -24,6 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 
+#[Route('/api/v1')]
 class ApplicationForTrainingController extends AbstractController
 {
     private ApplicationForTrainingUserResponse $applicationForTrainingUserResponse;
