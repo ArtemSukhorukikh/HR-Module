@@ -1,18 +1,19 @@
 <template>
+  <FullNavbar/>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <ProfilePage v-bind:current-user="true"></ProfilePage>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import FullNavbar from "@/components/Navbars/FullNavbar";
+import ProfilePage from "@/components/ProfilePage";
 export default {
   name: 'HomeView',
   components: {
-    HelloWorld
+    ProfilePage,
+    FullNavbar,
   }
 }
 </script>

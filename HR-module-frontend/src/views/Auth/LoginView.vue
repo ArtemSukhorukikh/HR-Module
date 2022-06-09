@@ -1,7 +1,8 @@
 <template>
+  <LoginNavbar/>
   <main class="position-absolute top-50 start-50 translate-middle">
   <form class="w-100">
-    <h1 class="h3 mb-3 fw-normal">Вход</h1>
+    <h1 class="h1 fw-bold text-black mb-3 ">Вход</h1>
 
     <div class="form-floating">
       <input v-model="username" type="text" class="form-control" id="floatingInput" placeholder="имя пользователя">
@@ -18,9 +19,11 @@
 </template>
 
 <script>
+import LoginNavbar from "@/components/Navbars/LoginNavbar";
 import axios from "axios";
 export default {
   name: "LoginView",
+  components: {LoginNavbar},
   data() {
     return {
       'username': '',
@@ -31,6 +34,10 @@ export default {
     login() {
       axios.post('http://localhost:84/api/v1/auth',{username: this.username, password: this.password}).then(responce => {
         localStorage.setItem('token', responce.data.token)
+        let date;
+        date = new Date()
+        localStorage.setItem('date', date.toString())
+        this.$router.go('/')
       }).catch(errors =>{
         console.log(errors)
       })
