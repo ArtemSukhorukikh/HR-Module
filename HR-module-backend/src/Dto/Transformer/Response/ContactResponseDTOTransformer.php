@@ -13,6 +13,7 @@ class ContactResponseDTOTransformer extends AbstractResponceDTOTransformer
     public function transformFromObject($contact)
     {
         $dto = new ContactDTO();
+        $dto->id = $contact->getId();
         $dto->link = $contact->getlink();
         $dto->source = $contact->getSource();
         return $dto;

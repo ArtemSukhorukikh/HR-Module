@@ -17,6 +17,7 @@ class GradeResponseDTOTransformer extends AbstractResponceDTOTransformer
     public function transformFromObject($grade): GradeDTO
     {
         $dto = new GradeDTO();
+        $dto->id = $grade->getId();
         $dto->name = $grade->getName();
         return $dto;
     }

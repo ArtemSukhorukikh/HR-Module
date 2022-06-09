@@ -64,9 +64,15 @@ class Task
      */
     private $taskEvaluation;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="Tasks")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->userToDo = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -152,29 +158,6 @@ class Task
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUserToDo(): Collection
-    {
-        return $this->userToDo;
-    }
-
-    public function addUserToDo(User $userToDo): self
-    {
-        if (!$this->userToDo->contains($userToDo)) {
-            $this->userToDo[] = $userToDo;
-        }
-
-        return $this;
-    }
-
-    public function removeUserToDo(User $userToDo): self
-    {
-        $this->userToDo->removeElement($userToDo);
-
-        return $this;
-    }
 
     public function getProjectTask(): ?Projects
     {
@@ -201,6 +184,33 @@ class Task
         }
 
         $this->taskEvaluation = $taskEvaluation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addTask($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeTask($this);
+        }
 
         return $this;
     }

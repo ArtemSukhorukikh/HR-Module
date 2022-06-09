@@ -3,11 +3,15 @@
 namespace App\Controller;
 
 use App\Dto\AnswearDTO;
+use App\Dto\Transformer\Response\ProjectsResponseDTOTransformer;
+
+use App\Dto\Transformer\Response\TasksResponseDTOTransformer;
 use App\Entity\Projects;
 use App\Repository\ProjectsRepository;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Container\ContainerInterface;
 use Redmine\Client\NativeCurlClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,18 +19,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use Redmine\Exception;
 
-#[Route('/api/v1/sync')]
+#[Route('/api/v1')]
 class ProjectsController extends AbstractController
 {
     public NativeCurlClient $client;
+    public ProjectsResponseDTOTransformer $projectsResponseDTOTransformer;
 
-    public function __construct()
+    public function __construct(ProjectsResponseDTOTransformer $projectsResponseDTOTransformer)
     {
         $this->client = new NativeCurlClient("http://192.168.0.16:3000", "0fb32ce4b235496fb8cb386cd6e7a0dfefa2e2df");
+        $this->projectsResponseDTOTransformer = $projectsResponseDTOTransformer;
     }
 
-    #[Route('/projects', name: 'app_projects', methods: "GET")]
-    public function index(ProjectsRepository $projectsRepository, EntityManagerInterface $entityManager): Response
+    #[Route('/sync/projects', name: 'app_projects_sync', methods: "GET")]
+    public function syncProjects(ProjectsRepository $projectsRepository, EntityManagerInterface $entityManager): Response
     {
         $projects = $this->client->getApi('project')->all();
         foreach ($projects['projects'] as $project) {
@@ -50,5 +56,11 @@ class ProjectsController extends AbstractController
         $answer->status = 'Sync';
         $answer->messageAnswear = "Sync " . $projects['total_count'];
         return $this->json($answer, Response::HTTP_OK);
+    }
+
+    #[Route('/projects', name: 'app_projects', methods: "GET")]
+    public function getProjects(ProjectsRepository $projectsRepository): Response
+    {
+        return $this->json($this->projectsResponseDTOTransformer->transformFromObjects($projectsRepository->findAll()));
     }
 }

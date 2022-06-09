@@ -6,6 +6,9 @@ use JMS\Serializer\Annotation as Serializer;
 
 class PersonalAchievementsDTO
 {
+    #[Serializer\Type("integer")]
+    public string $id;
+
     #[Serializer\Type("string")]
     public string $name;
 

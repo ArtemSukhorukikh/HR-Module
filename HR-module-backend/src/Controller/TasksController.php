@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Dto\AnswearDTO;
+use App\Dto\Transformer\Response\TasksResponseDTOTransformer;
 use App\Entity\Projects;
 use App\Entity\Task;
 use App\Repository\ProjectsRepository;
@@ -15,18 +16,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api/v1/sync')]
+#[Route('/api/v1')]
 class TasksController extends AbstractController
 {
     public NativeCurlClient $client;
-
-    public function __construct()
+    public TasksResponseDTOTransformer $tasksResponseDTOTransformer;
+    public function __construct(TasksResponseDTOTransformer $tasksResponseDTOTransformer)
     {
         $this->client = new NativeCurlClient("http://192.168.0.16:3000", "0fb32ce4b235496fb8cb386cd6e7a0dfefa2e2df");
+        $this->tasksResponseDTOTransformer = $tasksResponseDTOTransformer;
     }
 
-    #[Route('/tasks', name: 'app_tasks', methods: "GET")]
-    public function index(ProjectsRepository $projectsRepository,
+    #[Route('/sync/tasks', name: 'app_tasks_sync', methods: "GET")]
+    public function syncTasks(ProjectsRepository $projectsRepository,
                           UserRepository $userRepository,
                           EntityManagerInterface $entityManager,
                           TaskRepository $taskRepository): Response
@@ -57,7 +59,7 @@ class TasksController extends AbstractController
                 if (array_key_exists('login', $userAssigned['user'])) {
                     $userToDo = $userRepository->findOneBy(['username' => $userAssigned['user']['login']]);
                     if ($userToDo) {
-                        $taskHR->addUserToDo($userToDo);
+                        $taskHR->addUser($userToDo);
                     }
                 }
             }
@@ -69,5 +71,10 @@ class TasksController extends AbstractController
         $answer->status = 'Sync';
         $answer->messageAnswear = "Sync " . $tasks['total_count'];
         return $this->json($answer, Response::HTTP_OK);
+    }
+
+    #[Route('/tasks', name: 'app_tasks', methods: "GET")]
+    public function getTasks(TaskRepository $taskRepository,){
+        return $this->json($this->tasksResponseDTOTransformer->transformFromObjects($taskRepository->findAll()));
     }
 }
