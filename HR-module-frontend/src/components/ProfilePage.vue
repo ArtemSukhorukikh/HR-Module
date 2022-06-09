@@ -1,5 +1,6 @@
 <template>
-  <div class="container bg-light">
+  <div id="liveAlertPlaceholder"></div>
+  <div v-if="noError" class="container bg-light">
     <div class="main-body">
 
       <div class="row gutters-sm">
@@ -113,6 +114,7 @@ export default {
   name: "ProfilePage",
   data() {
     return {
+      "noError":false,
       "userData": {
         "username": "",
         "roles":[],
@@ -155,8 +157,9 @@ export default {
   beforeCreate() {
     if (this.currentUser === false) {
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-      axios.post("http://localhost:84/api/v1/users/search", {"username": this.userName}).then(responce => {
+      axios.post("http://localhost:84/api/v1/users/search", {"id": this.userName}).then(responce => {
         this.userData = responce.data
+        this.noError = true
         console.log(this.userData)
       }).catch(error => {
         if (error.request.status === 401) {
@@ -164,12 +167,16 @@ export default {
           localStorage.removeItem('date')
           this.$router.go("/login")
         }
+        if (error.request.status === 400){
+          alert("Пользователь не найден", "danger")
+        }
       })
     }
     else {
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
       axios.get("http://localhost:84/api/v1/users/current").then( responce => {
         this.userData = responce.data
+        this.noError = true
         console.log(this.userData)}).catch(error =>{
         if (error.request.status === 401) {
           localStorage.removeItem('token')
@@ -180,6 +187,18 @@ export default {
       }
 
   }
+}
+const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+const alert = (message, type) => {
+  const wrapper = document.createElement('div')
+  wrapper.innerHTML = [
+    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+    `   <div>${message}</div>`,
+    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+    '</div>'
+  ].join('')
+
+  alertPlaceholder.append(wrapper)
 }
 </script>
 

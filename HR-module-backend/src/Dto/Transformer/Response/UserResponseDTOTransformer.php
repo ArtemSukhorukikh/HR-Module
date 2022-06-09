@@ -34,6 +34,7 @@ class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
     public function transformFromObject($user)
     {
         $dto = new UserCurrentDto();
+        $dto->id = $user->getId();
         $dto->username = $user->getUserIdentifier();
         $dto->roles = $user->getRoles();
         $dto->userInfo = new UserDto();

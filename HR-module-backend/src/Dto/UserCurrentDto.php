@@ -5,6 +5,9 @@ use JMS\Serializer\Annotation as Serializer;
 
 class UserCurrentDto
 {
+    #[Serializer\Type("int")]
+    public int $id;
+
     #[Serializer\Type("string")]
     public string $username;
 

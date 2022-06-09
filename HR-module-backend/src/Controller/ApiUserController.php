@@ -100,7 +100,9 @@ class ApiUserController extends AbstractController
     #[Route('/search', name: 'user_search', methods: ['POST'])]
     public function getUserSearch(Request $request, UserRepository $userRepository): Response
     {
-        $user = $userRepository->findOneBy(['username' => $this->serializer->deserialize( $request->getContent(), UserDto::class, 'json')->username]);
+        $id = $request->toArray()['id'];
+
+        $user = $userRepository->find($id);
 
         if (!$user) {
             $this->json([
