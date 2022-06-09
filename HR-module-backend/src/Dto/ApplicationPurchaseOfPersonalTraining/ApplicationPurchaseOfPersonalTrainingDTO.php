@@ -1,19 +1,16 @@
 <?php
 
-namespace App\Dto\ApplicationPurchaseOfTraining;
+namespace App\Dto\ApplicationPurchaseOfPersonalTraining;
 
 use JMS\Serializer\Annotation as Serializer;
 
-class ApplicationPurchaseOfTrainingDTO
+class ApplicationPurchaseOfPersonalTrainingDTO
 {
     #[Serializer\Type("integer")]
     public int $id;
 
     #[Serializer\Type("integer")]
     public int $userId;
-
-    #[Serializer\Type("string")]
-    public string $description;
 
     #[Serializer\Type("string")]
     public string $link;

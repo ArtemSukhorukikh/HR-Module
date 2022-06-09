@@ -49,6 +49,12 @@ class Survey
      */
     private $status;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Department::class, inversedBy="surveys")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $deparment;
+
     public function __construct()
     {
         $this->responeSurveys = new ArrayCollection();
@@ -149,6 +155,18 @@ class Survey
     public function setStatus(int $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getDeparment(): ?Department
+    {
+        return $this->deparment;
+    }
+
+    public function setDeparment(?Department $deparment): self
+    {
+        $this->deparment = $deparment;
 
         return $this;
     }

@@ -109,6 +109,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $responeSurveys;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Department::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $works;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ApplicationPurchaseOfPersonalTraining::class, mappedBy="user_")
+     */
+    private $applicationPurchaseOfPersonalTrainings;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
@@ -118,6 +129,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->applicationForTrainings = new ArrayCollection();
         $this->applicationPurchaseOfTrainings = new ArrayCollection();
         $this->responeSurveys = new ArrayCollection();
+        $this->applicationPurchaseOfPersonalTrainings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -490,6 +502,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($responeSurvey->getUser() === $this) {
                 $responeSurvey->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getWorks(): ?Department
+    {
+        return $this->works;
+    }
+
+    public function setWorks(?Department $works): self
+    {
+        $this->works = $works;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApplicationPurchaseOfPersonalTraining>
+     */
+    public function getApplicationPurchaseOfPersonalTrainings(): Collection
+    {
+        return $this->applicationPurchaseOfPersonalTrainings;
+    }
+
+    public function addApplicationPurchaseOfPersonalTraining(ApplicationPurchaseOfPersonalTraining $applicationPurchaseOfPersonalTraining): self
+    {
+        if (!$this->applicationPurchaseOfPersonalTrainings->contains($applicationPurchaseOfPersonalTraining)) {
+            $this->applicationPurchaseOfPersonalTrainings[] = $applicationPurchaseOfPersonalTraining;
+            $applicationPurchaseOfPersonalTraining->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplicationPurchaseOfPersonalTraining(ApplicationPurchaseOfPersonalTraining $applicationPurchaseOfPersonalTraining): self
+    {
+        if ($this->applicationPurchaseOfPersonalTrainings->removeElement($applicationPurchaseOfPersonalTraining)) {
+            // set the owning side to null (unless already changed)
+            if ($applicationPurchaseOfPersonalTraining->getUser() === $this) {
+                $applicationPurchaseOfPersonalTraining->setUser(null);
             }
         }
 

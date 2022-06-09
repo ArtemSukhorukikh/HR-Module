@@ -5,9 +5,7 @@ namespace App\Dto\ApplicationForTraining\Request;
 use App\Dto\ApplicationForTraining\ApplicationForTrainingDTO;
 use App\Dto\Transformer\Request\AbstractRequestDTOTransformer;
 use App\Entity\ApplicationForTraining;
-use App\Repository\ApplicationForTrainingRepository;
 use App\Repository\EducationalResourcesRepository;
-use App\Repository\FeedbackRepository;
 use App\Repository\UserRepository;
 
 class ApplicationForTrainingRequest extends AbstractRequestDTOTransformer

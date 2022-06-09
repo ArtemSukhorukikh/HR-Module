@@ -59,10 +59,16 @@ class EducationalResources
      */
     private $applicationForTrainings;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Competence::class, mappedBy="educationalResources")
+     */
+    private $competences;
+
     public function __construct()
     {
         $this->makesRating = new ArrayCollection();
         $this->applicationForTrainings = new ArrayCollection();
+        $this->competences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -197,6 +203,33 @@ class EducationalResources
             if ($applicationForTraining->getIncluded() === $this) {
                 $applicationForTraining->setIncluded(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Competence>
+     */
+    public function getCompetences(): Collection
+    {
+        return $this->competences;
+    }
+
+    public function addCompetence(Competence $competence): self
+    {
+        if (!$this->competences->contains($competence)) {
+            $this->competences[] = $competence;
+            $competence->addEducationalResource($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompetence(Competence $competence): self
+    {
+        if ($this->competences->removeElement($competence)) {
+            $competence->removeEducationalResource($this);
         }
 
         return $this;

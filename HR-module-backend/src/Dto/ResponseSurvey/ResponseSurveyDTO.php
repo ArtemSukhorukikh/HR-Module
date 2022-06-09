@@ -10,8 +10,11 @@ class ResponseSurveyDTO
     public int $id;
 
     #[Serializer\Type("integer")]
-    public int $answer;
+    public int $userId;
 
-    #[Serializer\Type("DateTime<'Y-m-d'>")]
-    public \DateTimeInterface $date;
+    #[Serializer\Type("integer")]
+    public int $surveyId;
+
+    #[Serializer\Type("integer")]
+    public int $answer;
 }

@@ -34,19 +34,7 @@ class ApplicationForTrainingDepartmentResponse
         $users = $this->userRepository->findBy(
             ["id" => $object->getId()]
         );
-        $dto->applicationForTrainingDTO = [];
-        foreach ($application as $app)
-        {
-            $dto_ = new ApplicationForTrainingDTO();
-            $dto_->userId = $app->getCompose()->getId();
-            $dto_->edResId = $app->getIncluded()->getId();
-            $dto_->startDate = $app->getStartDate();
-            $dto_->endDate = $app->getEndDate();
-            $dto_->mathodOfPassage = $app->getMathodOfPassage();
-            $dto_->note = $app->getNote();
-            $dto_->status = $app->getStatus();
-            array_push($dto->applicationForTrainingDTO, $dto_);
-        }
+        $dto->applicationForTrainingListDTO = $this->applicationForTrainingUserResponse->transformFromObjects($users);
         return $dto;
     }
 
