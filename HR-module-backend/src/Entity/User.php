@@ -120,6 +120,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $applicationPurchaseOfPersonalTrainings;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Task::class, inversedBy="users")
+     */
+    private $Tasks;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
@@ -130,6 +135,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->applicationPurchaseOfTrainings = new ArrayCollection();
         $this->responeSurveys = new ArrayCollection();
         $this->applicationPurchaseOfPersonalTrainings = new ArrayCollection();
+        $this->Tasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -546,6 +552,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $applicationPurchaseOfPersonalTraining->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->Tasks;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->Tasks->contains($task)) {
+            $this->Tasks[] = $task;
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        $this->Tasks->removeElement($task);
 
         return $this;
     }
