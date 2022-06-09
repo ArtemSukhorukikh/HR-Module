@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Dto\Transformer\Response\UserResponseDTOTransformer;
 use App\Dto\UserCurrentDto;
+use App\Dto\UserDto;
 use App\Repository\UserRepository;
+use JMS\Serializer\SerializerBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +19,7 @@ use Nelmio\ApiDocBundle\Annotation\Security as SecurityOA;
 class ApiUserController extends AbstractController
 {
     private Security $security;
+    private $serializer;
     public UserResponseDTOTransformer $userResponseDTOTransformer;
 
     public function __construct(Security $security,
@@ -24,6 +27,7 @@ class ApiUserController extends AbstractController
     {
         $this->security = $security;
         $this->userResponseDTOTransformer = $userResponseDTOTransformer;
+        $this->serializer = SerializerBuilder::create()->build();
     }
     /**
      * @OA\Get(
@@ -93,15 +97,16 @@ class ApiUserController extends AbstractController
         return $this->json($currentUser, Response::HTTP_OK);
     }
 
-    #[Route('/search', name: 'user_search', methods: ['GET'])]
+    #[Route('/search', name: 'user_search', methods: ['POST'])]
     public function getUserSearch(Request $request, UserRepository $userRepository): Response
     {
-        $user = $userRepository->findOneBy(['username' => $request->toArray()['username']]);
+        $user = $userRepository->findOneBy(['username' => $this->serializer->deserialize( $request->getContent(), UserDto::class, 'json')->username]);
+
         if (!$user) {
             $this->json([
                 'status_code' => Response::HTTP_BAD_REQUEST,
                 'message' => 'User is not find.'
-            ], Response::HTTP_UNAUTHORIZED);
+            ], Response::HTTP_BAD_REQUEST);
         }
         $currentUser = $this->userResponseDTOTransformer->transformFromObject($user);
         return $this->json($currentUser, Response::HTTP_OK);

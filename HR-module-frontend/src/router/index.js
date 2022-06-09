@@ -4,7 +4,7 @@ import OfficeMapFloor2View from "../views/OfficeMapFloor2View";
 import OfficeMapFloo3View from "@/views/OfficeMapFloo3View";
 import LoginView from "@/views/Auth/LoginView";
 import RegistrationView from "@/views/Auth/RegistrationView";
-import KnowledgeBaseView from "@/views/KnowledgeBaseView";
+import UserView from "@/views/UserView";
 
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
@@ -30,6 +30,12 @@ const routes = [
     beforeEnter: authGuard
   },
   {
+    path: '/user/:username',
+    name: 'userPage',
+    component: UserView,
+    beforeEnter: authGuard
+  },
+  {
     path: '/officemap/floor2',
     name: 'Карта офиса этаж 2',
     component: OfficeMapFloor2View,
@@ -50,11 +56,6 @@ const routes = [
     path: '/registration',
     name: 'Регистрация',
     component: RegistrationView,
-  },
-  {
-    path: '/knowledgeBase',
-    name: 'База знаний',
-    component: KnowledgeBaseView,
   }
 ]
 
