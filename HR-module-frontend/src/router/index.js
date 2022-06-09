@@ -30,7 +30,7 @@ const routes = [
     beforeEnter: authGuard
   },
   {
-    path: '/user/:username',
+    path: '/user/:id',
     name: 'userPage',
     component: UserView,
     beforeEnter: authGuard

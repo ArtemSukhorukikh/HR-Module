@@ -1,5 +1,5 @@
 <template>
-  <ProfilePage v-bind:currentUser = "false"  v-bind:userName = "this.$route.params.username"/>
+  <ProfilePage v-bind:currentUser = "false"  v-bind:userName = "this.$route.params.id"/>
 </template>
 
 <script>
