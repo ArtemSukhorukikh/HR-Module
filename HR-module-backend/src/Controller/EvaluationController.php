@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Dto\AnswearDTO;
 use App\Dto\EvaluationDTO;
 use App\Dto\Transformer\Request\EvaluationRequestDTOTransformer;
+use App\Repository\TaskEvaluationRepository;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -45,6 +46,54 @@ class EvaluationController extends AbstractController
             $answer = new AnswearDTO();
             $answer->status = "Created";
             $answer->messageAnswear = "Create new evaluation to task ". $id;
+            return $this->json($answer, Response::HTTP_CREATED);
+        } else {
+            $answer = new AnswearDTO();
+            $answer->status = "Error";
+            $answer->messageAnswear = "Task ". $id . "does not find";
+            return $this->json($answer, Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    #[Route('/evaluation-update/{id}', name: 'evaluation-update')]
+    public function update(int $id,
+                          TaskEvaluationRepository $repository,
+                          EntityManagerInterface $entityManager,
+                          Request $request): Response
+    {
+        $evaluation = $repository->find($id);
+        if ($evaluation) {
+            $evaluationFromDTO = $this->serializer->deserialize($request->getContent(), EvaluationDTO::class, 'json');
+            $evaluation->setDate($evaluationFromDTO->date);
+            $evaluation->setValue($evaluationFromDTO->value);
+            $evaluation->setDescription($evaluationFromDTO->description);
+            $entityManager->persist($evaluation);
+            $entityManager->flush();
+            $answer = new AnswearDTO();
+            $answer->status = "Update";
+            $answer->messageAnswear = "Update evaluation ". $id;
+            return $this->json($answer, Response::HTTP_CREATED);
+        } else {
+            $answer = new AnswearDTO();
+            $answer->status = "Error";
+            $answer->messageAnswear = "Task ". $id . "does not find";
+            return $this->json($answer, Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    #[Route('/evaluation-delete/{id}', name: 'evaluation-delete')]
+    public function delete(int $id,
+                           TaskEvaluationRepository $repository,
+                           EntityManagerInterface $entityManager,
+                           Request $request): Response
+    {
+        $evaluation = $repository->find($id);
+        if ($evaluation) {
+            $entityManager->remove($evaluation);
+            $entityManager->flush();
+            $answer = new AnswearDTO();
+            $answer->status = "Deleted";
+            $answer->messageAnswear = "Delete evaluation ". $id;
             return $this->json($answer, Response::HTTP_CREATED);
         } else {
             $answer = new AnswearDTO();

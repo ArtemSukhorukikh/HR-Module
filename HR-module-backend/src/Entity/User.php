@@ -2,7 +2,11 @@
 
 namespace App\Entity;
 
+use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -409,5 +413,133 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->Tasks->removeElement($task);
 
         return $this;
+    }
+
+    public function countSpeedTask() {
+
+            $tasks = $this->getTasks();
+            $tasksHours = 0.0;
+            $tasksCount = 0.0;
+            $leftDate = [];
+            $rightDate = [];
+            foreach ($tasks as $task) {
+                if ($task->getCloseDate()){
+                    $leftDate[] = $task->getStartDate()->format("Y-m-d H:i");
+                    $rightDate[] = $task->getCloseDate()->format("Y-m-d H:i");
+                    $tasksCount++;
+                }
+            }
+            usort($leftDate, [$this::class, 'date_sort']);
+            usort($rightDate, [$this::class, 'date_sort']);
+            $datetime1 = new DateTime($leftDate[0]);
+            $datetime2 = new DateTime(end($rightDate));
+            $interval = $datetime1->diff($datetime2);
+            $woweekends = 0;
+            for($i=0; $i<=$interval->d; $i++){
+                $datetime1->modify('+1 day');
+                $weekday = $datetime1->format('w');
+
+                if($weekday !== "0" && $weekday !== "6"){ // 0 for Sunday and 6 for Saturday
+                    $woweekends++;
+                }
+
+            }
+            if ($tasksCount != 0) {
+
+                return $woweekends * 8 / $tasksCount;
+            }
+            return 0.0;
+
+    }
+
+    public function countHoursInMounth() {
+        $start = date('m-01-Y 00:00');
+        $end = date('Y-m-t 23:59');
+        $startDate = new DateTime($start);
+        $endDate = new DateTime($end);
+        $tasks = $this->getTasks();
+        $leftDate = [];
+        $rightDate = [];
+        $tasksHours = 0.0;
+        foreach ($tasks as $task) {
+            if ($task->getStartDate() > $startDate && $task->getCloseDate() < $endDate) {
+                $leftDate[] = $task->getStartDate()->format("Y-m-d H:i");
+                $rightDate[] = $task->getCloseDate()->format("Y-m-d H:i");
+                }
+        }
+
+        usort($leftDate, [$this::class, 'date_sort']);
+        usort($rightDate, [$this::class, 'date_sort']);
+        $datetime1 = new DateTime($leftDate[0]);
+        $datetime2 = new DateTime(end($rightDate));
+        $interval = $datetime1->diff($datetime2);
+        $woweekends = 0;
+        for($i=0; $i<=$interval->d; $i++){
+            $datetime1->modify('+1 day');
+            $weekday = $datetime1->format('w');
+
+            if($weekday !== "0" && $weekday !== "6"){ // 0 for Sunday and 6 for Saturday
+                $woweekends++;
+            }
+
+        }
+
+        return $woweekends * 8;
+    }
+
+    public function date_sort($a, $b) {
+        return strtotime($a) - strtotime($b);
+    }
+    public function avgMarkMounth() {
+
+        $tasks = $this->getTasks();
+        $tasksMark = 0.0;
+        $countMarks = 0;
+        foreach ($tasks as $task) {
+            $mark = $task->getTaskEvaluation();
+            if ($mark) {
+                $tasksMark += $mark->getValue();
+                $countMarks ++;
+            }
+        }
+        if ($countMarks > 0) {
+            return $tasksMark/$countMarks;
+        }
+        else {
+            return 0.0;
+        }
+    }
+
+    public function achivmentsAvg(){
+        $achs = $this->getPersonalAchievements();
+        $achValue = 0.0;
+        $achCount = 0;
+        foreach ($achs as $ach) {
+            $achValue += $ach->getValue();
+        }
+        if ($achCount == 0){
+            return 0;
+        }
+        return $achValue;
+    }
+
+    public function tasksInWork() {
+
+        $tasks = $this->getTasks();
+        $tasksCount = 0;
+        $count = 0;
+        foreach ($tasks as $task) {
+            $status = $task->getStatus();
+            if ($status === 'Новая' || $status === 'В работе') {
+                $tasksCount++;
+            }
+            $count++;
+        }
+        if ($count > 0) {
+            return $tasksCount/$count;
+        }
+        else {
+            return 0.0;
+        }
     }
 }

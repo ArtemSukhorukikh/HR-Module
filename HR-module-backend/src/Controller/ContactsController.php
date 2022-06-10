@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
+use App\Dto\AnswearDTO;
+use App\Dto\ContactDTO;
 use App\Dto\NewContactsDTO;
 use App\Dto\Transformer\Request\ContactRequestDTOTransformer;
 use App\Dto\Transformer\Response\AnswerResponseDTOTransformer;
 use App\Dto\Transformer\Response\ContactResponseDTOTransformer;
 use App\Dto\Transformer\Response\UsersContactsResponseDTOTransformer;
+use App\Entity\Contacts;
+use App\Repository\ContactsRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerBuilder;
@@ -63,5 +67,37 @@ class ContactsController extends AbstractController
         }
 
         return $this->json($data, Response::HTTP_BAD_REQUEST);
+    }
+
+    #[Route('/update', name: 'app_contacts_update', methods: ["POST", "PUT"])]
+    public function updateContacts(ContactsRepository $contactsRepository, Request $request, EntityManagerInterface $entityManager,): Response
+    {
+        $data = $this->serializer->deserialize($request->getContent(), ContactDTO::class, 'json');
+        $contact = $contactsRepository->find($data->id);
+        if ($contact) {
+            $contact->setlink($data->link);
+            $contact->setSource($data->sourse);
+            $entityManager->persist($contact);
+            $entityManager->flush();
+            return $this->json($data, Response::HTTP_CREATED);
+        }
+        return $this->json($data, Response::HTTP_BAD_REQUEST);
+    }
+    #[Route('/delete/{id}', name: 'app_contacts_delete', methods: ["POST", "PUT"])]
+    public function deleteContacts(int $id, ContactsRepository $contactsRepository, EntityManagerInterface $entityManager,): Response
+    {
+        $contact = $contactsRepository->find($id);
+        if ($contact) {
+            $entityManager->remove($contact);
+            $entityManager->flush();
+            $answer = new AnswearDTO();
+            $answer->status = "Deleted";
+            $answer->messageAnswear = "Deleted contact";
+            return $this->json($answer, Response::HTTP_OK);
+        }
+        $answer = new AnswearDTO();
+        $answer->status = "Un Deleted";
+        $answer->messageAnswear = "Contact doent find";
+        return $this->json($answer, Response::HTTP_BAD_REQUEST);
     }
 }

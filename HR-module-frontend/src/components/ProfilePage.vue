@@ -103,6 +103,9 @@
           </div>
         </div>
       </div>
+      <div>
+        <highcharts :constructor-type="'ganttChart'" :options="chartOptions"></highcharts>
+      </div>
   </div>
   </div>
 </template>
@@ -110,10 +113,60 @@
 <script>
 import axios from "axios";
 
+
 export default {
   name: "ProfilePage",
+  components: {
+
+  },
   data() {
     return {
+      chartOptions: {
+        accessibility:{
+          enabled: false
+        },
+        title: {
+          text: 'Задачи пользователя'
+        },
+
+        xAxis: {
+          minPadding: 0.05,
+          maxPadding: 0.05
+        },
+
+        yAxis: {
+          categories: []
+        },
+
+        series:
+          // name: 'Project 1',
+          // data: [{
+          //   start: Date.UTC(2022, 6, 1),
+          //   end: Date.UTC(2022, 6, 12),
+          //   y: 0,
+          // }, {
+          //   start: Date.UTC(2022, 11, 2),
+          //   end: Date.UTC(2022, 11, 5),
+          //   y: 1,
+          //
+          // }, {
+          //   start: Date.UTC(2022, 11, 8),
+          //   end: Date.UTC(2022, 11, 9),
+          //   y: 2,
+          // }, {
+          //   start: Date.UTC(2022, 11, 9),
+          //   end: Date.UTC(2022, 11, 19),
+          //   y: 1,
+          // }, {
+          //   start: Date.UTC(2022, 11, 10),
+          //   end: Date.UTC(2022, 11, 23),
+          //   y: 2,
+
+
+          // }],
+
+        [],
+      },
       "noError":false,
       "userData": {
         "username": "",
@@ -160,6 +213,7 @@ export default {
       axios.post("http://localhost:84/api/v1/users/search", {"id": this.userName}).then(responce => {
         this.userData = responce.data
         this.noError = true
+
         console.log(this.userData)
       }).catch(error => {
         if (error.request.status === 401) {
@@ -187,6 +241,25 @@ export default {
         })
       }
 
+  },
+  updated() {
+    let count = 0
+    this.userData.tasks.forEach(element =>{
+      console.log(element.name)
+      this.chartOptions.yAxis.categories.push(element.name)
+      let startDate = element['start_date'].substr(0,10).split('-')
+      let endDate = element['closed_on'].substr(0,10).split('-')
+      console.log(startDate)
+      this.chartOptions.series.push({
+        name: element['name'],
+        data: [{
+          start: Date.UTC(startDate[0],startDate[1],startDate[2]),
+          end: Date.UTC(endDate[0], endDate[1], endDate[2]),
+          y: count
+        }]
+      })
+    count++
+    })
   }
 }
 const alertPlaceholder = document.getElementById('liveAlertPlaceholder')

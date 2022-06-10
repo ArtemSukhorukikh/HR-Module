@@ -19,10 +19,10 @@ class TasksResponseDTOTransformer extends AbstractResponceDTOTransformer
         $dto->name = $task->getName();
         $dto->description = $task->getDescription();
         $dto->status = $task->getStatus();
-        $dto->created_on = $task->getStartDate()->format("Y-m-d");
+        $dto->start_date = $task->getStartDate()->format("Y-m-d H-m");
         $closeDate = $task->getCloseDate();
         if ($closeDate) {
-            $dto->closed_on = $closeDate->format("Y-m-d");
+            $dto->closed_on = $closeDate->format("Y-m-d H-m");
         }
         return $dto;
     }

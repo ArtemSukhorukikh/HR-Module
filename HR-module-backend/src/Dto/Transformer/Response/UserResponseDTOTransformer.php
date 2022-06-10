@@ -9,23 +9,27 @@ use App\Entity\Contacts;
 use App\Entity\Projects;
 use App\Entity\User;
 use App\Repository\ProjectsRepository;
+use App\Repository\TaskRepository;
 use phpDocumentor\Reflection\Types\Array_;
 
 class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
 {
     public TasksResponseDTOTransformer $tasksResponseDTOTransformer;
     public ProjectsResponseDTOTransformer $projectsResponseDTOTransformer;
+    public TaskRepository $taskRepository;
     public ContactResponseDTOTransformer $contactResponseDTOTransformer;
     public ProjectsRepository $projectsRepository;
     public function __construct(TasksResponseDTOTransformer $tasksResponseDTOTransformer,
                                 ProjectsResponseDTOTransformer $projectsResponseDTOTransformer,
                                 ProjectsRepository $projectsRepository,
-                                ContactResponseDTOTransformer $contactResponseDTOTransformer)
+                                ContactResponseDTOTransformer $contactResponseDTOTransformer,
+    TaskRepository $taskRepository)
     {
         $this->tasksResponseDTOTransformer = $tasksResponseDTOTransformer;
         $this->projectsResponseDTOTransformer = $projectsResponseDTOTransformer;
         $this->projectsRepository = $projectsRepository;
         $this->contactResponseDTOTransformer = $contactResponseDTOTransformer;
+        $this->taskRepository = $taskRepository;
     }
 
     /**
@@ -59,6 +63,12 @@ class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
         }
         $dto->projects = $this->projectsResponseDTOTransformer->transformFromObjects($usersProjectsUniq);
         $dto->contacts = $this->contactResponseDTOTransformer->transformFromObjects($user->getContacts());
+        $dto->speed = $user->countSpeedTask();
+        $dto->hours = $user->countHoursInMounth();
+        $dto->avgMark = $user->avgMarkMounth();
+        $dto->avgAch = $user->achivmentsAvg();
+        $dto->taskInWork = $user->tasksInWork();
+        $dto->effectiveness = 0.6 * $dto->hours - 0.2 * $dto->speed - 0.2 * $dto->taskInWork + 0.1 * $user->avgMarkMounth() + $dto->avgAch;
         return $dto;
     }
 }

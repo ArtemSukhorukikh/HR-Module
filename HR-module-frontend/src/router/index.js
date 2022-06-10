@@ -6,6 +6,7 @@ import LoginView from "@/views/Auth/LoginView";
 import RegistrationView from "@/views/Auth/RegistrationView";
 import UserView from "@/views/UserView";
 import PageNotFound from "@/components/ErrorPages/Page-not-found";
+import LogOut from "@/components/LogOut";
 
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
@@ -57,6 +58,11 @@ const routes = [
     path: '/registration',
     name: 'Регистрация',
     component: RegistrationView,
+  },
+  {
+    path:'/logout',
+    name: "Logout",
+    component: LogOut
   },
   {
     path:'/:pathMatch(.*)*',

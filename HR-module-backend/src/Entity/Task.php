@@ -49,11 +49,6 @@ class Task
     private $close_date;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="tasks")
-     */
-    private $userToDo;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Projects::class, inversedBy="tasks")
      * @ORM\JoinColumn(nullable=false)
      */

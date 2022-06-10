@@ -26,5 +26,22 @@ class UserCurrentDto
     #[Serializer\Type(ContactDTO::class)]
     public array $contacts;
 
+    #[Serializer\Type("float")]
+    public float $speed;
+
+    #[Serializer\Type("float")]
+    public float $hours;
+
+    #[Serializer\Type("float")]
+    public float $avgMark;
+
+    #[Serializer\Type("float")]
+    public float $avgAch;
+
+    #[Serializer\Type("float")]
+    public float $taskInWork;
+
+    #[Serializer\Type("float")]
+    public float $effectiveness;
 
 }
