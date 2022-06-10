@@ -167,8 +167,8 @@ export default {
           localStorage.removeItem('date')
           this.$router.go("/login")
         }
-        if (error.request.status === 400){
-          alert("Пользователь не найден", "danger")
+        if (error.request.status === 400 || error.require.status >= 500){
+          alert("Пользователь не найден или ошибка доступа к серверу", "danger")
         }
       })
     }
@@ -176,6 +176,7 @@ export default {
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
       axios.get("http://localhost:84/api/v1/users/current").then( responce => {
         this.userData = responce.data
+        localStorage.setItem('role', JSON.stringify(responce.data['roles']))
         this.noError = true
         console.log(this.userData)}).catch(error =>{
         if (error.request.status === 401) {
