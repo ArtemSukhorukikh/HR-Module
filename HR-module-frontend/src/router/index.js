@@ -5,6 +5,7 @@ import OfficeMapFloo3View from "@/views/OfficeMapFloo3View";
 import LoginView from "@/views/Auth/LoginView";
 import RegistrationView from "@/views/Auth/RegistrationView";
 import UserView from "@/views/UserView";
+import PageNotFound from "@/components/ErrorPages/Page-not-found";
 
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
@@ -30,7 +31,7 @@ const routes = [
     beforeEnter: authGuard
   },
   {
-    path: '/user/:id',
+    path: '/user/:username',
     name: 'userPage',
     component: UserView,
     beforeEnter: authGuard
@@ -56,6 +57,11 @@ const routes = [
     path: '/registration',
     name: 'Регистрация',
     component: RegistrationView,
+  },
+  {
+    path:'/:pathMatch(.*)*',
+    name: "PageNorFound",
+    component: PageNotFound,
   }
 ]
 
