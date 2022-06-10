@@ -2,7 +2,6 @@
 
 namespace App\Dto\ApplicationPurchaseOfPersonalTraining\Response;
 
-use App\Dto\ApplicationPurchaseOfPersonalTraining\ApplicationPurchaseOfPersonalTrainingDTO;
 use App\Dto\ApplicationPurchaseOfPersonalTraining\ApplicationPurchaseOfPersonalTrainingListDTO;
 use App\Dto\ApplicationPurchaseOfTraining\ApplicationPurchaseOfTrainingDTO;
 use App\Dto\ApplicationPurchaseOfTraining\ApplicationPurchaseOfTrainingListDTO;
@@ -11,7 +10,7 @@ use App\Entity\User;
 use App\Repository\ApplicationPurchaseOfPersonalTrainingRepository;
 use App\Repository\ApplicationPurchaseOfTrainingRepository;
 
-class ApplicationPurchaseOfPersonalTrainingUserResponse extends AbstractResponceDTOTransformer
+class ApplicationPurchaseOfPersonalTrainingUserFalseResponse extends AbstractResponceDTOTransformer
 {
     private ApplicationPurchaseOfPersonalTrainingRepository $applicationPurchaseOfPersonalTrainingRepository;
 
@@ -26,7 +25,7 @@ class ApplicationPurchaseOfPersonalTrainingUserResponse extends AbstractResponce
     {
         $dto = new ApplicationPurchaseOfPersonalTrainingListDTO();
         $application = $this->applicationPurchaseOfPersonalTrainingRepository->findBy(
-            ["user_" => $object->getId()]
+            ["user_" => $object->getId(), "status" => 0]
         );
         $dto->applicationPurchaseOfPersonalTrainingDTO = [];
         foreach ($application as $app)

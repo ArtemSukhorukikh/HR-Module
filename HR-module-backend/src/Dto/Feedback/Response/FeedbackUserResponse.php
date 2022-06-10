@@ -28,8 +28,8 @@ class FeedbackUserResponse
         foreach ($feedbacks as $feedback)
         {
             $feedbackDTO = new FeedbackDTO();
-            $feedbackDTO->userId = $feedback->getAuthon()->getId();
-            $feedbackDTO->educationalResourcesId = $feedback->getEducationalResources()->getId();
+            $feedbackDTO->user_id = $feedback->getAuthon()->getId();
+            $feedbackDTO->educational_resources_id = $feedback->getEducationalResources()->getId();
             $feedbackDTO->date = $feedback->getDate();
             $feedbackDTO->note = $feedback->getNote();
             $feedbackDTO->estimation = $feedback->getEstimation();

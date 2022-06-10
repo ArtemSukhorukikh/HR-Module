@@ -8,7 +8,7 @@ use App\Dto\Transformer\Response\AbstractResponceDTOTransformer;
 use App\Entity\User;
 use App\Repository\ApplicationPurchaseOfTrainingRepository;
 
-class ApplicationPurchaseOfTrainingUserResponse extends AbstractResponceDTOTransformer
+class ApplicationPurchaseOfTrainingStatusFalseResponse extends AbstractResponceDTOTransformer
 {
     private ApplicationPurchaseOfTrainingRepository $applicationPurchaseOfTrainingRepository;
 
@@ -23,7 +23,7 @@ class ApplicationPurchaseOfTrainingUserResponse extends AbstractResponceDTOTrans
     {
         $dto = new ApplicationPurchaseOfTrainingListDTO();
         $application = $this->applicationPurchaseOfTrainingRepository->findBy(
-            ["compose" => $object->getId()]
+            ["compose" => $object->getId(),"status" => 0]
         );
         $dto->applicationPurchaseOfTrainingDTO = [];
         foreach ($application as $app)

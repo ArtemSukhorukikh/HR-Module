@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Dto\AnswearDTO;
 use App\Dto\ApplicationPurchaseOfPersonalTraining\ApplicationPurchaseOfPersonalTrainingDTO;
 use App\Dto\ApplicationPurchaseOfPersonalTraining\ApplicationPurchaseOfPersonalTrainingStatusDTO;
 use App\Dto\ApplicationPurchaseOfPersonalTraining\Response\ApplicationPurchaseOfPersonalTrainingDepartmentResponse;
 use App\Dto\ApplicationPurchaseOfPersonalTraining\Response\ApplicationPurchaseOfPersonalTrainingResponse;
+use App\Dto\ApplicationPurchaseOfPersonalTraining\Response\ApplicationPurchaseOfPersonalTrainingUserFalseResponse;
 use App\Dto\ApplicationPurchaseOfPersonalTraining\Response\ApplicationPurchaseOfPersonalTrainingUserResponse;
 use App\Dto\ApplicationPurchaseOfPersonalTraining\Request\ApplicationPurchaseOfPersonalTrainingRequest;
 use App\Entity\ApplicationPurchaseOfPersonalTraining;
@@ -20,17 +22,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/api/v1/')]
+
 class ApplicationPurchaseOfPersonalTrainingController extends AbstractController
 {
     private ApplicationPurchaseOfPersonalTrainingUserResponse $applicationPurchaseOfPersonalUserResponse;
     private ApplicationPurchaseOfPersonalTrainingResponse $applicationPurchaseOfPersonalResponse;
     private ApplicationPurchaseOfPersonalTrainingDepartmentResponse $applicationPurchaseOfPersonalDepartmentResponse;
     private ApplicationPurchaseOfPersonalTrainingRequest $applicationPurchaseOfPersonalRequest;
+    private ApplicationPurchaseOfPersonalTrainingUserFalseResponse $applicationPurchaseOfPersonalTrainingUserFalseResponse;
     private $serializer;
 
     public function __construct(ApplicationPurchaseOfPersonalTrainingUserResponse $applicationPurchaseOfPersonalUserResponse,
                                 ApplicationPurchaseOfPersonalTrainingResponse $applicationPurchaseOfPersonalResponse,
                                 ApplicationPurchaseOfPersonalTrainingDepartmentResponse $applicationPurchaseOfPersonalDepartmentResponse,
+                                ApplicationPurchaseOfPersonalTrainingUserFalseResponse $applicationPurchaseOfPersonalTrainingUserFalseResponse,
                                 ApplicationPurchaseOfPersonalTrainingRequest $applicationPurchaseOfPersonalRequest)
     {
         $this->serializer = SerializerBuilder::create()->build();
@@ -38,6 +44,7 @@ class ApplicationPurchaseOfPersonalTrainingController extends AbstractController
         $this->applicationPurchaseOfPersonalResponse = $applicationPurchaseOfPersonalResponse;
         $this->applicationPurchaseOfPersonalDepartmentResponse = $applicationPurchaseOfPersonalDepartmentResponse;
         $this->applicationPurchaseOfPersonalRequest = $applicationPurchaseOfPersonalRequest;
+        $this->applicationPurchaseOfPersonalTrainingUserFalseResponse = $applicationPurchaseOfPersonalTrainingUserFalseResponse;
     }
 
 
@@ -49,7 +56,15 @@ class ApplicationPurchaseOfPersonalTrainingController extends AbstractController
         return $this->json($applicationDTO, Response::HTTP_OK);
     }
 
-    #[Route('/user/{id}', name: 'app_applicationForTraining_user', methods: "GET")]
+    #[Route('applicationPOPT/userFalse/{id}', name: 'app_ApplicationPurchaseOfPersonalTraining_userFalse', methods: "GET")]
+    public function findUserFalseApplicationPurchaseOfPersonalTraining($id, UserRepository $userRepository): Response
+    {
+        $user = $userRepository->find($id);
+        $applicationDTO = $this->applicationPurchaseOfPersonalTrainingUserFalseResponse->transformFromObject($user);
+        return $this->json($applicationDTO, Response::HTTP_OK);
+    }
+
+    #[Route('applicationPOPT/user/{id}', name: 'app_ApplicationPurchaseOfPersonalTraining_user', methods: "GET")]
     public function findUserApplicationPurchaseOfPersonalTraining($id, UserRepository $userRepository): Response
     {
         $user = $userRepository->find($id);
@@ -57,7 +72,7 @@ class ApplicationPurchaseOfPersonalTrainingController extends AbstractController
         return $this->json($applicationDTO, Response::HTTP_OK);
     }
 
-    #[Route('/department/{id}', name: 'app_applicationForTraining_user', methods: "GET")]
+    #[Route('/department/{id}', name: 'app_ApplicationPurchaseOfPersonalTraining_department', methods: "GET")]
     public function findDepartmentApplicationPurchaseOfPersonalTraining($id, DepartmentRepository $departmentRepository): Response
     {
         $department = $departmentRepository->find($id);
@@ -65,11 +80,11 @@ class ApplicationPurchaseOfPersonalTrainingController extends AbstractController
         return $this->json($applicationDTO, Response::HTTP_OK);
     }
 
-    #[Route('/new', name: 'app_applicationForTraining_new', methods: "POST")]
+    #[Route('applicationPOPT/new', name: 'app_ApplicationPurchaseOfPersonalTraining_new', methods: "POST")]
     public function newApplicationPurchaseOfPersonalTraining(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
         $data = $this->serializer->deserialize($request->getContent(), ApplicationPurchaseOfPersonalTrainingDTO::class, 'json');
-        $user = $userRepository->find($data->userId);
+        $user = $userRepository->find($data->user_id);
         if ($user) {
             $application = $this->applicationPurchaseOfPersonalRequest->transformToObject($data);
             $entityManager->persist($application);
@@ -81,7 +96,7 @@ class ApplicationPurchaseOfPersonalTrainingController extends AbstractController
         return $this->json($data, Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('/status', name: 'app_applicationForTraining_status', methods: "POST")]
+    #[Route('/status', name: 'app_ApplicationPurchaseOfPersonalTraining_status', methods: "POST")]
     public function statusApplicationPurchaseOfPersonalTraining(Request $request, ManagerRegistry  $doctrine): Response
     {
         $data = $this->serializer->deserialize($request->getContent(), ApplicationPurchaseOfPersonalTrainingStatusDTO::class, 'json');
@@ -97,7 +112,7 @@ class ApplicationPurchaseOfPersonalTrainingController extends AbstractController
         return $this->json($data, Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('/remove/{id}', name: 'app_applicationForTraining_remove', methods: "POST")]
+    #[Route('/remove/{id}', name: 'app_ApplicationPurchaseOfPersonalTraining_remove', methods: "POST")]
     public function removeApplicationPurchaseOfPersonalTraining($id, Request $request, ManagerRegistry  $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
@@ -105,10 +120,14 @@ class ApplicationPurchaseOfPersonalTrainingController extends AbstractController
         if ($application) {
             $entityManager->remove($application);
             $entityManager->flush();
-
-            //return $this->json($data, Response::HTTP_CREATED);
+            $answer = new AnswearDTO();
+            $answer->status = 'Deleted';
+            $answer->messageAnswear = "Deleted " . $id;
+            return $this->json($answer, Response::HTTP_OK);
         }
-
-       //return $this->json($data, Response::HTTP_BAD_REQUEST);
+        $answer = new AnswearDTO();
+        $answer->status = 'Error delete';
+        $answer->messageAnswear = "Un  deleted " . $id;
+        return $this->json($answer, Response::HTTP_BAD_REQUEST);
     }
 }

@@ -44,11 +44,28 @@ class Competence
      */
     private $competences;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Skills::class, mappedBy="competence")
+     */
+    private $skills;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $type;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="competences")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->educationalResources = new ArrayCollection();
         $this->includes = new ArrayCollection();
         $this->competences = new ArrayCollection();
+        $this->skills = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -151,6 +168,69 @@ class Competence
         if ($this->competences->removeElement($competence)) {
             $competence->removeInclude($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Skills>
+     */
+    public function getSkills(): Collection
+    {
+        return $this->skills;
+    }
+
+    public function addSkill(Skills $skill): self
+    {
+        if (!$this->skills->contains($skill)) {
+            $this->skills[] = $skill;
+            $skill->addCompetence($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSkill(Skills $skill): self
+    {
+        if ($this->skills->removeElement($skill)) {
+            $skill->removeCompetence($this);
+        }
+
+        return $this;
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(?int $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        $this->users->removeElement($user);
 
         return $this;
     }

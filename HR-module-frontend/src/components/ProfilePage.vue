@@ -177,6 +177,7 @@ export default {
       axios.get("http://localhost:84/api/v1/users/current").then( responce => {
         this.userData = responce.data
         localStorage.setItem('role', JSON.stringify(responce.data['roles']))
+        localStorage.setItem('role', JSON.stringify(responce.data['userId']))
         this.noError = true
         console.log(this.userData)}).catch(error =>{
         if (error.request.status === 401) {

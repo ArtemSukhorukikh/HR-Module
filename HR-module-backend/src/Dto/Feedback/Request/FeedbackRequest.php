@@ -27,8 +27,8 @@ class FeedbackRequest extends AbstractRequestDTOTransformer
     public function transformToObject($feedback): Feedback
     {
         $data = new Feedback();
-        $data->setAuthon($this->userRepository->find($feedback->userId));
-        $data->setEducationalResources($this->educationalResourcesRepository->find($feedback->educationalResourcesId));
+        $data->setAuthon($this->userRepository->find($feedback->user_id));
+        $data->setEducationalResources($this->educationalResourcesRepository->find($feedback->educational_resources_id));
         $data->setEstimation((integer)$feedback->estimation);
         $data->setDate($feedback->date);
         $data->setNote((string)$feedback->note);

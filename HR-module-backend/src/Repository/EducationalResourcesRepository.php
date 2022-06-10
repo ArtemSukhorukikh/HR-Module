@@ -39,6 +39,15 @@ class EducationalResourcesRepository extends ServiceEntityRepository
         }
     }
 
+    public function qwe()
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery('
+        SELECT p FROM AcmeStoreBundle:Product p 
+        WHERE p.price > :price 
+        ORDER BY p.price ASC');
+    }
+
 //    /**
 //     * @return EducationalResources[] Returns an array of EducationalResources objects
 //     */

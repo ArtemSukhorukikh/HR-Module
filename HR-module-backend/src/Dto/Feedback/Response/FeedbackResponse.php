@@ -17,8 +17,8 @@ class FeedbackResponse extends AbstractResponceDTOTransformer
         $dto->userFIO = $feedback->getAuthon()->getFirstName() . ' ' .
             $feedback->getAuthon()->getLastName() . ' ' .
             $feedback->getAuthon()->getPatronymic();
-        $dto->userId = $feedback->getAuthon()->getId();
-        $dto->educationalResourcesId = $feedback->getEducationalResources()->getId();
+        $dto->user_id = $feedback->getAuthon()->getId();
+        $dto->educational_resources_id = $feedback->getEducationalResources()->getId();
         $dto->estimation = $feedback->getEstimation();
         $dto->date = $feedback->getDate();
         $dto->note = $feedback->getNote();

@@ -33,8 +33,8 @@ class FeedbackResursesResponse
                 $feedback->getAuthon()->getLastName() . ' ' .
                 $feedback->getAuthon()->getPatronymic();
             $feedbackDTO->id = $feedback->getId();
-            $feedbackDTO->userId = $feedback->getAuthon()->getId();
-            $feedbackDTO->educationalResourcesId = $feedback->getEducationalResources()->getId();
+            $feedbackDTO->user_id = $feedback->getAuthon()->getId();
+            $feedbackDTO->educational_resources_id = $feedback->getEducationalResources()->getId();
             $feedbackDTO->date = $feedback->getDate();
             $feedbackDTO->note = $feedback->getNote();
             $feedbackDTO->estimation = $feedback->getEstimation();

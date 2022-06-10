@@ -17,7 +17,7 @@ class ApplicationPurchaseOfPersonalTrainingResponse
     public function transformFromObject($object): ApplicationPurchaseOfPersonalTrainingDTO
     {
         $dto = new ApplicationPurchaseOfPersonalTrainingDTO();
-        $dto->userId = $object->getUser()->getId();
+        $dto->user_id = $object->getUser()->getId();
         $dto->link = $object->getLink();
         $dto->note = $object->getNote();
         $dto->status = $object->getStatus();

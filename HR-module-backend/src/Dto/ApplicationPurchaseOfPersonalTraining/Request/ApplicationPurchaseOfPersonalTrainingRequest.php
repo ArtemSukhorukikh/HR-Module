@@ -17,7 +17,7 @@ class ApplicationPurchaseOfPersonalTrainingRequest extends AbstractRequestDTOTra
 
     public function __construct(UserRepository $userRepository)
     {
-        $this->$userRepository = $userRepository;
+        $this->userRepository = $userRepository;
     }
     /**
      * @param ApplicationPurchaseOfPersonalTrainingDTO $object
@@ -25,7 +25,7 @@ class ApplicationPurchaseOfPersonalTrainingRequest extends AbstractRequestDTOTra
     public function transformToObject($object): ApplicationPurchaseOfPersonalTraining
     {
         $data = new ApplicationPurchaseOfPersonalTraining();
-        $data->setUser($this->userRepository->find($object->userId));
+        $data->setUser($this->userRepository->find($object->user_id));
         $data->setLink($object->link);
         $data->setNote($object->note);
         $data->setStatus($object->status);

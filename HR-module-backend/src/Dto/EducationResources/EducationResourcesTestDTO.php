@@ -1,29 +1,35 @@
 <?php
 
-namespace App\Dto\Feedback;
+namespace App\Dto\EducationResources;
 
 use JMS\Serializer\Annotation as Serializer;
 
-class FeedbackDTO
+class EducationResourcesTestDTO
 {
     #[Serializer\Type("integer")]
     public int $id;
 
     #[Serializer\Type("string")]
-    public string $userFIO;
+    public string $name;
 
     #[Serializer\Type("integer")]
-    public int $user_id = 3;
+    public int $type;
 
     #[Serializer\Type("integer")]
-    public int $educational_resources_id = 3;
+    public int $test1;
 
     #[Serializer\Type("integer")]
-    public int $estimation = 5;
+    public int $test2;
 
     #[Serializer\Type("string")]
-    public string $note = 'qwe';
+    public string $description;
+
+    #[Serializer\Type("string")]
+    public string $link;
 
     #[Serializer\Type("DateTime<'Y-m-d'>")]
     public \DateTimeInterface $date;
+
+    #[Serializer\Type("integer")]
+    public int $price;
 }

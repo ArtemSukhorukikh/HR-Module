@@ -2,14 +2,13 @@
 
 namespace App\Dto\EducationResources\Response;
 
-use App\Dto\EducationResources\EducationResourcesAllDTO;
-use App\Dto\EducationResources\EducationResourcesCompetenceDTO;
+use App\Dto\EducationResources\EducationResourcesListDTO;
 use App\Dto\Transformer\Response\AbstractResponceDTOTransformer;
-use App\Entity\Competence;
+use App\Entity\EducationalResources;
 use App\Repository\CompetenceRepository;
 use App\Repository\EducationalResourcesRepository;
 
-class EducationResourcesListResponse extends AbstractResponceDTOTransformer
+class EducationResourcesUseResponse extends AbstractResponceDTOTransformer
 {
     private EducationResourcesResponse $educationResourcesResponse;
     private EducationalResourcesRepository $educationalResourcesRepository;
@@ -23,27 +22,15 @@ class EducationResourcesListResponse extends AbstractResponceDTOTransformer
         $this->educationalResourcesRepository = $educationalResourcesRepository;
         $this->competenceRepository = $competenceRepository;
     }
+
     /**
-     * @param Competence $object
+     * @param EducationalResources[] $objects
      */
-    public function transformFromObject($object): EducationResourcesCompetenceDTO
+    public function transformFromObject($objects): EducationResourcesListDTO
     {
-        $dto = new EducationResourcesCompetenceDTO();
-        $educationalResources = $object->getEducationalResources();
-        $dto->id = $object->getId();
-        $dto->competence = $object->getName();
-        $dto->educationResourcesCompetence = $this->educationResourcesResponse->transformFromObjects($educationalResources);
+        $dto = new EducationResourcesListDTO();
+        $dto->educationResourcesCompetence = $this->educationResourcesResponse->transformFromObjects($objects);
         return $dto;
     }
 
-    public function transformFromObjects(iterable $objects): iterable
-    {
-        $dto = [];
-
-        foreach ($objects as $object) {
-
-            $dto[] = $this->transformFromObject($object);
-        }
-        return $dto;
-    }
 }

@@ -56,7 +56,7 @@ class FeedbackController extends AbstractController
         return $this->json($feedbackDTO, Response::HTTP_OK);
     }
 
-    #[Route('feedback/{id}', name: 'app_applicationForTraining_find', methods: "GET")]
+    #[Route('/feedback/{id}', name: 'app_applicationForTraining_find', methods: "GET")]
     public function findFeedback($id, FeedbackRepository $feedbackRepository): Response
     {
         $feedback = $feedbackRepository->find($id);
@@ -64,7 +64,7 @@ class FeedbackController extends AbstractController
         return $this->json($feedbackDTO, Response::HTTP_OK);
     }
 
-    #[Route('feedback/user/{id}', name: 'app_feedback_user_find', methods: "GET")]
+    #[Route('/feedback/user/{id}', name: 'app_feedback_user_find', methods: "GET")]
     public function findUserFeedback($id, UserRepository $userRepository): Response
     {
         $user = $userRepository->find($id);
@@ -72,23 +72,7 @@ class FeedbackController extends AbstractController
         return $this->json($feedbackDTO, Response::HTTP_OK);
     }
 
-    #[Route('feedback/new', name: 'app_feedback_new', methods: "POST")]
-    public function newFeedback(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
-    {
-        $data = $this->serializer->deserialize($request->getContent(), FeedbackDTO::class, 'json');
-        $user = $userRepository->find($data->userId);
-        if ($user) {
-            $feedback = $this->feedbackRequest->transformToObject($data);
-            $entityManager->persist($feedback);
-            $entityManager->flush();
-
-            return $this->json($data, Response::HTTP_CREATED);
-        }
-
-        return $this->json($data, Response::HTTP_BAD_REQUEST);
-    }
-
-    #[Route('feedback/delete/{id}', name: 'app_feedback_remove', methods: "POST")]
+    #[Route('/feedback/delete/{id}', name: 'app_feedback_remove', methods: "POST")]
     public function removeFeedback($id, Request $request, ManagerRegistry  $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
@@ -101,5 +85,21 @@ class FeedbackController extends AbstractController
         }
 
         //return $this->json($data, Response::HTTP_BAD_REQUEST);
+    }
+
+    #[Route('/feedback/new', name: 'app_feedback_new', methods: "POST")]
+    public function newFeedback(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    {
+        $data = $this->serializer->deserialize($request->getContent(), FeedbackDTO::class, 'json');
+        $user = $userRepository->find($data->user_id);
+        if ($user) {
+            $feedback = $this->feedbackRequest->transformToObject($data);
+            $entityManager->persist($feedback);
+            $entityManager->flush();
+
+            return $this->json($data, Response::HTTP_CREATED);
+        }
+
+        return $this->json($data, Response::HTTP_BAD_REQUEST);
     }
 }

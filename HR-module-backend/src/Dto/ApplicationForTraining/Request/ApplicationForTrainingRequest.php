@@ -24,11 +24,11 @@ class ApplicationForTrainingRequest extends AbstractRequestDTOTransformer
     public function transformToObject($object): ApplicationForTraining
     {
         $data = new ApplicationForTraining();
-        $data->setCompose($this->userRepository->find($object->userId));
-        $data->setIncluded($this->educationalResourcesRepository->find($object->edResId));
-        $data->setStartDate($object->startDate);
-        $data->setEndDate($object->endDate);
-        $data->setMathodOfPassage($object->mathodOfPassage);
+        $data->setCompose($this->userRepository->find($object->user_id));
+        $data->setIncluded($this->educationalResourcesRepository->find($object->ed_res_id));
+        $data->setStartDate($object->start_date);
+        $data->setEndDate($object->end_date);
+        $data->setMathodOfPassage($object->method_of_passage);
         $data->setNote($object->note);
         $data->setStatus($object->status);
         return $data;

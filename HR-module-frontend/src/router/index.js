@@ -7,6 +7,8 @@ import RegistrationView from "@/views/Auth/RegistrationView";
 import UserView from "@/views/UserView";
 import PageNotFound from "@/components/ErrorPages/Page-not-found";
 import KnowledgeBase from "@/views/KnowledgeBaseView";
+import CreateAFT from "@/views/Application/CreateApplication";
+import UserAFT from "@/views/Application/UserApplications";
 
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
@@ -68,6 +70,16 @@ const routes = [
     path: '/knowledgeBase',
     name: 'База знаний',
     component: KnowledgeBase,
+  },
+  {
+    path: '/CreateAFT',
+    name: 'Создание заявок',
+    component: CreateAFT,
+  },
+  {
+    path: '/UserAFT',
+    name: 'Просмотр заявок пользователь',
+    component: UserAFT,
   }
 ]
 

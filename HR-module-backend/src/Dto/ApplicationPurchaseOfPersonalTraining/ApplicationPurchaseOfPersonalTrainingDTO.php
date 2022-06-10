@@ -10,7 +10,7 @@ class ApplicationPurchaseOfPersonalTrainingDTO
     public int $id;
 
     #[Serializer\Type("integer")]
-    public int $userId;
+    public int $user_id;
 
     #[Serializer\Type("string")]
     public string $link;

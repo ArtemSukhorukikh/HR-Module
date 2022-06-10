@@ -125,6 +125,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $Tasks;
 
+    /**
+     * @ORM\OneToMany(targetEntity=SkillAssessment::class, mappedBy="user_", orphanRemoval=true)
+     */
+    private $skillAssessments;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Competence::class, mappedBy="users")
+     */
+    private $competences;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
@@ -136,6 +146,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->responeSurveys = new ArrayCollection();
         $this->applicationPurchaseOfPersonalTrainings = new ArrayCollection();
         $this->Tasks = new ArrayCollection();
+        $this->skillAssessments = new ArrayCollection();
+        $this->competences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -576,6 +588,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeTask(Task $task): self
     {
         $this->Tasks->removeElement($task);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SkillAssessment>
+     */
+    public function getSkillAssessments(): Collection
+    {
+        return $this->skillAssessments;
+    }
+
+    public function addSkillAssessment(SkillAssessment $skillAssessment): self
+    {
+        if (!$this->skillAssessments->contains($skillAssessment)) {
+            $this->skillAssessments[] = $skillAssessment;
+            $skillAssessment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSkillAssessment(SkillAssessment $skillAssessment): self
+    {
+        if ($this->skillAssessments->removeElement($skillAssessment)) {
+            // set the owning side to null (unless already changed)
+            if ($skillAssessment->getUser() === $this) {
+                $skillAssessment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Competence>
+     */
+    public function getCompetences(): Collection
+    {
+        return $this->competences;
+    }
+
+    public function addCompetence(Competence $competence): self
+    {
+        if (!$this->competences->contains($competence)) {
+            $this->competences[] = $competence;
+            $competence->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompetence(Competence $competence): self
+    {
+        if ($this->competences->removeElement($competence)) {
+            $competence->removeUser($this);
+        }
 
         return $this;
     }

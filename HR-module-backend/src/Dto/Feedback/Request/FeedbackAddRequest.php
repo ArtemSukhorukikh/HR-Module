@@ -21,7 +21,7 @@ class FeedbackAddRequest extends AbstractRequestDTOTransformer
     public function transformToObject($object): Feedback
     {
         $data = new Feedback();
-        //$data->setAuthon($object->userId);
+        //$data->setAuthon($object->user_id);
         //$data->setEducationalResources($object->educationalResourcesId);
         $data->setEstimation($object->estimation);
         $data->setDate($object->date);

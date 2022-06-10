@@ -9,7 +9,7 @@ use App\Entity\ApplicationForTraining;
 use App\Entity\User;
 use App\Repository\ApplicationForTrainingRepository;
 
-class ApplicationForTrainingUserResponse extends AbstractResponceDTOTransformer
+class ApplicationForTrainingUserFalseResponse extends AbstractResponceDTOTransformer
 {
     private ApplicationForTrainingRepository $applicationForTrainingRepository;
 
@@ -24,7 +24,7 @@ class ApplicationForTrainingUserResponse extends AbstractResponceDTOTransformer
     {
         $dto = new ApplicationForTrainingListDTO();
         $application = $this->applicationForTrainingRepository->findBy(
-            ["compose" => $object->getId()]
+            ["compose" => $object->getId(), "status" => 0]
         );
         $dto->applicationForTrainingDTO = [];
         foreach ($application as $app)

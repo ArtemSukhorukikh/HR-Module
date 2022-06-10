@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/api/v1')]
 class PersonalTrainingController extends AbstractController
 {
     private PersonalTrainingResponse $personalTrainingResponse;
@@ -30,7 +31,7 @@ class PersonalTrainingController extends AbstractController
         $this->personalTrainingRequest = $personalTrainingRequest;
     }
 
-    #[Route('/{id}', name: 'app_personalTraining_find', methods: "GET")]
+    #[Route('/app_personalTraining_new/{id}', name: 'app_personalTraining_find', methods: "GET")]
     public function findFeedback($id, PersonalTrainingRepository $personalTrainingRepository): Response
     {
         $training = $personalTrainingRepository->find($id);
@@ -38,8 +39,8 @@ class PersonalTrainingController extends AbstractController
         return $this->json($trainingDTO, Response::HTTP_OK);
     }
 
-    #[Route('/new', name: 'app_feedback_new', methods: "POST")]
-    public function newFeedback(Request $request, EntityManagerInterface $entityManager, ApplicationPurchaseOfPersonalTrainingRepository $personalTrainingRepository): Response
+    #[Route('/app_personalTraining_new/new', name: 'app_personalTraining_new', methods: "POST")]
+    public function newPersonalTraining(Request $request, EntityManagerInterface $entityManager, ApplicationPurchaseOfPersonalTrainingRepository $personalTrainingRepository): Response
     {
         $data = $this->serializer->deserialize($request->getContent(), PersonalTrainingDTO::class, 'json');
         $app = $personalTrainingRepository->find($data->id);

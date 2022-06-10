@@ -10,19 +10,22 @@ class ApplicationForTrainingDTO
     public int $id;
 
     #[Serializer\Type("integer")]
-    public int $userId;
+    public int $user_id;
 
     #[Serializer\Type("integer")]
-    public int $edResId;
+    public int $ed_res_id;
+
+    #[Serializer\Type("string")]
+    public string $ed_name;
 
     #[Serializer\Type("DateTime<'Y-m-d'>")]
-    public \DateTimeInterface $startDate;
+    public \DateTimeInterface $start_date;
 
     #[Serializer\Type("DateTime<'Y-m-d'>")]
-    public \DateTimeInterface $endDate;
+    public \DateTimeInterface $end_date;
 
     #[Serializer\Type("integer")]
-    public int $mathodOfPassage;
+    public int $method_of_passage;
 
     #[Serializer\Type("string")]
     public string $note;

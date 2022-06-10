@@ -76,6 +76,7 @@
 <script>
 import FullNavbar from "@/components/Navbars/FullNavbar";
 import axios from "axios";
+import moment from 'moment'
 export default {
   name: "KnowledgeBase",
   components: {FullNavbar},
@@ -104,9 +105,6 @@ export default {
           console.log(this.educationResourcesAll)
         });
   },
-  beforeUpdate() {
-    console.log(this.educationResourcesAll)
-  },
   methods:{
     checkFeedback(id_) {
       axios
@@ -125,10 +123,22 @@ export default {
     sendFeedback() {
       let date;
       date = new Date()
-      this.feedbackDTO.date = date.toString()
+      this.feedbackDTO.date = moment(date).format("YYYY-MM-DD")
+      this.feedbackDTO.userId =  localStorage.getItem('userId')
+      this.feedbackDTO.educationalResourcesId = this.educationResources.id
+      console.log(this.feedbackDTO)
       axios
-          .post('http://localhost:84/api/v1/auth',
-              { feedbackDTO: this.feedbackDTO })
+          .post('http://localhost:84/api/v1/feedback/new',{
+            id: "",
+            userFIO: "",
+            user_id: this.feedbackDTO.userId,
+            educational_resources_id: this.feedbackDTO.educationalResourcesId,
+            estimation: this.feedbackDTO.estimation,
+            note: this.feedbackDTO.note,
+            date: this.feedbackDTO.date})
+          .then(response => {
+            console.log(response)
+          });
     }
   }
 }

@@ -3,6 +3,7 @@
 namespace App\Dto\EducationResources\Request;
 
 use App\Dto\EducationResources\EducationResourcesUpdateDTO;
+use App\Entity\EducationalResources;
 
 class EducationResourcesUpdateRequest
 {
