@@ -92,6 +92,13 @@ class OfficeController extends AbstractController
                 'message' => 'User is not authenticated.'
             ], Response::HTTP_UNAUTHORIZED);
         }
+        if ($user->getWorkplace())
+        {
+            $this->json([
+                'status_code' => Response::HTTP_IM_USED,
+                'message' => 'User have gor a placework.'
+            ], Response::HTTP_IM_USED);
+        }
         $workplace = $workplaceRepository->find($id);
         if ($user && $workplace) {
             $workplace->setUserInWorkplace($user);

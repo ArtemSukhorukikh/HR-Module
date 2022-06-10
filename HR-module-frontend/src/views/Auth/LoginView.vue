@@ -13,8 +13,14 @@
       <label for="floatingPassword">Пароль</label>
     </div>
 
-    <button @click="login" class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+    <button @click="login" class="w-100 btn btn-lg btn-primary" type="submit">Вход</button>
   </form>
+    <div v-if="errorAuth" class="alert alert-danger" role="alert">
+      Неправильная пара логин/пароль
+    </div>
+    <div v-if="errorServer" class="alert alert-danger" role="alert">
+      Нет доступа к серверу авторизации, попробуйте позже
+    </div>
   </main>
 </template>
 
@@ -26,6 +32,8 @@ export default {
   components: {LoginNavbar},
   data() {
     return {
+      'errorServer': false,
+      'errorAuth': false,
       'username': '',
       'password': '',
     }
@@ -39,7 +47,12 @@ export default {
         localStorage.setItem('date', date.toString())
         this.$router.go('/')
       }).catch(errors =>{
-        console.log(errors)
+        if (errors.request.status === 401) {
+          this.errorAuth = true
+        }
+        if (errors.request.status >= 500) {
+          this.errorServer = true
+        }
       })
     }
   },

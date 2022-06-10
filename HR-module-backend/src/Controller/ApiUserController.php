@@ -7,6 +7,7 @@ use App\Dto\UserCurrentDto;
 use App\Dto\UserDto;
 use App\Repository\UserRepository;
 use JMS\Serializer\SerializerBuilder;
+use Redmine\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -100,18 +101,23 @@ class ApiUserController extends AbstractController
     #[Route('/search', name: 'user_search', methods: ['POST'])]
     public function getUserSearch(Request $request, UserRepository $userRepository): Response
     {
-        $id = $request->toArray()['id'];
+        $username = $request->toArray()["username"];
 
-        $user = $userRepository->find($id);
+        $user = $userRepository->findOneBy(['username' => $username]);
+        try {
+            $currentUser = $this->userResponseDTOTransformer->transformFromObject($user);
+            return $this->json($currentUser, Response::HTTP_OK);
+        }catch (Exception $exception){
 
+    }
         if (!$user) {
             $this->json([
                 'status_code' => Response::HTTP_BAD_REQUEST,
                 'message' => 'User is not find.'
             ], Response::HTTP_BAD_REQUEST);
         }
-        $currentUser = $this->userResponseDTOTransformer->transformFromObject($user);
-        return $this->json($currentUser, Response::HTTP_OK);
+
+
     }
 
 }

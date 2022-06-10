@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Dto\AnswearDTO;
 use App\Dto\PersonalAchievementsAddUserDTO;
 use App\Dto\PersonalAchievementsDTO;
 use App\Dto\Transformer\Request\PersonalAchievementsRequestDTOTransformer;
@@ -43,6 +44,10 @@ class PersonalAchievementsController extends AbstractController
         if ($user) {
             return $this->json($this->achivmentsResponseDTOTransformer->transformFromObjects($user->getPersonalAchievements()), Response::HTTP_OK);
         }
+        return $this->json([
+            'status_code' => Response::HTTP_BAD_REQUEST,
+            'message' => 'User is not find.'
+        ], Response::HTTP_BAD_REQUEST);
     }
 
     #[Route('/', name: 'app_personal_achievements', methods: "GET")]
@@ -58,6 +63,10 @@ class PersonalAchievementsController extends AbstractController
         if ($user) {
             return $this->json($this->achivmentsResponseDTOTransformer->transformFromObjects($user->getPersonalAchievements()), Response::HTTP_OK);
         }
+        return $this->json([
+            'status_code' => Response::HTTP_BAD_REQUEST,
+            'message' => 'Bad Data.'
+        ], Response::HTTP_BAD_REQUEST);
     }
 
     #[Route('/new', name: 'app_personal_achievements_new', methods: "POST")]
@@ -70,6 +79,48 @@ class PersonalAchievementsController extends AbstractController
             $entityManager->flush();
             return $this->json($data, Response::HTTP_CREATED);
         }
+        return $this->json([
+            'status_code' => Response::HTTP_BAD_REQUEST,
+            'message' => 'Bad Data.'
+        ], Response::HTTP_BAD_REQUEST);
+    }
+
+    #[Route('/update/{id}', name: 'app_personal_achievements_update', methods: "POST")]
+    public function updatePersonalAchievements(int $id,PersonalAchievementsRepository $repository, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $achivment = $repository->find($id);
+        $data = $this->serializer->deserialize($request->getContent(), PersonalAchievementsDTO::class, 'json');
+        if ($data && $achivment) {
+            $achivment->setDescription($data->description);
+            $achivment->setValue($data->value);
+            $achivment->setName($data->name);
+            $entityManager->persist($achivment);
+            $entityManager->flush();
+            return $this->json($data, Response::HTTP_CREATED);
+        }
+        return $this->json([
+            'status_code' => Response::HTTP_BAD_REQUEST,
+            'message' => 'Bad Data.'
+        ], Response::HTTP_BAD_REQUEST);
+    }
+
+    #[Route('/delete/{id}', name: 'app_personal_achievements_update', methods: "POST")]
+    public function deletePersonalAchievements(int $id,PersonalAchievementsRepository $repository, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $achivment = $repository->find($id);
+        $data = $this->serializer->deserialize($request->getContent(), PersonalAchievementsDTO::class, 'json');
+        if ($data && $achivment) {
+            $entityManager->remove($achivment);
+            $entityManager->flush();
+            $answer = new AnswearDTO();
+            $answer->status = "deleted";
+            $answer->messageAnswear = "Delete personal achivment";
+            return $this->json($answer, Response::HTTP_CREATED);
+        }
+        return $this->json([
+            'status_code' => Response::HTTP_BAD_REQUEST,
+            'message' => 'Bad Data.'
+        ], Response::HTTP_BAD_REQUEST);
     }
 
     #[Route('/add', name: 'app_personal_achievements_add', methods: "POST")]
@@ -86,5 +137,9 @@ class PersonalAchievementsController extends AbstractController
                 return $this->json($data, Response::HTTP_CREATED);
             }
         }
+        return $this->json([
+            'status_code' => Response::HTTP_BAD_REQUEST,
+            'message' => 'Bad Data.'
+        ], Response::HTTP_BAD_REQUEST);
     }
 }

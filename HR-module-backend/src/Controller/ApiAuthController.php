@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Dto\AnswearDTO;
 use App\Dto\Transformer\Request\UserRequestDTOTransformer;
 use App\Dto\UserAuthDto;
 use App\Dto\UserDto;
@@ -168,5 +169,53 @@ class ApiAuthController extends AbstractController
         $userAuth->roles =  $user->getRoles();
         $userAuth->token = $JWTTokenManager->create($user);
         return $this->json($userAuth, Response::HTTP_CREATED);
+    }
+
+    #[Route('/user/update', name: 'api_user_update', methods: ['PUT', 'POST'])]
+    public function update(
+        Request $request,
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager,
+        JWTTokenManagerInterface $JWTTokenManager
+    ): Response
+    {
+        $userDto = $this->serializer->deserialize($request->getContent(), UserDto::class, 'json');
+        $errors = $this->validator->validate($userDto);
+        if ($userRepository->findOneBy(['username' => $userDto->username])) {
+            if (count($errors) > 0) {
+                $jsonErrors = [];
+                foreach ($errors as $error) {
+                    $jsonErrors[$error->getPropertyPath()][] = $error->getMessage();
+                }
+                return $this->json([
+                    'errors' => $jsonErrors,
+                ], Response::HTTP_BAD_REQUEST);
+            }
+            $user = $userRepository->findOneBy(['username' => $userDto->username]);
+            $userChange = $this->userTransformer->transformToObject($userDto);
+            $user->setUsername($userChange->getUsername());
+            $user->setDateOfHiring($userChange->getDateOfHiring());
+            $user->setFirstName($userChange->getFirstName());
+            $user->setLastName($userChange->getLastName());
+            $user->setPatronymic($userChange->getPatronymic());
+            $user->setPosition($userChange->getPosition());
+            $entityManager->persist($user);
+            $entityManager->flush();
+            $answer = new AnswearDTO();
+            $answer->status = "Change";
+            $answer->messageAnswear = "User Info change";
+            return $this->json($answer, Response::HTTP_CREATED);
+        }
+        else {
+            $errors->add(new ConstraintViolation(
+                message: 'User ' . $userDto->username .  ' does not exists.',
+                messageTemplate: 'User {{ value }} already exists.',
+                parameters: ['value' => $userDto->username],
+                root: $userDto,
+                propertyPath: 'username',
+                invalidValue: $userDto->username
+            ));
+        }
+
     }
 }

@@ -23,7 +23,10 @@ class WorkplaceResponseDTOTransformer extends AbstractResponceDTOTransformer
     {
         $dto = new WorkplaceDTO();
         $dto->RoomInTheOffice = $workplace->getRoomInTheOffice();
-        $dto->user = $this->userResponseDTOTransformer->transformFromObject($workplace->getUserInWorkplace());
+        $user = $workplace->getUserInWorkplace();
+        if ($user){
+            $dto->user = $this->userResponseDTOTransformer->transformFromObject($workplace->getUserInWorkplace());
+        }
         return $dto;
     }
 }

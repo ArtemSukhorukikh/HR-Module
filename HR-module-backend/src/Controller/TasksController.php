@@ -77,4 +77,5 @@ class TasksController extends AbstractController
     public function getTasks(TaskRepository $taskRepository,){
         return $this->json($this->tasksResponseDTOTransformer->transformFromObjects($taskRepository->findAll()));
     }
+
 }
