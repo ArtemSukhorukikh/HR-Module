@@ -14,6 +14,9 @@ class FeedbackResponse extends AbstractResponceDTOTransformer
     public function transformFromObject($feedback): FeedbackDTO
     {
         $dto = new FeedbackDTO();
+        $dto->userFIO = $feedback->getAuthon()->getFirstName() . ' ' .
+            $feedback->getAuthon()->getLastName() . ' ' .
+            $feedback->getAuthon()->getPatronymic();
         $dto->userId = $feedback->getAuthon()->getId();
         $dto->educationalResourcesId = $feedback->getEducationalResources()->getId();
         $dto->estimation = $feedback->getEstimation();

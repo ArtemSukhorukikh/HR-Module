@@ -6,6 +6,6 @@ use JMS\Serializer\Annotation as Serializer;
 
 class FeedbackListDTO
 {
-    #[Serializer\Type("array<App\Dto\FeedbackDTO>")]
+    #[Serializer\Type("array<App\Dto\Feedback\FeedbackDTO>")]
     public array $feedbackDTO;
 }

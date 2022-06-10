@@ -33,11 +33,7 @@ class EducationalResourcesController extends AbstractController
     #[Route('/educationalResources/findCompetence/{id}', name: 'app_educationalResources_findCompetence', methods: "GET")]
     public function findCompetence($id, CompetenceRepository $competenceRepository): Response
     {
-        //$competence = $competenceRepository->find($id);
-        $criteria = array_filter(array(
-            'competences' => null
-        ));
-        $competence = $competenceRepository->findBy($criteria)[0];
+        $competence = $competenceRepository->find($id);
         $educationalResourcesDTO = $this->educationResourcesListResponse->transformFromObject($competence);
         return $this->json($educationalResourcesDTO, Response::HTTP_OK);
     }

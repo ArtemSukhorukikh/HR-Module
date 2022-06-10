@@ -13,7 +13,7 @@ class FeedbackUserResponse
 
     public function __construct(FeedbackRepository $feedbackRepository)
     {
-        $this->$feedbackRepository = $feedbackRepository;
+        $this->feedbackRepository = $feedbackRepository;
     }
 
     /**
@@ -22,7 +22,7 @@ class FeedbackUserResponse
     public function transformFromObject($object): FeedbackListDTO
     {
         $feedbacks = $this->feedbackRepository->findBy(
-            ['authon' => $object->getId()]);
+            ['authon' => $object]);
         $dto = new FeedbackListDTO();
         $dto->feedbackDTO = [];
         foreach ($feedbacks as $feedback)

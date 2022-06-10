@@ -13,7 +13,7 @@ class FeedbackUpdateRequest extends AbstractRequestDTOTransformer
 
     public function __construct(FeedbackRepository $feedbackRepository)
     {
-        $this->$feedbackRepository = $feedbackRepository;
+        $this->feedbackRepository = $feedbackRepository;
     }
 
     /**

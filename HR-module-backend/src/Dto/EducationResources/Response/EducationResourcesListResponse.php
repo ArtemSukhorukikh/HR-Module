@@ -25,6 +25,7 @@ class EducationResourcesListResponse extends AbstractResponceDTOTransformer
     {
         $dto = new EducationResourcesCompetenceDTO();
         $educationalResources = $object->getEducationalResources();
+        $dto->id = $object->getId();
         $dto->competence = $object->getName();
         $dto->educationResourcesCompetence = $this->educationResourcesResponse->transformFromObjects($educationalResources);
         return $dto;

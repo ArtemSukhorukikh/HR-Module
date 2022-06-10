@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/api/v1')]
 class FeedbackController extends AbstractController
 {
     private FeedbackResponse $feedbackResponse;
@@ -47,23 +48,7 @@ class FeedbackController extends AbstractController
         $this->feedbackUpdateRequest = $feedbackUpdateRequest;
     }
 
-    #[Route('/{id}', name: 'app_applicationForTraining_find', methods: "GET")]
-    public function findFeedback($id, FeedbackRepository $feedbackRepository): Response
-    {
-        $feedback = $feedbackRepository->find($id);
-        $feedbackDTO = $this->feedbackResponse->transformFromObject($feedback);
-        return $this->json($feedbackDTO, Response::HTTP_OK);
-    }
-
-    #[Route('/user/{id}', name: 'app_feedback_user_find', methods: "GET")]
-    public function findUserFeedback($id, UserRepository $userRepository): Response
-    {
-        $user = $userRepository->find($id);
-        $feedbackDTO = $this->feedbackUserResponse->transformFromObject($user);
-        return $this->json($feedbackDTO, Response::HTTP_OK);
-    }
-
-    #[Route('/resource/{id}', name: 'app_feedback_user_find', methods: "GET")]
+    #[Route('/feedback/resource/{id}', name: 'app_feedback_resource_find', methods: "GET")]
     public function findResourcesFeedback($id, EducationalResourcesRepository $educationalResourcesRepository): Response
     {
         $resource = $educationalResourcesRepository->find($id);
@@ -71,7 +56,23 @@ class FeedbackController extends AbstractController
         return $this->json($feedbackDTO, Response::HTTP_OK);
     }
 
-    #[Route('/new', name: 'app_feedback_new', methods: "POST")]
+    #[Route('feedback/{id}', name: 'app_applicationForTraining_find', methods: "GET")]
+    public function findFeedback($id, FeedbackRepository $feedbackRepository): Response
+    {
+        $feedback = $feedbackRepository->find($id);
+        $feedbackDTO = $this->feedbackResponse->transformFromObject($feedback);
+        return $this->json($feedbackDTO, Response::HTTP_OK);
+    }
+
+    #[Route('feedback/user/{id}', name: 'app_feedback_user_find', methods: "GET")]
+    public function findUserFeedback($id, UserRepository $userRepository): Response
+    {
+        $user = $userRepository->find($id);
+        $feedbackDTO = $this->feedbackUserResponse->transformFromObject($user);
+        return $this->json($feedbackDTO, Response::HTTP_OK);
+    }
+
+    #[Route('feedback/new', name: 'app_feedback_new', methods: "POST")]
     public function newFeedback(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
         $data = $this->serializer->deserialize($request->getContent(), FeedbackDTO::class, 'json');
@@ -87,7 +88,7 @@ class FeedbackController extends AbstractController
         return $this->json($data, Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('/delete/{id}', name: 'app_feedback_remove', methods: "POST")]
+    #[Route('feedback/delete/{id}', name: 'app_feedback_remove', methods: "POST")]
     public function removeFeedback($id, Request $request, ManagerRegistry  $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
