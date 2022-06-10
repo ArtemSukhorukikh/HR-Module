@@ -6,6 +6,7 @@ import LoginView from "@/views/Auth/LoginView";
 import RegistrationView from "@/views/Auth/RegistrationView";
 import UserView from "@/views/UserView";
 import PageNotFound from "@/components/ErrorPages/Page-not-found";
+import KnowledgeBase from "@/views/KnowledgeBaseView";
 
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
@@ -62,6 +63,11 @@ const routes = [
     path:'/:pathMatch(.*)*',
     name: "PageNorFound",
     component: PageNotFound,
+  },
+  {
+    path: '/knowledgeBase',
+    name: 'База знаний',
+    component: KnowledgeBase,
   }
 ]
 
