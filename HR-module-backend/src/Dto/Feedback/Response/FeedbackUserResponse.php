@@ -29,6 +29,7 @@ class FeedbackUserResponse
             return null;
         }
         $dto = new FeedbackDTO();
+        $dto->id = $feedback->getId();
         $dto->user_id = $feedback->getAuthon()->getId();
         $dto->educational_resources_id = $feedback->getEducationalResources()->getId();
         $dto->date = $feedback->getDate();

@@ -49,21 +49,28 @@
         <div class="text-black mb-3 " v-if="educationResources.type === 2">Тип ресурса: Онлайн тренинг</div>
         <div class="text-black mb-3 ">Ссылка: {{educationResources.link}} </div>
         <form class="w-100">
-          <h3 class="h1 fw-bold text-black mb-3 ">Отзыв</h3>
-
-          <div class="form-floating">
-            <input v-model="feedbackDTO.note" type="text" class="form-control" id="floatingPassword" placeholder="Пароль">
-            <label for="floatingPassword">Отзыв</label>
+          <div v-if="userFeedback">
+            <h3 class="fw-bold text-black mb-3 ">Ваш отзыв</h3>
+            <div class="text-black mb-3 ">{{ userFeedback.note }}</div>
+            <div class="text-black mb-3 ">Оценка: {{ userFeedback.estimation }}</div>
+            <button @click="deleteFeedback()" class="w-100 btn btn-lg btn-primary" type="submit">Удалить отзыв</button>
           </div>
-          <select class="form-select form-select-sm" aria-label=".form-select-sm example" v-model="feedbackDTO.estimation">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
+          <div v-if="!userFeedback">
+            <h3 class="h1 fw-bold text-black mb-3 ">Отзыв</h3>
+            <div class="form-floating">
+              <input v-model="feedbackDTO.note" type="text" class="form-control" id="floatingPassword" placeholder="Пароль">
+              <label for="floatingPassword">Отзыв</label>
+            </div>
+            <select class="form-select form-select-sm" aria-label=".form-select-sm example" v-model="feedbackDTO.estimation">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+            <button @click="sendFeedback" class="w-100 btn btn-lg btn-primary" type="submit">Оставить отзыв</button>
+          </div>
 
-          <button @click="sendFeedback" class="w-100 btn btn-lg btn-primary" type="submit">Оставить отзыв</button>
         </form>
       </div>
     </div>
@@ -112,6 +119,13 @@ export default {
         });
   },
   methods:{
+    deleteFeedback(){
+      axios
+          .post("http://localhost:84/api/v1/feedback/delete/" + this.userFeedback.id)
+          .then(response => {
+            console.log(response.data)
+          });
+    },
     getDate(date){
       return moment(date).format("YYYY-MM-DD")
     },

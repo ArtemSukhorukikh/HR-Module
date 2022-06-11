@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Dto\AnswearDTO;
 use App\Dto\Feedback\FeedbackDTO;
 use App\Dto\Feedback\Request\FeedbackAddRequest;
 use App\Dto\Feedback\Request\FeedbackRequest;
@@ -79,11 +80,17 @@ class FeedbackController extends AbstractController
         if ($feedback) {
             $entityManager->remove($feedback);
             $entityManager->flush();
+            $answer = new AnswearDTO();
+            $answer->status = 'Deleted';
+            $answer->messageAnswear = "Deleted " . $id;
+            return $this->json($answer, Response::HTTP_OK);
 
             //return $this->json(Response::HTTP_OK);
         }
-
-        //return $this->json($data, Response::HTTP_BAD_REQUEST);
+        $answer = new AnswearDTO();
+        $answer->status = 'Error delete';
+        $answer->messageAnswear = "Un  deleted " . $id;
+        return $this->json($answer, Response::HTTP_BAD_REQUEST);
     }
 
     #[Route('/feedback/new', name: 'app_feedback_new', methods: "POST")]
