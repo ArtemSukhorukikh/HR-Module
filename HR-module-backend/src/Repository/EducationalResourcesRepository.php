@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Competence;
 use App\Entity\EducationalResources;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -39,13 +40,17 @@ class EducationalResourcesRepository extends ServiceEntityRepository
         }
     }
 
-    public function qwe()
+    public function checkAll(Competence $competence, CompetenceRepository $competenceRepository)
     {
-        $em = $this->getEntityManager();
-        $query = $em->createQuery('
-        SELECT p FROM AcmeStoreBundle:Product p 
-        WHERE p.price > :price 
-        ORDER BY p.price ASC');
+        $educationResources = [];
+        $comp = $competence;
+        while ($comp != null)
+        {
+            $educationResource = $comp->getEducationalResources();
+            $educationResources = array_merge($educationResources, $educationResource->toArray());
+            $comp = $comp->getIncludes()[0];
+        }
+        return $educationResources;
     }
 
 //    /**

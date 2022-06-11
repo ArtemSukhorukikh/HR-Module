@@ -30,6 +30,7 @@ class ApplicationForTrainingUserFalseResponse extends AbstractResponceDTOTransfo
         foreach ($application as $app)
         {
             $dto_ = new ApplicationForTrainingDTO();
+            $dto_->id = $app->getId();
             $dto_->ed_name = $app->getIncluded()->getName();
             $dto_->user_id = $app->getCompose()->getId();
             $dto_->ed_res_id = $app->getIncluded()->getId();

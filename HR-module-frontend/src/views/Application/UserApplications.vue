@@ -54,7 +54,7 @@
                       </h5>
                       <div>
                         <h5 >
-                          Описание {{item.note}}
+                          Описание: {{item.note}}
                         </h5>
                         <h5 v-if="item.method_of_passage === 0">
                           Спосок прохождения обучения: На рабочем месте
@@ -69,7 +69,7 @@
                           Конец обучения: {{this.makeDate(item.end_date)}}
                         </h5>
                       </div>
-
+                      <button class="btn btn-primary" @click="deleteApplicationFT(item.id)">Удалить</button>
                     </div>
                   </div>
                 </div>
@@ -122,7 +122,7 @@
                       <div class="card-body">
                         {{item.note}}
                       </div>
-
+                      <button class="btn btn-primary" @click="deleteApplicationPOPT(item.id)">Удалить</button>
                     </div>
                   </div>
                 </div>
@@ -160,7 +160,6 @@
                 <div class="card-body p-md-5">
                   <div class="row justify-content-center">
                     <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-
                       <h5 v-if="item.status === 0">
                         Ожидание
                       </h5>
@@ -179,7 +178,7 @@
                       <div>
                         {{item.Link}}
                       </div>
-
+                      <button class="btn btn-primary" @click="deleteApplicationPOT(item.id)">Удалить</button>
                     </div>
                   </div>
                 </div>
@@ -219,6 +218,33 @@ export default {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
   },
   methods:{
+    deleteApplicationFT(id) {
+      axios
+          .post("http://localhost:84/api/v1/applicationFT/delete/" + id)
+          .then(response => {
+            console.log(response.data)
+          });
+      this.checkApplicationFT()
+      this.chStatus0()
+    },
+    deleteApplicationPOPT(id) {
+      axios
+          .post("http://localhost:84/api/v1/applicationPOPT/remove/" + id)
+          .then(response => {
+            console.log(response.data)
+          });
+      this.checkApplicationPOPT()
+      this.chStatus0()
+    },
+    deleteApplicationPOT(id) {
+      axios
+          .post("http://localhost:84/api/v1/applicationPOT/remove/" + id)
+          .then(response => {
+            console.log(response.data)
+          });
+      this.checkApplicationPOT()
+      this.chStatus0()
+    },
     makeDate(date) {
       return moment(date).format("YYYY-MM-DD")
     },

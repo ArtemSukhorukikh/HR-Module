@@ -5,15 +5,15 @@
     <div class="row">
       <div class="col-4">
         <div class="accordion" id="accordionExample">
-          <div class="accordion-item" v-for="item in educationResourcesAll" v-bind:key="item">
-            <h2 class="accordion-header" id="headingOne">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <div class="accordion-item" v-for="(item, index) in educationResourcesAll" v-bind:key="item">
+            <h2 class="accordion-header" v-bind:id="'heading'+index">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" v-bind:data-bs-target="'#collapse'+ index" aria-expanded="false" v-bind:aria-controls="'#collapse'+ index">
                 {{ item.competence }}
               </button>
             </h2>
 
-            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample" v-for="item_ in item.educationResourcesCompetence" v-bind:key="item_">
-              <div class="accordion-body">
+            <div v-bind:id="'collapse'+ index " class="accordion-collapse collapse" v-bind:aria-labelledby="'heading'+ index">
+              <div class="accordion-body" v-for="item_ in item.educationResourcesCompetence" v-bind:key="item_">
                 <button v-on:click="checkFeedback(item_.id)">{{ item_.name }}//</button>
               </div>
             </div>
@@ -27,7 +27,10 @@
               {{item.userFIO}}
             </h5>
             <h6 class="card-subtitle mb-2 text-muted">
-              Оценка: {{item.estimation}} Дата: {{item.date}}
+              Оценка: {{item.estimation}}
+            </h6>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Дата: {{getDate(item.date)}}
             </h6>
             <div class="card-body">
               {{item.note}}
@@ -37,14 +40,16 @@
 
       </div>
       <div class="col">
-        <div>{{educationResources.name}}</div>
-        <div>{{educationResources.link}}</div>
-        <div>{{educationResources.description}}</div>
-        <div>{{educationResources.price}}</div>
-        <div>{{educationResources.date}}</div>
-        <div>{{educationResources.type}}</div>
+        <h1 class="text-black mb-3 ">{{educationResources.name}}</h1>
+        <div class="text-black mb-3 ">Описание: {{educationResources.description}}</div>
+        <div class="text-black mb-3 ">Цена ресурса: {{educationResources.price}}</div>
+        <div class="text-black mb-3 ">Дата добавления: {{educationResources.date}}</div>
+        <div class="text-black mb-3 " v-if="educationResources.type === 0">Тип ресурса: Книга</div>
+        <div class="text-black mb-3 " v-if="educationResources.type === 1">Тип ресурса: Онлайн курс</div>
+        <div class="text-black mb-3 " v-if="educationResources.type === 2">Тип ресурса: Онлайн тренинг</div>
+        <div class="text-black mb-3 ">Ссылка: {{educationResources.link}} </div>
         <form class="w-100">
-          <h1 class="h1 fw-bold text-black mb-3 ">Отзыв</h1>
+          <h3 class="h1 fw-bold text-black mb-3 ">Отзыв</h3>
 
           <div class="form-floating">
             <input v-model="feedbackDTO.note" type="text" class="form-control" id="floatingPassword" placeholder="Пароль">
@@ -93,7 +98,8 @@ export default {
         "estimation": '',
         "note": '',
         "date": ''
-      }
+      },
+      "userFeedback": {}
     };
   },
   beforeCreate() {
@@ -106,6 +112,9 @@ export default {
         });
   },
   methods:{
+    getDate(date){
+      return moment(date).format("YYYY-MM-DD")
+    },
     checkFeedback(id_) {
       axios
           .get("http://localhost:84/api/v1/feedback/resource/" + id_)
@@ -118,6 +127,13 @@ export default {
           .then(response => {
             this.educationResources = response.data
             console.log(this.educationResources)
+          });
+      console.log(id_, localStorage.getItem('userId'))
+      axios
+          .get("http://localhost:84/api/v1/feedback/user/" + id_ + "/" + localStorage.getItem('userId'))
+          .then(response => {
+            this.userFeedback = response.data
+            console.log(this.userFeedback)
           });
     },
     sendFeedback() {

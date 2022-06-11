@@ -111,8 +111,8 @@ class ApplicationPurchaseOfTrainingController extends AbstractController
         return $this->json($data, Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('applicationPOT/remove/{id}', name: 'app_applicationForTraining_remove', methods: "GET")]
-    public function removeApplicationPurchaseOfTraining($id, Request $request, ManagerRegistry  $doctrine)
+    #[Route('applicationPOT/remove/{id}', name: 'app_applicationPurchaseOfTraining_remove', methods: "POST")]
+    public function removeApplicationPurchaseOfTraining_($id, Request $request, ManagerRegistry  $doctrine)
     {
         $entityManager = $doctrine->getManager();
         $application = $entityManager->getRepository(ApplicationPurchaseOfTraining::class)->find($id);

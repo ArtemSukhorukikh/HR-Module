@@ -88,7 +88,7 @@ class ApiUserController extends AbstractController
     {
         $user = $this->security->getUser();
         if (!$user) {
-           $this->json([
+           return $this->json([
            'status_code' => Response::HTTP_UNAUTHORIZED,
            'message' => 'User is not authenticated.'
            ], Response::HTTP_UNAUTHORIZED);

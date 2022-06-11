@@ -48,7 +48,7 @@ class ApplicationPurchaseOfPersonalTrainingController extends AbstractController
     }
 
 
-    #[Route('/{id}', name: 'app_ApplicationPurchaseOfPersonalTraining_find', methods: "GET")]
+    #[Route('applicationPOPT/{id}', name: 'app_ApplicationPurchaseOfPersonalTraining_find', methods: "GET")]
     public function findApplicationPurchaseOfPersonalTraining($id, ApplicationPurchaseOfPersonalTrainingRepository $ApplicationPurchaseOfPersonalTrainingRepository): Response
     {
         $application = $ApplicationPurchaseOfPersonalTrainingRepository->find($id);
@@ -72,7 +72,7 @@ class ApplicationPurchaseOfPersonalTrainingController extends AbstractController
         return $this->json($applicationDTO, Response::HTTP_OK);
     }
 
-    #[Route('/department/{id}', name: 'app_ApplicationPurchaseOfPersonalTraining_department', methods: "GET")]
+    #[Route('applicationPOPT/department/{id}', name: 'app_ApplicationPurchaseOfPersonalTraining_department', methods: "GET")]
     public function findDepartmentApplicationPurchaseOfPersonalTraining($id, DepartmentRepository $departmentRepository): Response
     {
         $department = $departmentRepository->find($id);
@@ -96,7 +96,7 @@ class ApplicationPurchaseOfPersonalTrainingController extends AbstractController
         return $this->json($data, Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('/status', name: 'app_ApplicationPurchaseOfPersonalTraining_status', methods: "POST")]
+    #[Route('applicationPOPT/status', name: 'app_ApplicationPurchaseOfPersonalTraining_status', methods: "POST")]
     public function statusApplicationPurchaseOfPersonalTraining(Request $request, ManagerRegistry  $doctrine): Response
     {
         $data = $this->serializer->deserialize($request->getContent(), ApplicationPurchaseOfPersonalTrainingStatusDTO::class, 'json');
@@ -112,7 +112,7 @@ class ApplicationPurchaseOfPersonalTrainingController extends AbstractController
         return $this->json($data, Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('/remove/{id}', name: 'app_ApplicationPurchaseOfPersonalTraining_remove', methods: "POST")]
+    #[Route('applicationPOPT/remove/{id}', name: 'app_ApplicationPurchaseOfPersonalTraining_remove', methods: "POST")]
     public function removeApplicationPurchaseOfPersonalTraining($id, Request $request, ManagerRegistry  $doctrine): Response
     {
         $entityManager = $doctrine->getManager();

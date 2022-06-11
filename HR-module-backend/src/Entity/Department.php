@@ -34,6 +34,12 @@ class Department
      */
     private $surveys;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Competence::class, inversedBy="department", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $mainCompetence;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -113,6 +119,18 @@ class Department
                 $survey->setDeparment(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMainCompetence(): ?Competence
+    {
+        return $this->mainCompetence;
+    }
+
+    public function setMainCompetence(Competence $mainCompetence): self
+    {
+        $this->mainCompetence = $mainCompetence;
 
         return $this;
     }

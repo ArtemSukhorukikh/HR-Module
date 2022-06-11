@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Competence;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -37,6 +38,28 @@ class CompetenceRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function getUserCompetence(User $user, UserRepository $userRepository): iterable
+    {
+        $competence = $user->getCompetences();
+        $test = $this->getSkillsCompetence($competence[0]);
+        var_dump($test);
+        return $test;
+    }
+
+    public function getSkillsCompetence(Competence $competence): iterable
+    {
+        if(!is_null($competence->getIncludes()))
+        {
+            $objects = $competence->getIncludes();
+            $dto = [];
+            foreach ($objects as $object_) {
+                $dto = $this->getSkillsCompetence($object_);
+                $dto[] = $object_->getSkills();
+            }
+        }
+        return $dto;
     }
 
 //    /**

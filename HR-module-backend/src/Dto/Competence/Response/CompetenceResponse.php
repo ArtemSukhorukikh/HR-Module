@@ -16,6 +16,7 @@ class CompetenceResponse extends AbstractResponceDTOTransformer
     public function transformFromObject($object): CompetenceDTO
     {
         $dto = new CompetenceDTO();
+        $dto->id = $object->getId();
         $dto->type = $object->getType();
         $dto->description = $object->getDescription();
         $dto->name = $object->getName();
@@ -24,6 +25,7 @@ class CompetenceResponse extends AbstractResponceDTOTransformer
         $dto->skills_id = [];
         $dto->users_id = [];
         $dto->educational_resources = [];
+        $dto->need_rating = $object->getNeedRating();
         foreach($object->getCompetences() as $i){
             $dto->competences_id[] = $i->getId();
         }

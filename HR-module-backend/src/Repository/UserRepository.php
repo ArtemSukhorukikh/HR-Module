@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Competence;
+use App\Entity\SkillAssessment;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -55,6 +57,50 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $this->add($user, true);
     }
+
+    public function checkGradeRating(User $user, Competence $competence)
+    {
+        $skillAssessments = $user->getSkillAssessments();
+        $skills = $competence->getSkills();
+        $trueSkillAssessments = [];
+        foreach($skills as $skill)
+        {
+            foreach($skillAssessments as $skillAssessment)
+            {
+                if ($skillAssessment->getSkills()->getId() == $skill->getId())
+                {
+                    $trueSkillAssessments[] = $skillAssessment;
+                }
+            }
+        }
+        $sum = 0;
+        $count = 0;
+        foreach ($trueSkillAssessments as $trueSkillAssessment)
+        {
+            $count += 1;
+            $sum += $trueSkillAssessment->getEstimation();
+        }
+        $rating = $sum / $count;
+        return $rating;
+    }
+
+    public function checkGrade(User $user, Competence $competence)
+    {
+        $rating = $this->checkGradeRating($user, $competence);
+        $grade = 0;
+        $comp = $competence->getIncludes()[0];
+        while ($comp != null)
+        {
+            if($comp->getNeedRating() > $rating)
+            {
+                return $grade;
+            }
+            $grade = $comp->getId();
+            $comp = $comp->getIncludes()[0];
+        }
+        return $grade;
+    }
+
 
 //    /**
 //     * @return User[] Returns an array of User objects

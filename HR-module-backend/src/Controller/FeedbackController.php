@@ -64,11 +64,10 @@ class FeedbackController extends AbstractController
         return $this->json($feedbackDTO, Response::HTTP_OK);
     }
 
-    #[Route('/feedback/user/{id}', name: 'app_feedback_user_find', methods: "GET")]
-    public function findUserFeedback($id, UserRepository $userRepository): Response
+    #[Route('/feedback/user/{id}/{ide}', name: 'app_feedback_user_find', methods: "GET")]
+    public function findUserFeedback($id, $ide, UserRepository $userRepository): Response
     {
-        $user = $userRepository->find($id);
-        $feedbackDTO = $this->feedbackUserResponse->transformFromObject($user);
+        $feedbackDTO = $this->feedbackUserResponse->transformFromObject($id, $ide);
         return $this->json($feedbackDTO, Response::HTTP_OK);
     }
 

@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Dto\Competence\CompetenceDTO;
 use App\Dto\Competence\Request\CompetenceRequest;
 use App\Dto\Competence\Response\CompetenceListResponse;
+use App\Dto\Competence\Response\CompetenceRatingResponse;
 use App\Dto\Competence\Response\CompetenceResponse;
+use App\Dto\Competence\Response\CompetenceSkillsResponse;
 use App\Dto\EducationResources\Response\EducationResourcesAllResponse;
 use App\Dto\EducationResources\Response\EducationResourcesListResponse;
 use App\Dto\EducationResources\Response\EducationResourcesResponse;
@@ -24,17 +26,20 @@ class CompetenceController extends AbstractController
     private CompetenceRequest $competenceRequest;
     private CompetenceResponse $competenceResponse;
     private CompetenceListResponse $competenceListResponse;
+    private CompetenceRatingResponse $competenceRatingResponse;
     private EducationResourcesListResponse $educationResourcesListResponse;
     private $serializer;
     public function __construct(
         CompetenceRequest $competenceRequest,
         CompetenceResponse $competenceResponse,
         CompetenceListResponse $competenceListResponse,
+        CompetenceRatingResponse $competenceRatingResponse,
         EducationResourcesListResponse $educationResourcesListResponse)
     {
         $this->serializer = SerializerBuilder::create()->build();
         $this->competenceRequest = $competenceRequest;
         $this->competenceResponse = $competenceResponse;
+        $this->competenceRatingResponse = $competenceRatingResponse;
         $this->competenceListResponse = $competenceListResponse;
         $this->educationResourcesListResponse = $educationResourcesListResponse;
     }
@@ -47,11 +52,23 @@ class CompetenceController extends AbstractController
         return $this->json($competenceDTO, Response::HTTP_OK);
     }
 
+    #[Route('/competence/department/{id}', name: 'app_competence_department', methods: "GET")]
+    public function findDepartment($id, CompetenceRepository $competenceRepository, UserRepository $userRepository): Response
+    {
+        $user = $userRepository->find($id);
+        $competence = $user->getWorks()->getMainCompetence();
+        $competenceDTO = $this->competenceRatingResponse->transformFromObject($competence);
+        $competenceDTO->rating = $userRepository->checkGradeRating($user, $competence);
+        return $this->json($competenceDTO, Response::HTTP_OK);
+    }
+
     #[Route('/competence/list/{id}', name: 'app_competence_find', methods: "GET")]
-    public function findAll($id, CompetenceRepository $competenceRepository): Response
+    public function findAll($id, CompetenceRepository $competenceRepository, UserRepository $userRepository): Response
     {
         $competence = $competenceRepository->find($id);
+        //var_dump($userRepository->checkGrade($userRepository->find(1), $competence));
         $competenceDTO = $this->competenceListResponse->transformFromObject($competence);
+        //$competenceDTO = $this->competenceSkillsResponse->transformFromObject($competence);
         return $this->json($competenceDTO, Response::HTTP_OK);
     }
 
