@@ -29,7 +29,7 @@ class EducationResourcesListResponse extends AbstractResponceDTOTransformer
     public function transformFromObject($object): EducationResourcesCompetenceDTO
     {
         $dto = new EducationResourcesCompetenceDTO();
-        $educationalResources = $object->getEducationalResources();
+        $educationalResources = $this->educationalResourcesRepository->checkAll($object, $this->competenceRepository);
         $dto->id = $object->getId();
         $dto->competence = $object->getName();
         $dto->educationResourcesCompetence = $this->educationResourcesResponse->transformFromObjects($educationalResources);
@@ -41,7 +41,6 @@ class EducationResourcesListResponse extends AbstractResponceDTOTransformer
         $dto = [];
 
         foreach ($objects as $object) {
-
             $dto[] = $this->transformFromObject($object);
         }
         return $dto;

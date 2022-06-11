@@ -33,4 +33,7 @@ class CompetenceDTO
     #[Serializer\Type("integer")]
     public int $type;
 
+    #[Serializer\Type("double")]
+    public float $need_rating;
+
 }

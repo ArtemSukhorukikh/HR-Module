@@ -15,6 +15,7 @@ class ApplicationForTrainingResponse extends AbstractResponceDTOTransformer
     public function transformFromObject($object):ApplicationForTrainingDTO
     {
         $dto = new ApplicationForTrainingDTO();
+        $dto->id = $object->getId();
         $dto->user_id = $object->getCompose()->getId();
         $dto->ed_name = $object->getIncluded()->getName();
         $dto->ed_res_id = $object->getIncluded()->getId();

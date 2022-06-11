@@ -30,7 +30,7 @@
                         <label class="form-label">Обучающий ресурс</label>
                         <select class="form-select form-select-sm" aria-label=".form-select-sm example" v-model="applicationDTO.ed_res_id" >
                           <option disabled="disabled">Сделайте выбор</option>
-                          <option v-for="item in educationResourcesAll" v-bind:key="item" v-bind:value=" item.id">{{item.name}}</option>
+                          <option v-for="item in educationResourcesAll" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
                         </select>
 
                         <div class="d-flex flex-row align-items-center mb-2">
@@ -228,19 +228,20 @@ export default {
           });
     },
     sendApplication() {
-      this.start_date = moment(this.start_date).format("YYYY-MM-DD")
-      this.end_date = moment(this.end_date).format("YYYY-MM-DD")
-      this.user_id =  localStorage.getItem('userId')
+      this.applicationDTO.start_date = moment(this.start_date).format("YYYY-MM-DD")
+      this.applicationDTO.end_date = moment(this.end_date).format("YYYY-MM-DD")
+      this.applicationDTO.user_id =  localStorage.getItem('userId')
+      console.log(this.method_of_passage)
       console.log(this.applicationDTO)
       axios
           .post('http://localhost:84/api/v1/applicationFT/new',{
-            id: this.id,
-            user_id: this.user_id,
-            ed_res_id: String(this.ed_res_id),
-            start_date: this.start_date,
-            end_date: this.end_date,
-            method_of_passage: this.method_of_passage,
-            note: this.note,
+            id: this.applicationDTO.id,
+            user_id: this.applicationDTO.user_id,
+            ed_res_id: String(this.applicationDTO.ed_res_id),
+            start_date: this.applicationDTO.start_date,
+            end_date: this.applicationDTO.end_date,
+            method_of_passage: this.applicationDTO.method_of_passage,
+            note: this.applicationDTO.note,
             status: "0"})
           .then(response => {
             console.log(response)

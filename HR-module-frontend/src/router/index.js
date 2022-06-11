@@ -9,6 +9,9 @@ import PageNotFound from "@/components/ErrorPages/Page-not-found";
 import KnowledgeBase from "@/views/KnowledgeBaseView";
 import CreateAFT from "@/views/Application/CreateApplication";
 import UserAFT from "@/views/Application/UserApplications";
+import CompMap from "@/views/CompetenceMap";
+import CompMatr from "@/views/CompetenceMatrixView";
+import SkillAs from "@/views/SkillsAssessment";
 
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
@@ -80,6 +83,21 @@ const routes = [
     path: '/UserAFT',
     name: 'Просмотр заявок пользователь',
     component: UserAFT,
+  },
+  {
+    path: '/compMap',
+    name: 'Карта компетенций',
+    component: CompMap,
+  },
+  {
+    path: '/compMatr',
+    name: 'Матрица компетенций',
+    component: CompMatr,
+  },
+  {
+    path: '/skillAs',
+    name: 'Оценка навыков',
+    component: SkillAs,
   }
 ]
 

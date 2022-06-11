@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Competence;
 use App\Entity\Skills;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -37,6 +39,12 @@ class SkillsRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public  function getSkillUser(User $user, Competence $competence, Skills $skills, SkillAssessmentRepository $assessmentRepository){
+        $userCompetence = $user->getCompetences()[0];
+        $skillsCompetence = $this->findBy(['competence' => $userCompetence]);
+
     }
 
 //    /**

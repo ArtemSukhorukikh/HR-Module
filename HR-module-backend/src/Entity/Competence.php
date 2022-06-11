@@ -59,6 +59,16 @@ class Competence
      */
     private $users;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $needRating;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Department::class, mappedBy="mainCompetence", cascade={"persist", "remove"})
+     */
+    private $department;
+
     public function __construct()
     {
         $this->educationalResources = new ArrayCollection();
@@ -231,6 +241,35 @@ class Competence
     public function removeUser(User $user): self
     {
         $this->users->removeElement($user);
+
+        return $this;
+    }
+
+    public function getNeedRating(): ?float
+    {
+        return $this->needRating;
+    }
+
+    public function setNeedRating(float $needRating): self
+    {
+        $this->needRating = $needRating;
+
+        return $this;
+    }
+
+    public function getDepartment(): ?Department
+    {
+        return $this->department;
+    }
+
+    public function setDepartment(Department $department): self
+    {
+        // set the owning side of the relation if necessary
+        if ($department->getMainCompetence() !== $this) {
+            $department->setMainCompetence($this);
+        }
+
+        $this->department = $department;
 
         return $this;
     }
