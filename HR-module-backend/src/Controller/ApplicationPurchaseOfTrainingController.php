@@ -71,6 +71,15 @@ class ApplicationPurchaseOfTrainingController extends AbstractController
         return $this->json($applicationDTO, Response::HTTP_OK);
     }
 
+
+    #[Route('applicationPOT/departmentFalse/{id}', name: 'app_applicationPurchaseOfTraining_departmentfalse', methods: "GET")]
+    public function findDepartmentFalseApplicationPurchaseOfTraining($id, DepartmentRepository $departmentRepository): Response
+    {
+        $department = $departmentRepository->find($id);
+        $applicationDTO = $this->applicationPurchaseOfTrainingDepartmentResponse->transformFromObject($department);
+        return $this->json($applicationDTO, Response::HTTP_OK);
+    }
+
     #[Route('applicationPOT/department/{id}', name: 'app_applicationPurchaseOfTraining_department', methods: "GET")]
     public function findDepartmentApplicationPurchaseOfTraining($id, DepartmentRepository $departmentRepository): Response
     {

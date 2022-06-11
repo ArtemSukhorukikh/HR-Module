@@ -4,10 +4,11 @@ namespace App\Dto\ApplicationPurchaseOfTraining\Response;
 
 use App\Dto\ApplicationForTraining\ApplicationForTrainingDTO;
 use App\Dto\ApplicationPurchaseOfTraining\ApplicationPurchaseOfTrainingDTO;
+use App\Dto\Transformer\Response\AbstractResponceDTOTransformer;
 use App\Entity\ApplicationForTraining;
 use App\Entity\ApplicationPurchaseOfTraining;
 
-class ApplicationPurchaseOfTrainingResponse
+class ApplicationPurchaseOfTrainingResponse extends AbstractResponceDTOTransformer
 {
     /**
      * @param ApplicationPurchaseOfTraining $object

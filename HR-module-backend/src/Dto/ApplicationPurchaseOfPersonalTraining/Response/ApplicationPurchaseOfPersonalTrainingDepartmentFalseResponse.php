@@ -14,7 +14,7 @@ use App\Repository\ApplicationForTrainingRepository;
 use App\Repository\ApplicationPurchaseOfPersonalTrainingRepository;
 use App\Repository\UserRepository;
 
-class ApplicationPurchaseOfPersonalTrainingDepartmentResponse
+class ApplicationPurchaseOfPersonalTrainingDepartmentFalseResponse
 {
 
     private ApplicationPurchaseOfPersonalTrainingResponse $applicationPurchaseOfPersonalTrainingResponse;
@@ -38,7 +38,7 @@ class ApplicationPurchaseOfPersonalTrainingDepartmentResponse
         $users = $object->getUsers();
         $dto->applicationPurchaseOfPersonalTrainingDTO = [];
         foreach ($users as $user){
-            $applications = $this->applicationPurchaseOfPersonalTrainingRepository->findBy(["user_" => $user->getId()]);
+            $applications = $this->applicationPurchaseOfPersonalTrainingRepository->findBy(["user_" => $user->getId(), "status" => 0]);
             if ($applications != null) {
                 $dto->applicationPurchaseOfPersonalTrainingDTO = array_merge($dto->applicationPurchaseOfPersonalTrainingDTO, $this->applicationPurchaseOfPersonalTrainingResponse->transformFromObjects($applications)) ;
             }

@@ -33,10 +33,11 @@ class ApplicationForTrainingDepartmentResponse
     {
         $dto = new ApplicationForTrainingListDTO();
         $users = $object->getUsers();
+        $dto->applicationForTrainingDTO = [];
         foreach ($users as $user){
             $applications = $this->applicationForTrainingRepository->findBy(["compose" => $user->getId()]);
             if ($applications != null) {
-                $dto->applicationForTrainingDTO = $this->applicationForTrainingResponse->transformFromObjects($applications);
+                $dto->applicationForTrainingDTO = array_merge($dto->applicationForTrainingDTO, $this->applicationForTrainingResponse->transformFromObjects($applications)) ;
             }
         }
         return $dto;

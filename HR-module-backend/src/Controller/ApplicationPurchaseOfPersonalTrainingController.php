@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Dto\AnswearDTO;
 use App\Dto\ApplicationPurchaseOfPersonalTraining\ApplicationPurchaseOfPersonalTrainingDTO;
 use App\Dto\ApplicationPurchaseOfPersonalTraining\ApplicationPurchaseOfPersonalTrainingStatusDTO;
+use App\Dto\ApplicationPurchaseOfPersonalTraining\Response\ApplicationPurchaseOfPersonalTrainingDepartmentFalseResponse;
 use App\Dto\ApplicationPurchaseOfPersonalTraining\Response\ApplicationPurchaseOfPersonalTrainingDepartmentResponse;
 use App\Dto\ApplicationPurchaseOfPersonalTraining\Response\ApplicationPurchaseOfPersonalTrainingResponse;
 use App\Dto\ApplicationPurchaseOfPersonalTraining\Response\ApplicationPurchaseOfPersonalTrainingUserFalseResponse;
@@ -31,11 +32,13 @@ class ApplicationPurchaseOfPersonalTrainingController extends AbstractController
     private ApplicationPurchaseOfPersonalTrainingDepartmentResponse $applicationPurchaseOfPersonalDepartmentResponse;
     private ApplicationPurchaseOfPersonalTrainingRequest $applicationPurchaseOfPersonalRequest;
     private ApplicationPurchaseOfPersonalTrainingUserFalseResponse $applicationPurchaseOfPersonalTrainingUserFalseResponse;
+    private ApplicationPurchaseOfPersonalTrainingDepartmentFalseResponse $applicationPurchaseOfPersonalTrainingDepartmentFalseResponse;
     private $serializer;
 
     public function __construct(ApplicationPurchaseOfPersonalTrainingUserResponse $applicationPurchaseOfPersonalUserResponse,
                                 ApplicationPurchaseOfPersonalTrainingResponse $applicationPurchaseOfPersonalResponse,
                                 ApplicationPurchaseOfPersonalTrainingDepartmentResponse $applicationPurchaseOfPersonalDepartmentResponse,
+                                ApplicationPurchaseOfPersonalTrainingDepartmentFalseResponse $applicationPurchaseOfPersonalTrainingDepartmentFalseResponse,
                                 ApplicationPurchaseOfPersonalTrainingUserFalseResponse $applicationPurchaseOfPersonalTrainingUserFalseResponse,
                                 ApplicationPurchaseOfPersonalTrainingRequest $applicationPurchaseOfPersonalRequest)
     {
@@ -43,6 +46,7 @@ class ApplicationPurchaseOfPersonalTrainingController extends AbstractController
         $this->applicationPurchaseOfPersonalUserResponse = $applicationPurchaseOfPersonalUserResponse;
         $this->applicationPurchaseOfPersonalResponse = $applicationPurchaseOfPersonalResponse;
         $this->applicationPurchaseOfPersonalDepartmentResponse = $applicationPurchaseOfPersonalDepartmentResponse;
+        $this->applicationPurchaseOfPersonalTrainingDepartmentFalseResponse = $applicationPurchaseOfPersonalTrainingDepartmentFalseResponse;
         $this->applicationPurchaseOfPersonalRequest = $applicationPurchaseOfPersonalRequest;
         $this->applicationPurchaseOfPersonalTrainingUserFalseResponse = $applicationPurchaseOfPersonalTrainingUserFalseResponse;
     }
@@ -72,10 +76,20 @@ class ApplicationPurchaseOfPersonalTrainingController extends AbstractController
         return $this->json($applicationDTO, Response::HTTP_OK);
     }
 
-    #[Route('applicationPOPT/department/{id}', name: 'app_ApplicationPurchaseOfPersonalTraining_department', methods: "GET")]
-    public function findDepartmentApplicationPurchaseOfPersonalTraining($id, DepartmentRepository $departmentRepository): Response
+    #[Route('applicationPOPT/departmentFalse/{id}', name: 'app_ApplicationPurchaseOfPersonalTraining_departmentfalse', methods: "GET")]
+    public function findDepartmentFalseApplicationPurchaseOfPersonalTraining($id, DepartmentRepository $departmentRepository, UserRepository $userRepository): Response
     {
-        $department = $departmentRepository->find($id);
+        $user = $userRepository->find($id);
+        $department = $user->getWorks();
+        $applicationDTO = $this->applicationPurchaseOfPersonalTrainingDepartmentFalseResponse->transformFromObject($department);
+        return $this->json($applicationDTO, Response::HTTP_OK);
+    }
+
+    #[Route('applicationPOPT/department/{id}', name: 'app_ApplicationPurchaseOfPersonalTraining_department', methods: "GET")]
+    public function findDepartmentApplicationPurchaseOfPersonalTraining($id, DepartmentRepository $departmentRepository, UserRepository $userRepository): Response
+    {
+        $user = $userRepository->find($id);
+        $department = $user->getWorks();
         $applicationDTO = $this->applicationPurchaseOfPersonalDepartmentResponse->transformFromObject($department);
         return $this->json($applicationDTO, Response::HTTP_OK);
     }

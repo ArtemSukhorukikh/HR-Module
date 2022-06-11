@@ -12,6 +12,7 @@ import UserAFT from "@/views/Application/UserApplications";
 import CompMap from "@/views/CompetenceMap";
 import CompMatr from "@/views/CompetenceMatrixView";
 import SkillAs from "@/views/SkillsAssessment";
+import DepAFT from "@/views/Application/DepartmentApplication";
 
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
@@ -98,6 +99,11 @@ const routes = [
     path: '/skillAs',
     name: 'Оценка навыков',
     component: SkillAs,
+  },
+  {
+    path: '/DepAFT',
+    name: 'Просмотр заявок отдела',
+    component: DepAFT,
   }
 ]
 
