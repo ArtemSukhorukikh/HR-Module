@@ -89,9 +89,10 @@ class ApplicationForTrainingController extends AbstractController
     }
 
     #[Route('applicationFT/department/{id}', name: 'app_applicationForTraining_department', methods: "GET")]
-    public function findDepartmentApplicationForTraining($id, DepartmentRepository $departmentRepository): Response
+    public function findDepartmentApplicationForTraining($id, UserRepository $userRepository): Response
     {
-        $department = $departmentRepository->find($id);
+        $user = $userRepository->find($id);
+        $department = $user->getWorks();
         $applicationDTO = $this->applicationForTrainingDepartmentResponse->transformFromObject($department);
         return $this->json($applicationDTO, Response::HTTP_OK);
     }

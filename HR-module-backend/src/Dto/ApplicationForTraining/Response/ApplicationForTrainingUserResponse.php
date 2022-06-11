@@ -20,17 +20,22 @@ class ApplicationForTrainingUserResponse extends AbstractResponceDTOTransformer
     /**
      * @param User $object
      */
-    public function transformFromObject($object):ApplicationForTrainingListDTO
+    public function transformFromObject($object): ?ApplicationForTrainingListDTO
     {
         $dto = new ApplicationForTrainingListDTO();
         $application = $this->applicationForTrainingRepository->findBy(
             ["compose" => $object->getId()]
         );
+        if ($application == null)
+        {
+            return null;
+        }
         $dto->applicationForTrainingDTO = [];
         foreach ($application as $app)
         {
             $dto_ = new ApplicationForTrainingDTO();
             $dto_->id = $app->getId();
+            $dto_->user_name = $object->getFirstName() . ' ' . $object->getLastName();
             $dto_->ed_name = $app->getIncluded()->getName();
             $dto_->user_id = $app->getCompose()->getId();
             $dto_->ed_res_id = $app->getIncluded()->getId();

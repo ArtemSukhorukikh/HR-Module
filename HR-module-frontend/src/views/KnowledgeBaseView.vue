@@ -125,6 +125,9 @@ export default {
           .then(response => {
             console.log(response.data)
           });
+      this.userFeedback = null
+      console.log(this.educationResources.id)
+      this.checkFeedback(this.educationResources.id)
     },
     getDate(date){
       return moment(date).format("YYYY-MM-DD")
@@ -169,6 +172,7 @@ export default {
           .then(response => {
             console.log(response)
           });
+      this.checkFeedback(this.educationResources.id)
     }
   }
 }
