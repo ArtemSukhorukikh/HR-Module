@@ -9,9 +9,9 @@ use App\Entity\Workplace;
 
 class WorkplaceResponseDTOTransformer extends AbstractResponceDTOTransformer
 {
-    private UserResponseDTOTransformer $userResponseDTOTransformer;
+    private UserOfficeResponseDTOTransformer $userResponseDTOTransformer;
 
-    public function __construct(UserResponseDTOTransformer $userResponseDTOTransformer)
+    public function __construct(UserOfficeResponseDTOTransformer $userResponseDTOTransformer)
     {
         $this->userResponseDTOTransformer = $userResponseDTOTransformer;
     }
@@ -22,6 +22,7 @@ class WorkplaceResponseDTOTransformer extends AbstractResponceDTOTransformer
     public function transformFromObject($workplace): WorkplaceDTO
     {
         $dto = new WorkplaceDTO();
+        $dto->id = $workplace->getId();
         $dto->RoomInTheOffice = $workplace->getRoomInTheOffice();
         $user = $workplace->getUserInWorkplace();
         if ($user){

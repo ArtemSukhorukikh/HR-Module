@@ -51,7 +51,7 @@ export default {
           this.errorAuth = true
         }
         if (errors.request.status >= 500) {
-          this.errorServer = true
+          this.$router.go(`error/${errors.request.status}`)
         }
       })
     }

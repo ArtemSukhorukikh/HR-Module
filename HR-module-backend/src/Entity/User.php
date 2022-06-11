@@ -418,6 +418,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function countSpeedTask() {
 
             $tasks = $this->getTasks();
+
             $tasksHours = 0.0;
             $tasksCount = 0.0;
             $leftDate = [];
@@ -428,6 +429,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                     $rightDate[] = $task->getCloseDate()->format("Y-m-d H:i");
                     $tasksCount++;
                 }
+            }
+            if ($tasksCount == 0) {
+                return 0.0;
             }
             usort($leftDate, [$this::class, 'date_sort']);
             usort($rightDate, [$this::class, 'date_sort']);

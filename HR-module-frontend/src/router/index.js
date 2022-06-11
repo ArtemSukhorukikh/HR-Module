@@ -7,7 +7,7 @@ import RegistrationView from "@/views/Auth/RegistrationView";
 import UserView from "@/views/UserView";
 import PageNotFound from "@/components/ErrorPages/Page-not-found";
 import LogOut from "@/components/LogOut";
-
+import ErrorServer from "@/components/ErrorPages/ErrorServer";
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
 const authGuard = function beforeEach(to, from, next) {
@@ -36,6 +36,11 @@ const routes = [
     name: 'userPage',
     component: UserView,
     beforeEnter: authGuard
+  },
+  {
+    path: '/error/:errorCode',
+    name: 'errorPage',
+    component: ErrorServer,
   },
   {
     path: '/officemap/floor2',
