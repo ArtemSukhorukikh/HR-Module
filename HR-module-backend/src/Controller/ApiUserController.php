@@ -2,10 +2,17 @@
 
 namespace App\Controller;
 
+use App\Dto\Transformer\Request\UserRequestDTOTransformer;
 use App\Dto\Transformer\Response\UserResponseDTOTransformer;
+use App\Dto\UserAuthDto;
 use App\Dto\UserCurrentDto;
 use App\Dto\UserDto;
+use App\Entity\SkillAssessment;
+use App\Entity\User;
+use App\Repository\CompetenceRepository;
+use App\Repository\DepartmentRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerBuilder;
 use Redmine\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,6 +22,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Security as SecurityOA;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/v1/users')]
 class ApiUserController extends AbstractController
@@ -22,13 +31,19 @@ class ApiUserController extends AbstractController
     private Security $security;
     private $serializer;
     public UserResponseDTOTransformer $userResponseDTOTransformer;
+    public UserRequestDTOTransformer $userTransformer;
+    public $validator;
 
     public function __construct(Security $security,
-                                UserResponseDTOTransformer $userResponseDTOTransformer)
+                                UserResponseDTOTransformer $userResponseDTOTransformer,
+    UserRequestDTOTransformer $requestDTOTransformer,
+                                ValidatorInterface $validator)
     {
         $this->security = $security;
         $this->userResponseDTOTransformer = $userResponseDTOTransformer;
         $this->serializer = SerializerBuilder::create()->build();
+        $this->userTransformer = $requestDTOTransformer;
+        $this->validator = $validator;
     }
     /**
      * @OA\Get(
@@ -116,6 +131,59 @@ class ApiUserController extends AbstractController
                 'message' => 'User is not find.'
             ], Response::HTTP_BAD_REQUEST);
         }
+
+
+    }
+
+    #[Route('/update/{id}', name: 'user_update', methods: ['POST'])]
+    public function updateUser(int $id,Request $request,
+                               UserRepository $userRepository,
+                               CompetenceRepository $competenceRepository,
+                               DepartmentRepository $departmentRepository,
+                               EntityManagerInterface $entityManager,): Response
+    {
+        $userDto = $this->serializer->deserialize($request->getContent(), UserDto::class, 'json');
+
+        $userNew = $this->userTransformer->transformToObject($userDto);
+        $user =  $userRepository->find($id);
+        if ($user) {
+            $errors = []; //$this->validator->validate($userDto);
+            if ($user->getUsername() != $userNew->getUsername()){
+                if ($userRepository->findOneBy(['username' => $userDto->username])) {
+                    $errors->add(new ConstraintViolation(
+                        message: 'User ' . $userDto->username .  ' already exists.',
+                        messageTemplate: 'User {{ value }} already exists.',
+                        parameters: ['value' => $userDto->username],
+                        root: $userDto,
+                        propertyPath: 'username',
+                        invalidValue: $userDto->username
+                    ));
+                }
+            }
+            if (count($errors) > 0) {
+                $jsonErrors = [];
+                foreach ($errors as $error) {
+                    $jsonErrors[$error->getPropertyPath()][] = $error->getMessage();
+                }
+                return $this->json([
+                    'errors' => $jsonErrors,
+                ], Response::HTTP_BAD_REQUEST);
+            }
+            $user->setFirstName($userNew->getFirstName());
+            $user->setLastName($userNew->getLastName());
+            $user->setPatronymic($userNew->getPatronymic());
+            $user->setPosition($userNew->getPosition());
+            $user->setDateOfHiring($userNew->getDateOfHiring());
+            $user->setUsername($userNew->getUsername());
+            $user->setWorks($departmentRepository->findOneBy(["name" => $userDto->department]));
+            $entityManager->persist($user);
+            $entityManager->flush();
+            return $this->json(['ok'], Response::HTTP_ACCEPTED);
+        }
+        else {
+            return $this->json(['error'], Response::HTTP_BAD_REQUEST);
+        }
+
 
 
     }

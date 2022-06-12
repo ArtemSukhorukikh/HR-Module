@@ -6,7 +6,7 @@
         <li class="nav-item mx-5"><router-link class="nav-link"  to="/knowledgeBase">База знаний</router-link></li>
         <li class="nav-item mx-5"><router-link class="nav-link"  to="/officemap/floor2">Карта офиса этаж 2</router-link></li>
         <li class="nav-item mx-5"><router-link class="nav-link"  to="/officemap/floor3">Карта офиса этаж 3</router-link></li>
-        <button @click="exit">Выйти</button>
+        <li class="nav-item mx-5"><router-link class="nav-link"  to="/logout">Выход</router-link></li>
       </ul>
     </header>
   </div>

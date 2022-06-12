@@ -52,7 +52,9 @@ export default {
     return {
       loaded: false,
       isModalVisible: false,
-      dataOffices:{}
+      dataOffices:{
+        offices: undefined
+      }
     };
   },
   components: {ModalWindowWorkplace, FullNavbar},
@@ -70,8 +72,27 @@ export default {
     clickOnMap(officeNumber, place) {
 
       this.isModalVisible = true;
-      this.$refs.modal.office = this.dataOffices.offices[officeNumber - 1]
+      this.$refs.modal.office.name = this.dataOffices.offices[officeNumber - 1].name
+      this.$refs.modal.office.floor = this.dataOffices.offices[officeNumber - 1].floor
+      this.$refs.modal.office.workplaces.id = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].id
+      this.$refs.modal.office.workplaces.RoomInTheOffice = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].RoomInTheOffice
+      if (this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user) {
+        this.$refs.modal.office.workplaces.showUser = true
+        this.$refs.modal.office.workplaces.user.firstname = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.userInfo.firstname
+        this.$refs.modal.office.workplaces.user.lastname = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.userInfo.lastname
+        this.$refs.modal.office.workplaces.user.patronymic = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.userInfo.patronymic
+        this.$refs.modal.office.workplaces.user.position = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.userInfo.position
+        this.$refs.modal.office.workplaces.user.contacts = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.userInfo.contacts
+      }
+      else {
+        this.$refs.modal.office.workplaces.showUser = false
+        this.$refs.modal.office.workplaces.user.firstname = ""
+        this.$refs.modal.office.workplaces.user.lastname = ""
+        this.$refs.modal.office.workplaces.user.patronymic = ""
+        this.$refs.modal.office.workplaces.user.position = ""
+      }
       this.$refs.modal.place = place - 1
+      this.$refs.modal.render = true;
     },
     closeModal() {
       this.isModalVisible = false;
@@ -81,21 +102,5 @@ export default {
 </script>
 
 <style scoped>
-  .floorImage {
-    height: auto !important;
-    width: 100% !important;
-    background-image: url("../assets/img/Floor2Full.png");
-  }
-  .part {
-    box-sizing: border-box;
-    width: 60px;
-    height: 60px;
-    border: 1px solid #000000;
-  }
-  .button-part {
 
-    background: transparent;
-    border: none !important;
-    font-size:0;
-  }
 </style>

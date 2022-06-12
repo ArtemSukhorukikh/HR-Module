@@ -1,5 +1,6 @@
 <template>
   <div id="liveAlertPlaceholder"></div>
+  <modal-window-user-form ref="modal" v-show="isModalVisible" @close="closeModal"></modal-window-user-form>
   <div v-if="noError" class="container bg-light">
     <div class="main-body">
 
@@ -58,8 +59,8 @@
                   {{ userData.username}}
                 </div>
               </div>
-                <div class="col-sm-12">
-                  <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                <div v-if="currentUser" class="col-sm-12">
+                  <button @click="openModal()" class="btn btn-outline-primary my-2 " >Редактировать</button>
                 </div>
               </div>
             </div>
@@ -112,15 +113,18 @@
 
 <script>
 import axios from "axios";
+import ModalWindowUserForm from "@/components/modal-windows/modal-window-user-form";
 
 
 export default {
   name: "ProfilePage",
   components: {
+    ModalWindowUserForm
 
   },
   data() {
     return {
+      isModalVisible: false,
       chartOptions: {
         accessibility:{
           enabled: false
@@ -206,6 +210,19 @@ export default {
     },
     fullName(){
       if (this.userData !== null) return  this.userData.userInfo['lastname'] + " " + this.userData.userInfo['firstname'] + " " + this.userData.userInfo['patronymic'] ;
+    },
+    openModal() {
+      this.isModalVisible = true;
+      this.$refs.modal.firstname = this.userData.userInfo.firstname
+      this.$refs.modal.lastname = this.userData.userInfo.lastname
+      this.$refs.modal.patronymic = this.userData.userInfo.patronymic
+      this.$refs.modal.position = this.userData.userInfo.position
+      this.$refs.modal.dateofhiring = this.userData.userInfo.dateofhiring
+      this.$refs.modal.username = this.userData.username
+      this.$refs.modal.id = this.userData.id
+    },
+    closeModal() {
+      this.isModalVisible = false;
     }
   },
   beforeCreate() {
@@ -232,9 +249,6 @@ export default {
       axios.get("http://localhost:84/api/v1/users/current").then( responce => {
         this.userData = responce.data
         localStorage.setItem('role', JSON.stringify(responce.data['roles']))
-        localStorage.setItem('username', responce.data.username)
-        localStorage.setItem('userId', JSON.stringify(responce.data['id']))
-        console.log(localStorage.getItem('userId'))
         this.noError = true
         console.log(this.userData)}).catch(error =>{
         if (error.request.status === 401) {
@@ -242,8 +256,8 @@ export default {
           localStorage.removeItem('date')
           this.$router.go("/login")
         }
-        })
-      }
+      })
+    }
 
   },
   updated() {
@@ -252,8 +266,14 @@ export default {
       console.log(element.name)
       this.chartOptions.yAxis.categories.push(element.name)
       let startDate = element['start_date'].substr(0,10).split('-')
-      let endDate = element['closed_on'].substr(0,10).split('-')
-      console.log(startDate)
+      let endDate;
+      if (element['closed_on']) {
+        endDate = element['closed_on'].substr(0,10).split('-')
+      } else {
+        endDate = element['updated_on'].substr(0,10).split('-')
+      }
+
+      console.log(endDate)
       this.chartOptions.series.push({
         name: element['name'],
         data: [{
@@ -262,7 +282,7 @@ export default {
           y: count
         }]
       })
-    count++
+      count++
     })
   }
 }

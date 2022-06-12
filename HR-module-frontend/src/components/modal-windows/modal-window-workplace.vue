@@ -39,20 +39,20 @@
                   Номер рабочего места:
                 </div>
                 <div class="col">
-                  {{this.office.workplaces[this.place].RoomInTheOffice}}
+                  {{this.office.workplaces.RoomInTheOffice}}
                 </div>
               </div>
-              <div v-if="this.office.workplaces[this.place].user" class="row">
+              <div v-if="this.office.workplaces.showUser" class="row">
                 <div class="col">
                   <div class="col">ФИО</div>
                   <div class="col">Должность</div>
                   <div class="col">Контакты</div>
                 </div>
                 <div class="col">
-                  <div class="col">
-                    {{this.office.workplaces[this.place].user.userInfo.firstname}} {{this.office.workplaces[this.place].user.userInfo.lastname}} {{this.office.workplaces[this.place].user.userInfo.patronymic}}
+                  <div class="row-col">
+                    {{this.office.workplaces.user.firstname }} {{this.office.workplaces.user.lastname}} {{this.office.workplaces.user.patronymic}}
                   </div>
-                  <div class="col">{{this.office.workplaces[this.place].user.userInfo.position}}</div>
+                  <div class="col">{{this.office.workplaces.user.position}}</div>
                   <div class="col">
 
                   </div>
@@ -79,11 +79,22 @@ export default {
     return {
       show: false,
       office: {
-        workplaces:[{
+        name:"",
+        floor:"",
+        workplaces:{
             id:0,
             RoomInTheOffice: 0,
-            user:{}
-      }]
+            user:{
+              username:"",
+              dateofhiring: ' ',
+              firstname:'',
+              lastname:'',
+              patronymic:'',
+              position:'',
+              contacts: {},
+            },
+            showUser : false,
+      }
       },
       place: 0,
     }
@@ -93,9 +104,22 @@ export default {
       this.$emit('close');
     },
     setPlace() {
-      axios.post(`http://localhost:84/api/v1/offices/set/workplace/${this.office.workplaces[this.place].id}`,{}).then(response => {
+      axios.post(`http://localhost:84/api/v1/offices/set/workplace/${this.office.workplaces.id}`,{}).then(response => {
         console.log(response.data)
-        this.$router.go('/officemap/floor2')
+        this.$router.go('/officemap/floor'+this.office.floor)
+      }).catch(errors =>{
+        if (errors.request.status === 401) {
+          this.$router.go('/login')
+        }
+        if (errors.request.status >= 500) {
+          this.$router.go(`/error/${errors.request.status}`)
+        }
+      })
+    },
+    unsetPlace() {
+      axios.post(`http://localhost:84/api/v1/offices/unset/workplace/${this.office.workplaces.id}`,{}).then(response => {
+        console.log(response.data)
+        this.$router.go('/officemap/floor'+this.office.floor)
       }).catch(errors =>{
         if (errors.request.status === 401) {
           this.$router.go('/login')
@@ -111,7 +135,6 @@ export default {
 
 <style scoped>
 .modal-backdrop {
-  width: 500px !important;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -124,7 +147,7 @@ export default {
 }
 
 .modal {
-  width: 30%;
+  width: 40%;
   background: #FFFFFF;
   box-shadow: 2px 2px 20px 1px;
   overflow-x: auto;
