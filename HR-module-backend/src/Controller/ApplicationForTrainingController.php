@@ -9,6 +9,7 @@ use App\Dto\ApplicationForTraining\ApplicationForTrainingDTO;
 use App\Dto\ApplicationForTraining\ApplicationForTrainingListDTO;
 use App\Dto\ApplicationForTraining\ApplicationForTrainingStatusDTO;
 use App\Dto\ApplicationForTraining\Request\ApplicationForTrainingRequest;
+use App\Dto\ApplicationForTraining\Response\ApplicationForTrainingDepartmentFalseResponse;
 use App\Dto\ApplicationForTraining\Response\ApplicationForTrainingDepartmentResponse;
 use App\Dto\ApplicationForTraining\Response\ApplicationForTrainingResponse;
 use App\Dto\ApplicationForTraining\Response\ApplicationForTrainingUserFalseResponse;
@@ -31,6 +32,7 @@ class ApplicationForTrainingController extends AbstractController
 {
     private ApplicationForTrainingUserResponse $applicationForTrainingUserResponse;
     private ApplicationForTrainingResponse $applicationForTrainingResponse;
+    private ApplicationForTrainingDepartmentFalseResponse $applicationForTrainingDepartmentFalseResponse;
     private ApplicationForTrainingDepartmentResponse $applicationForTrainingDepartmentResponse;
     private ApplicationForTrainingUserFalseResponse $applicationForTrainingUserFalseResponse;
     private ApplicationForTrainingRequest $applicationForTrainingRequest;
@@ -39,12 +41,14 @@ class ApplicationForTrainingController extends AbstractController
     public function __construct(ApplicationForTrainingUserResponse $applicationForTrainingUserResponse,
                                 ApplicationForTrainingResponse $applicationForTrainingResponse,
                                 ApplicationForTrainingDepartmentResponse $applicationForTrainingDepartmentResponse,
+                                ApplicationForTrainingDepartmentFalseResponse $applicationForTrainingDepartmentFalseResponse,
                                 ApplicationForTrainingUserFalseResponse $applicationForTrainingUserFalseResponse,
                                 ApplicationForTrainingRequest $applicationForTrainingRequest)
     {
         $this->serializer = SerializerBuilder::create()->build();
         $this->applicationForTrainingUserResponse = $applicationForTrainingUserResponse;
         $this->applicationForTrainingResponse = $applicationForTrainingResponse;
+        $this->applicationForTrainingDepartmentFalseResponse = $applicationForTrainingDepartmentFalseResponse;
         $this->applicationForTrainingUserFalseResponse = $applicationForTrainingUserFalseResponse;
         $this->applicationForTrainingDepartmentResponse = $applicationForTrainingDepartmentResponse;
         $this->applicationForTrainingRequest = $applicationForTrainingRequest;
@@ -94,7 +98,7 @@ class ApplicationForTrainingController extends AbstractController
     {
         $user = $userRepository->find($id);
         $department = $user->getWorks();
-        $applicationDTO = $this->applicationForTrainingDepartmentResponse->transformFromObject($department);
+        $applicationDTO = $this->applicationForTrainingDepartmentFalseResponse->transformFromObject($department);
         return $this->json($applicationDTO, Response::HTTP_OK);
     }
 

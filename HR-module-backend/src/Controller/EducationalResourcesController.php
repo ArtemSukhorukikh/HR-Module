@@ -3,14 +3,18 @@
 namespace App\Controller;
 
 use App\Dto\EducationResources\EducationResourcesAllDTO;
+use App\Dto\EducationResources\EducationResourcesDTO;
+use App\Dto\EducationResources\Request\EducationResourcesRequest;
 use App\Dto\EducationResources\Response\EducationResourcesAllResponse;
 use App\Dto\EducationResources\Response\EducationResourcesListResponse;
 use App\Dto\EducationResources\Response\EducationResourcesResponse;
 use App\Dto\EducationResources\Response\EducationResourcesUseResponse;
 use App\Repository\CompetenceRepository;
 use App\Repository\EducationalResourcesRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -18,6 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class EducationalResourcesController extends AbstractController
 {
     private EducationResourcesAllResponse $educationResourcesAllResponse;
+    private EducationResourcesRequest $educationResourcesRequest;
     private EducationResourcesResponse $educationResourcesResponse;
     private EducationResourcesListResponse $educationResourcesListResponse;
     private EducationResourcesUseResponse $educationResourcesUseResponse;
@@ -26,9 +31,11 @@ class EducationalResourcesController extends AbstractController
         EducationResourcesAllResponse $educationResourcesAllResponse,
         EducationResourcesResponse $educationResourcesResponse,
         EducationResourcesUseResponse $educationResourcesUseResponse,
+        EducationResourcesRequest $educationResourcesRequest,
         EducationResourcesListResponse $educationResourcesListResponse)
     {
         $this->serializer = SerializerBuilder::create()->build();
+        $this->educationResourcesRequest = $educationResourcesRequest;
         $this->educationResourcesAllResponse = $educationResourcesAllResponse;
         $this->educationResourcesUseResponse = $educationResourcesUseResponse;
         $this->educationResourcesResponse = $educationResourcesResponse;
@@ -72,5 +79,15 @@ class EducationalResourcesController extends AbstractController
         $educationalResources = $educationalResourcesRepository->find($id);
         $educationalResourcesDTO = $this->educationResourcesResponse->transformFromObject($educationalResources);
         return $this->json($educationalResourcesDTO, Response::HTTP_OK);
+    }
+
+    #[Route('/educationalResources/new', name: 'app_educationalResources_new', methods: "POST")]
+    public function newEducationalResources(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $data = $this->serializer->deserialize($request->getContent(), EducationResourcesDTO::class, 'json');
+        $educationalResource = $this->educationResourcesRequest->transformToObject($data);
+        $entityManager->persist($educationalResource);
+        $entityManager->flush();
+        return $this->json($data, Response::HTTP_CREATED);
     }
 }
