@@ -11,7 +11,7 @@ class NewContactsDTO
     #[Serializer\Type("string")]
     public string $username;
     #[Serializer\Type("string")]
-    public string $link = "1";
+    public string $link;
     #[Serializer\Type("string")]
-    public string $source = "2";
+    public string $sourse;
 }

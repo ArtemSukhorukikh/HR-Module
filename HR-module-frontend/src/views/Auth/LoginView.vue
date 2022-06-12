@@ -13,7 +13,7 @@
       <label for="floatingPassword">Пароль</label>
     </div>
 
-    <button @click="login" class="w-100 btn btn-lg btn-primary" type="submit">Вход</button>
+    <button @click="login" class="w-100 mt-4 btn btn-lg btn-primary" type="submit">Вход</button>
   </form>
     <div v-if="errorAuth" class="alert alert-danger" role="alert">
       Неправильная пара логин/пароль

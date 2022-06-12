@@ -1,6 +1,7 @@
 <template>
   <div id="liveAlertPlaceholder"></div>
   <modal-window-user-form ref="modal" v-show="isModalVisible" @close="closeModal"></modal-window-user-form>
+  <modal-window-contact-form ref="contact" v-show="isModalContactVisible" @close="closeContactModal()" ></modal-window-contact-form>
   <div v-if="noError" class="container bg-light">
     <div class="main-body">
 
@@ -21,11 +22,21 @@
             </div>
           </div>
           <div class="card mt-3">
-            <p>Контакты</p>
+            <div class="row-cols-2 d-flex justify-content-around">
+              <p>Контакты</p>
+              <svg @click='openModalContact("new", {})' xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mt-1 bi bi-plus-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+              </svg>
+            </div>
             <ul class="list-group list-group-flush">
               <li v-for="contact in userData.contacts" v-bind:key = "contact" class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                <h6 class="mb-0">{{contact['source']}}</h6>
+                <h6 class="mb-0">{{contact['sourse']}}</h6>
                 <span class="text-secondary">{{contact['link']}}</span>
+                <svg @click='openModalContact("update", contact)' xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                </svg>
               </li>
             </ul>
           </div>
@@ -59,6 +70,16 @@
                   {{ userData.username}}
                 </div>
               </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Отдел</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  {{ userData.department}}
+                </div>
+              </div>
+              <hr>
                 <div v-if="currentUser" class="col-sm-12">
                   <button @click="openModal()" class="btn btn-outline-primary my-2 " >Редактировать</button>
                 </div>
@@ -114,17 +135,20 @@
 <script>
 import axios from "axios";
 import ModalWindowUserForm from "@/components/modal-windows/modal-window-user-form";
+import ModalWindowContactForm from "@/components/modal-windows/modal-window-contact-form";
 
 
 export default {
   name: "ProfilePage",
   components: {
+    ModalWindowContactForm,
     ModalWindowUserForm
 
   },
   data() {
     return {
       isModalVisible: false,
+      isModalContactVisible: false,
       chartOptions: {
         accessibility:{
           enabled: false
@@ -172,26 +196,27 @@ export default {
         [],
       },
       "noError":false,
-      "userData": {
-        "userid": "",
-        "username": "",
-        "roles":[],
-        "userInfo":{
+      userData: {
+        userid: "",
+        username: "",
+        roles:[],
+        userInfo:{
           'dateofhiring':'',
           'firstname':'',
           'lastname':'',
           'patronymic':'',
           'position':''
         },
-        "contacts":{
+        contacts:{
 
         },
-        "projects": {
+        projects: {
 
         },
-        "tasks": {
+        tasks: {
 
-        }
+        },
+        department:""
       },
     }
   },
@@ -211,6 +236,19 @@ export default {
     fullName(){
       if (this.userData !== null) return  this.userData.userInfo['lastname'] + " " + this.userData.userInfo['firstname'] + " " + this.userData.userInfo['patronymic'] ;
     },
+    openModalContact(method, contact) {
+      this.isModalContactVisible = true
+      this.$refs.contact.method = method
+      this.$refs.contact.username = this.userData.username
+      if (method === 'update') {
+        this.$refs.contact.link = contact.link
+        this.$refs.contact.source = contact.sourse
+        this.$refs.contact.id = contact.id
+      }
+    },
+    closeContactModal() {
+      this.isModalContactVisible = false;
+    },
     openModal() {
       this.isModalVisible = true;
       this.$refs.modal.firstname = this.userData.userInfo.firstname
@@ -220,6 +258,7 @@ export default {
       this.$refs.modal.dateofhiring = this.userData.userInfo.dateofhiring
       this.$refs.modal.username = this.userData.username
       this.$refs.modal.id = this.userData.id
+      this.$refs.modal.department = this.userData.department
     },
     closeModal() {
       this.isModalVisible = false;

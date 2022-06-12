@@ -15,7 +15,7 @@ class ContactRequestDTOTransformer extends AbstractRequestDTOTransformer
     {
         $data = new Contacts();
         $data->setlink((string)$contact->link);
-        $data->setSource((string)$contact->source);
+        $data->setSource((string)$contact->sourse);
         return $data;
     }
 }
