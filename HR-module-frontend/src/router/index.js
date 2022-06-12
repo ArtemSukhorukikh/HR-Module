@@ -15,6 +15,7 @@ import CompMap from "@/views/CompetenceMap";
 import CompMatr from "@/views/CompetenceMatrixView";
 import SkillAs from "@/views/SkillsAssessment";
 import DepAFT from "@/views/Application/DepartmentApplication";
+import CreateEdRes from "@/views/CreateEducationResource";
 
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
@@ -81,41 +82,55 @@ const routes = [
     path:'/:pathMatch(.*)*',
     name: "PageNorFound",
     component: PageNotFound,
+    beforeEnter: authGuard
   },
   {
     path: '/knowledgeBase',
     name: 'База знаний',
     component: KnowledgeBase,
+    beforeEnter: authGuard
   },
   {
     path: '/CreateAFT',
     name: 'Создание заявок',
     component: CreateAFT,
+    beforeEnter: authGuard
   },
   {
     path: '/UserAFT',
     name: 'Просмотр заявок пользователь',
     component: UserAFT,
+    beforeEnter: authGuard
   },
   {
     path: '/compMap',
     name: 'Карта компетенций',
     component: CompMap,
+    beforeEnter: authGuard
   },
   {
     path: '/compMatr',
     name: 'Матрица компетенций',
     component: CompMatr,
+    beforeEnter: authGuard
   },
   {
     path: '/skillAs',
     name: 'Оценка навыков',
     component: SkillAs,
+    beforeEnter: authGuard
   },
   {
     path: '/DepAFT',
     name: 'Просмотр заявок отдела',
     component: DepAFT,
+    beforeEnter: authGuard
+  },
+  {
+    path: '/createEdRes',
+    name: 'Создание образовательного ресурса',
+    component: CreateEdRes,
+    beforeEnter: authGuard
   }
 ]
 

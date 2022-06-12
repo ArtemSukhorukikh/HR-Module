@@ -11,16 +11,15 @@
                 {{ item.competence }}
               </button>
             </h2>
-
             <div v-bind:id="'collapse'+ index " class="accordion-collapse collapse" v-bind:aria-labelledby="'heading'+ index">
               <div class="accordion-body" v-for="item_ in item.educationResourcesCompetence" v-bind:key="item_">
-                <button v-on:click="checkFeedback(item_.id)">{{ item_.name }}//</button>
+                <a class="link-primary" v-on:click="checkFeedback(item_.id)">{{ item_.name }}</a>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col-sm">
         <div v-if="feedbacks">
           <div class="card" v-for="item in feedbacks" v-bind:key="item">
             <h5 class="card-title">
@@ -39,14 +38,15 @@
         </div>
 
       </div>
-      <div class="col">
+      <div class="col-sm w-25">
         <h1 class="text-black mb-3 ">{{educationResources.name}}</h1>
-        <div class="text-black mb-3 ">Описание: {{educationResources.description}}</div>
+        <p class="text-black mb-3 text-wrap">Описание: {{educationResources.description}}</p>
         <div class="text-black mb-3 ">Цена ресурса: {{educationResources.price}}</div>
         <div class="text-black mb-3 ">Дата добавления: {{educationResources.date}}</div>
         <div class="text-black mb-3 " v-if="educationResources.type === 0">Тип ресурса: Книга</div>
         <div class="text-black mb-3 " v-if="educationResources.type === 1">Тип ресурса: Онлайн курс</div>
         <div class="text-black mb-3 " v-if="educationResources.type === 2">Тип ресурса: Онлайн тренинг</div>
+        <div class="text-black mb-3 " v-if="educationResources.type === 3">Тип ресурса: Личный ресурс</div>
         <div class="text-black mb-3 ">Ссылка: {{educationResources.link}} </div>
         <form class="w-100">
           <div v-if="userFeedback">

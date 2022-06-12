@@ -1,21 +1,32 @@
 <template>
   <FullNavbar/>
-  <div v-for="item in competences" v-bind:key="item">
-    <h6 @click="getDescription(item.id)">{{item.name}}</h6>
-    <button class="button" type="button" @click="getDescription(item)">
-      {{item.name}}
-    </button>
-    <div class="progress" >
-      <div class="progress-bar" role="progressbar" v-bind:style="{ width: getPersent(item.need_rating) }" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+  <div class="container bg-light">
+
+    <div v-for="item in competences" v-bind:key="item" class="card mb-3 w-75 mx-auto">
+      <div class="card-body">
+        <a class="h6 link" @click="getDescription(item)"> {{item.name}}</a>
+        <div class="progress" >
+          <div class="progress-bar" role="progressbar" v-bind:style="{ width: getPersent(item.need_rating) }" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div v-if="descriptions">
-    <div>
-      {{ descriptions.description }}
+    <div v-if="descriptions" class="card mb-3 mx-auto w-75">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm">
+            <p>Описание компетенции:</p>
+            <p> {{ descriptions.description }} </p>
+          </div>
+          <div class="col-sm">
+            <p>Список образовательных ресурсов:</p>
+            <div v-for="item in descriptions.educationResources" v-bind:key="item" >
+              {{ item.name }}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div v-for="item in descriptions.educationResources" v-bind:key="item">
-      {{ item.name }}
-    </div>
+
   </div>
 
 </template>
@@ -47,6 +58,7 @@ export default {
               console.log(this.competences)
               console.log(this.rating.toFixed(2))
             });
+    this.descriptions = null
   },
   methods: {
     getPersent( needRating ) {

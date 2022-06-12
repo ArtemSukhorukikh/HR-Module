@@ -9,6 +9,9 @@ class EducationResourcesDTO
     #[Serializer\Type("integer")]
     public int $id;
 
+    #[Serializer\Type("integer")]
+    public int $id_competence;
+
     #[Serializer\Type("string")]
     public string $name;
 

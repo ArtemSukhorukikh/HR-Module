@@ -73,17 +73,19 @@ class ApplicationPurchaseOfTrainingController extends AbstractController
 
 
     #[Route('applicationPOT/departmentFalse/{id}', name: 'app_applicationPurchaseOfTraining_departmentfalse', methods: "GET")]
-    public function findDepartmentFalseApplicationPurchaseOfTraining($id, DepartmentRepository $departmentRepository): Response
+    public function findDepartmentFalseApplicationPurchaseOfTraining($id, UserRepository $userRepository): Response
     {
-        $department = $departmentRepository->find($id);
+        $user = $userRepository->find($id);
+        $department = $user->getWorks();;
         $applicationDTO = $this->applicationPurchaseOfTrainingDepartmentResponse->transformFromObject($department);
         return $this->json($applicationDTO, Response::HTTP_OK);
     }
 
     #[Route('applicationPOT/department/{id}', name: 'app_applicationPurchaseOfTraining_department', methods: "GET")]
-    public function findDepartmentApplicationPurchaseOfTraining($id, DepartmentRepository $departmentRepository): Response
+    public function findDepartmentApplicationPurchaseOfTraining($id, UserRepository $userRepository): Response
     {
-        $department = $departmentRepository->find($id);
+        $user = $userRepository->find($id);
+        $department = $user->getWorks();
         $applicationDTO = $this->applicationPurchaseOfTrainingDepartmentResponse->transformFromObject($department);
         return $this->json($applicationDTO, Response::HTTP_OK);
     }
@@ -104,7 +106,7 @@ class ApplicationPurchaseOfTrainingController extends AbstractController
         return $this->json($data, Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('applicationPOT/status', name: 'app_applicationForTraining_status', methods: "POST")]
+    #[Route('applicationPOT/status', name: 'app_applicationPurchaseOfTraining_status', methods: "POST")]
     public function statusApplicationPurchaseOfTraining(Request $request, ManagerRegistry  $doctrine): Response
     {
         $data = $this->serializer->deserialize($request->getContent(), ApplicationPurchaseOfTrainingStatusDTO::class, 'json');
