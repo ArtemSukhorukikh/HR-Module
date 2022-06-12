@@ -170,7 +170,6 @@
               <option v-for="item in educationResources" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
             </select>
 
-            <button @click="findAllResource" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Добавить ресурс</button>
             <button @click="compAddEdRes" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Добавить ресурс</button>
 
           </form>
@@ -198,7 +197,6 @@
               <option v-for="item in educationResources" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
             </select>
 
-            <button @click="findAllResource" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Добавить ресурс</button>
             <button @click="compDeleteEdRes" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Удалить ресурс</button>
 
           </form>
