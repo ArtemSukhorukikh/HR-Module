@@ -10,6 +10,7 @@ use App\Dto\UserDto;
 use App\Dto\WorkplaceDTO;
 use App\Entity\Office;
 use App\Repository\OfficeRepository;
+use App\Repository\UserRepository;
 use App\Repository\WorkplaceRepository;
 
 use Doctrine\ORM\EntityManager;
@@ -82,9 +83,10 @@ class OfficeController extends AbstractController
     }
 
     #[Route('/set/workplace/{id}', name: 'app_office_add_user', methods: "POST")]
-    public function setWorkplace(int $id, Request $request, EntityManagerInterface $entityManager, WorkplaceRepository $workplaceRepository)
+    public function setWorkplace(int $id, Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager, WorkplaceRepository $workplaceRepository)
     : Response
     {
+        $username = $request->toArray()['username'];
         $user = $this->security->getUser();
         if (!$user) {
             return $this->json([
@@ -92,20 +94,20 @@ class OfficeController extends AbstractController
                 'message' => 'User is not authenticated.'
             ], Response::HTTP_UNAUTHORIZED);
         }
-
-        if ($user->getWorkplace() != null)
+        $user = $userRepository->findOneBy(['username' => $username]);
+        if ($workplaceRepository->findOneBy(['userInWorkplace'=>$user->getId()]))
         {
             return $this->json([
-                'status_code' => Response::HTTP_IM_USED,
+                'status_code' => Response::HTTP_BAD_REQUEST,
                 'message' => 'User have got a placework.'
-            ], Response::HTTP_IM_USED);
+            ], Response::HTTP_BAD_REQUEST);
         }
         $workplace = $workplaceRepository->find($id);
-        if ($workplace->getUserInWorkplace() != null) {
+        if ($workplace->getUserInWorkplace() !== null) {
             return $this->json([
-                'status_code' => Response::HTTP_IM_USED,
+                'status_code' => Response::HTTP_BAD_REQUEST,
                 'message' => 'WorkPlace is busy.'
-            ], Response::HTTP_IM_USED);
+            ], Response::HTTP_BAD_REQUEST);
         }
         if ($user && $workplace) {
             $workplace->setUserInWorkplace($user);
@@ -116,31 +118,25 @@ class OfficeController extends AbstractController
     }
 
     #[Route('/unset/workplace/{id}', name: 'app_office_unset_user', methods: "POST")]
-    public function unsetWorkplace(int $id, Request $request, EntityManagerInterface $entityManager, WorkplaceRepository $workplaceRepository)
+    public function unsetWorkplace(int $id, Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager, WorkplaceRepository $workplaceRepository)
     : Response
     {
         $user = $this->security->getUser();
         if (!$user) {
-            $this->json([
+            return $this->json([
                 'status_code' => Response::HTTP_UNAUTHORIZED,
                 'message' => 'User is not authenticated.'
             ], Response::HTTP_UNAUTHORIZED);
         }
-        if (!$user->getWorkplace())
-        {
-            $this->json([
-                'status_code' => Response::HTTP_IM_USED,
-                'message' => 'User have not got a placework.'
-            ], Response::HTTP_IM_USED);
+        $workplace = $workplaceRepository->find($id);
+        if ($workplace) {
+            $workplace->getUserInWorkplace()->setWorkplace(null);
+            $entityManager->persist($workplace);
+            $entityManager->flush();
+            return $this->json(["status" => "OK"], Response::HTTP_CREATED);
+
         }
-        else{
-            $workplace = $workplaceRepository->find($id);
-            if ($user && $workplace) {
-                $workplace->setUserInWorkplace(null);
-                $entityManager->persist($workplace);
-                $entityManager->flush();
-                return $this->json(["status" => "OK"], Response::HTTP_CREATED);
-            }
-        }
+        return $this->json(['doen`t find'], Response::HTTP_BAD_REQUEST);
     }
+
 }

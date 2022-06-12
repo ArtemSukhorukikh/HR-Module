@@ -83,6 +83,10 @@ export default {
         this.$refs.modal.office.workplaces.user.patronymic = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.userInfo.patronymic
         this.$refs.modal.office.workplaces.user.position = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.userInfo.position
         this.$refs.modal.office.workplaces.user.contacts = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.userInfo.contacts
+        this.$refs.modal.office.workplaces.user.username = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.username
+        if (this.$refs.modal.office.workplaces.user.username === localStorage.getItem('username')) {
+          this.$refs.modal.isUser = true
+        }
       }
       else {
         this.$refs.modal.office.workplaces.showUser = false

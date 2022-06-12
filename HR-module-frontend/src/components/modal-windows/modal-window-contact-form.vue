@@ -27,35 +27,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>
               <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" v-model="lastname" placeholder="Иванов" required>
-                <label for="floatingInput">Фамилия</label>
+                <input type="text" class="form-control" id="floatingInput" v-model="link" placeholder="Телеграм" required>
+                <label for="floatingInput">Ресурс</label>
               </div>
               <div class="form-floating mb-3">
-                <input type="text" class="form-control" v-model="firstname" id="floatingInput" placeholder="Иван" required>
+                <input type="text" class="form-control" id="floatingInput" v-model="source" placeholder="@yournickname" required>
                 <label for="floatingInput">Имя</label>
               </div>
-              <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" v-model="patronymic" placeholder="Иванович" required>
-                <label for="floatingInput">Отчество</label>
-              </div>
-              <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" v-model="username" placeholder="Username" required>
-                <label for="floatingInput">Имя пользователя</label>
-              </div>
-              <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" v-model="department" placeholder="Отдел" required>
-                <label for="floatingInput">Отдел</label>
-              </div>
-              <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" v-model="position" placeholder="Должномть" required>
-                <label for="floatingInput">Должность</label>
-              </div>
-              <div class="form-floating mb-3">
-                <input type="date" class="form-control" id="floatingInput"  v-model="dateofhiring">
-                <label for="floatingInput">Дата приема на работу</label>
-              </div>
-              <div class="mb-3 d-flex justify-content-center">
-                <button class="btn btn-outline-primary" @click="updateUserInfo()">Сохранить</button>
+              <div class="row-cols-2 d-flex justify-content-center">
+                <div class="mb-3 ">
+                  <button class="btn btn-outline-primary" @click="updateContactInfo">Сохранить</button>
+                </div>
+                <div class="mb-3">
+                  <button class="btn btn-outline-danger" @click="deleteContactInfo">Удалить</button>
+                </div>
               </div>
             </div>
           </slot>
@@ -68,44 +53,47 @@
 <script>
 import axios from "axios";
 export default {
-  name: "modal-window-user-form",
+  name: "modal-window-contact-form",
   data: function () {
     return {
+      id:"",
+      method:"",
       show: false,
       error: false,
       ok:"",
-      id:"",
       username:"",
-      firstname:"",
-      lastname:"",
-      patronymic:"",
-      position:"",
-      dateofhiring: "",
-      department: "",
-
-
-
+      link:"",
+      source:""
     }
   },
   methods: {
-    updateUserInfo(){
-      axios.post(`http://localhost:84/api/v1/users/update/${this.id}`,{
-        username: this.username,
-        lastname: this.lastname,
-        firstname: this.firstname,
-        patronymic: this.patronymic,
-        position: this.position,
-        dateofhiring: this.dateofhiring,
-        department: this.department
+    deleteContactInfo(){
+      axios.post(`http://localhost:84/api/v1/contacts/delete/${this.id}`,{
       }).then(responce => {
         console.log(responce)
         this.ok = true
         this.error = false
-        setTimeout(this.$router.go(), 2000)
+        setTimeout(this.$router.go(this.$router.currentRoute), 2000)
       }).catch(errors => {
         this.error = true
         console.log(errors)
       })
+    },
+    updateContactInfo(){
+        axios.post(`http://localhost:84/api/v1/contacts/${this.method}`,{
+          id:this.id,
+          username: this.username,
+          link: this.link,
+          sourse: this.source,
+        }).then(responce => {
+          console.log(responce)
+          this.ok = true
+          this.error = false
+          setTimeout(this.$router.go(this.$router.currentRoute), 2000)
+        }).catch(errors => {
+          this.error = true
+          console.log(errors)
+        })
     },
     close() {
       this.$emit('close');

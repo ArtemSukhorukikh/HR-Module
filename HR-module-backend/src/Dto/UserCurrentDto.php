@@ -1,6 +1,7 @@
 <?php
 namespace App\Dto;
 
+use App\Dto\Department\DepartmentDTO;
 use JMS\Serializer\Annotation as Serializer;
 
 class UserCurrentDto
@@ -22,6 +23,9 @@ class UserCurrentDto
 
     #[Serializer\Type(TasksDTO::class)]
     public $tasks;
+
+    #[Serializer\Type("string")]
+    public $department;
 
     #[Serializer\Type(ContactDTO::class)]
     public array $contacts;
