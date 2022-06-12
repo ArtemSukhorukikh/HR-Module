@@ -2,27 +2,39 @@
 
 namespace App\Dto\Feedback\Response;
 
-
 use App\Dto\Feedback\FeedbackDTO;
-use App\Dto\Feedback\FeedbackUserDTO;
-use App\Entity\Feedback;
-use App\Entity\User;
+use App\Dto\Feedback\FeedbackListDTO;
 use App\Entity\EducationalResources;
-use App\Dto\Transformer\Response\AbstractResponceDTOTransformer;
+use App\Entity\User;
+use App\Repository\FeedbackRepository;
 
-class FeedbackUserResponse  extends AbstractResponceDTOTransformer
+class FeedbackUserResponse
 {
-    /**
-     * @param Feedback $object
-     */
-    public function transformFromObject($object): FeedbackUserDTO
+    private FeedbackRepository $feedbackRepository;
+
+    public function __construct(FeedbackRepository $feedbackRepository)
     {
-        $feedback = new FeedbackDTO();
-        $feedback->estimation = $object->getEstimation();
-        $feedback->date = $object->getDate();
-        $feedback->note = $object->getNote();
-        $dto = new FeedbackUserDTO($feedback);
-        $dto->userId = $object->getAuthon()->getId();
-        $dto->educationalResourcesId = $object->getEducationalResources()->getId();
+        $this->feedbackRepository = $feedbackRepository;
+    }
+
+    /**
+     * @param string $object
+     * @param string $object0
+     */
+    public function transformFromObject($object, $object0): ?FeedbackDTO
+    {
+        $feedback = $this->feedbackRepository->findOneBy(
+            ['authon' => $object0, 'educationalResources' => $object]);
+        if ($feedback == null){
+            return null;
+        }
+        $dto = new FeedbackDTO();
+        $dto->id = $feedback->getId();
+        $dto->user_id = $feedback->getAuthon()->getId();
+        $dto->educational_resources_id = $feedback->getEducationalResources()->getId();
+        $dto->date = $feedback->getDate();
+        $dto->note = $feedback->getNote();
+        $dto->estimation = $feedback->getEstimation();
+        return $dto;
     }
 }

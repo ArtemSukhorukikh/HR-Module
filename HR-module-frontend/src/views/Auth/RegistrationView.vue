@@ -15,35 +15,39 @@
 
                     <div class="d-flex flex-row align-items-center mb-2">
                       <i class="fas fa-user fa-lg me-3 fa-fw"></i>
-                      <div class="form-outline flex-fill mb-0">
+                      <div class="form-outline flex-fill mb-0" :class="{ error: v$.username.$errors.length }">
                         <label class="form-label" for="form3Example1c">Имя пользователя в системе RedMine</label>
-                        <input type="text" id="form3Example1c" v-model="username" class="form-control" />
-
+                        <input type="text" id="form3Example1c" v-model="username" class="form-control"/>
                       </div>
+                      <div class="form-label" v-if="v$.username.required.$invalid">Данное поле должно быть заполенно</div>
                     </div>
 
                     <div class="d-flex flex-row align-items-center mb-2">
                       <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
-                      <div class="form-outline flex-fill mb-0">
+                      <div class="form-outline flex-fill mb-0" :class="{ error: v$.password.$errors.length }">
                         <label class="form-label" for="form3Example4c">Пароль</label>
-                        <input type="password" id="form3Example4c" v-model="password" class="form-control" />
+                        <input type="password" id="form3Example4c" v-model="password" class="form-control" @blur="v$.password.$touch()"/>
                       </div>
-
+                      <div class="form-label" v-if="v$.password.required.$invalid">Данное поле должно быть заполенно</div>
+                      <div class="form-label" v-if="v$.password.minLength.$invalid">Минимальное кол-во символов 6!</div>
                     </div>
+
                     <div class="d-flex flex-row align-items-center mb-2">
                       <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                      <div class="form-outline flex-fill mb-0">
+                      <div class="form-outline flex-fill mb-0"  :class="{ error: v$.firstname.$errors.length }">
                         <label class="form-label" for="form3Example3c">Имя</label>
                         <input type="text" id="form3Example3c" v-model="firstname" class="form-control" />
                       </div>
+                      <div class="form-label" v-if="v$.firstname.required.$invalid">Данное поле должно быть заполенно</div>
                     </div>
 
                     <div class="d-flex flex-row align-items-center mb-2">
                       <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                      <div class="form-outline flex-fill mb-0">
+                      <div class="form-outline flex-fill mb-0" :class="{ error: v$.lastname.$errors.length }">
                         <label class="form-label" for="form3Example3c">Фамилия</label>
                         <input type="text" id="form3Example3c" v-model="lastname" class="form-control" />
                       </div>
+                      <div class="form-label" v-if="v$.lastname.required.$invalid">Данное поле должно быть заполенно</div>
                     </div>
 
                     <div class="d-flex flex-row align-items-center mb-2">
@@ -56,10 +60,20 @@
 
                     <div class="d-flex flex-row align-items-center mb-2">
                       <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                      <div class="form-outline flex-fill mb-0">
+                      <div class="form-outline flex-fill mb-0" :class="{ error: v$.position.$errors.length }">
                         <label class="form-label" for="form3Example3c">Должность</label>
                         <input type="text" id="form3Example3c" v-model="position" class="form-control" />
                       </div>
+                      <div class="form-label" v-if="v$.position.required.$invalid">Данное поле должно быть заполенно</div>
+                    </div>
+
+                    <div class="d-flex flex-row align-items-center mb-2">
+                      <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0" :class="{ error: v$.department.$errors.length }">
+                        <label class="form-label" for="form3Example3c">Отдел</label>
+                        <input type="text" id="form3Example3c" v-model="department" class="form-control" />
+                      </div>
+                      <div class="form-label" v-if="v$.department.required.$invalid">Данное поле должно быть заполенно</div>
                     </div>
 
                     <div class="d-flex flex-row align-items-center mb-2">
@@ -95,11 +109,14 @@
 <script>
 import axios from "axios";
 import LoginNavbar from "@/components/Navbars/LoginNavbar";
+import useVuelidate from '@vuelidate/core'
+import { required, minLength } from '@vuelidate/validators'
 export default {
   name: "RegistrationView",
   components: {LoginNavbar},
   data() {
     return {
+      v$: useVuelidate(),
       "username": "",
       "password": "",
       "lastname": "",
@@ -107,29 +124,58 @@ export default {
       "patronymic": "",
       "position": "",
       "dateofhiring": "",
+      "department": "",
+    }
+  },
+  validations() {
+    return {
+      lastname: {
+        required
+      },
+      firstname: {
+        required
+      },
+      username: {
+        required
+      },
+      position: {
+        required
+      },
+      department: {
+        required
+      },
+      password: {
+        required,
+        minLength: minLength(6)
+      }
     }
   },
   methods: {
     register() {
-      console.log(this.dateofhiring)
-      axios.post('http://localhost:84/api/v1/register',{
-        username: this.username,
-        password: this.password,
-        lastname: this.lastname,
-        firstname: this.firstname,
-        patronymic: this.patronymic,
-        position: this.position,
-        dateofhiring: this.dateofhiring
-      }).then(responce => {
-        localStorage.setItem('token', responce.data.token)
-        localStorage.setItem('roles', JSON.stringify(responce.data.roles))
-        let date;
-        date = new Date()
-        localStorage.setItem('date', date.toString())
-        this.$router.push("/")
-      }).catch(errors =>{
-        console.log(errors)
-      })
+      this.v$.$validate()
+      console.log(this.v$)
+      if(!this.v$.error){
+        console.log(this.dateofhiring)
+        axios.post('http://localhost:84/api/v1/register',{
+          username: this.username,
+          password: this.password,
+          lastname: this.lastname,
+          firstname: this.firstname,
+          patronymic: this.patronymic,
+          position: this.position,
+          dateofhiring: this.dateofhiring,
+          department: this.department
+        }).then(responce => {
+          localStorage.setItem('token', responce.data.token)
+          localStorage.setItem('roles', JSON.stringify(responce.data.roles))
+          let date;
+          date = new Date()
+          localStorage.setItem('date', date.toString())
+          this.$router.push("/")
+        }).catch(errors =>{
+          console.log(errors)
+        })
+      }
     }
   },
 }

@@ -6,7 +6,10 @@ use App\Dto\AnswearDTO;
 use App\Dto\Transformer\Request\UserRequestDTOTransformer;
 use App\Dto\UserAuthDto;
 use App\Dto\UserDto;
+use App\Entity\SkillAssessment;
 use App\Entity\User;
+use App\Repository\CompetenceRepository;
+use App\Repository\DepartmentRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerBuilder;
@@ -20,6 +23,7 @@ use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Security as SecurityOA;
+use \Datetime;
 
 #[Route('/api/v1')]
 class ApiAuthController extends AbstractController
@@ -132,6 +136,8 @@ class ApiAuthController extends AbstractController
     public function register(
         Request $request,
         UserRepository $userRepository,
+        CompetenceRepository $competenceRepository,
+        DepartmentRepository $departmentRepository,
         EntityManagerInterface $entityManager,
         JWTTokenManagerInterface $JWTTokenManager
     ): Response
@@ -160,8 +166,23 @@ class ApiAuthController extends AbstractController
         $user = new User;
         $user = $this->userTransformer->transformToObject($userDto);
         $user->setPassword($this->passwordHasher->hashPassword($user, $userDto->password));
+        $user->setWorks($departmentRepository->findOneBy(["name" => $userDto->department]));
         $entityManager->persist($user);
         $entityManager->flush();
+        $competence = $user->getWorks()->getMainCompetence();
+        $competence->addUser($user);
+        $skills = $competence->getSkills();
+        foreach ($skills as $skill){
+            $skillsAssessment = new SkillAssessment();
+            $skillsAssessment->setUser($user);
+            $skillsAssessment->setSkills($skill);
+            $skillsAssessment->setEstimation(0);
+            $date = new DateTime();
+            $skillsAssessment->setDate($date);
+            $entityManager->persist($skillsAssessment);
+            $entityManager->flush();
+        }
+
         $userAuth = new UserAuthDto();
         $userAuth->roles =  $user->getRoles();
         $userAuth->token = $JWTTokenManager->create($user);

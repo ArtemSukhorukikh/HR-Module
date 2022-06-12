@@ -3,3 +3,6 @@ HR-module-backend/.idea/dataSources.xml
 HR-module-backend/.idea/dataSources.xml
 HR-module-backend/composer.json
 HR-module-backend/composer.lock
+HR-module-backend/docker-compose.yml
+HR-module-backend/composer.lock
+HR-module-backend/composer.json

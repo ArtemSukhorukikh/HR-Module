@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Competence;
 use App\Entity\EducationalResources;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,6 +38,19 @@ class EducationalResourcesRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function checkAll(Competence $competence, CompetenceRepository $competenceRepository)
+    {
+        $educationResources = [];
+        $comp = $competence;
+        while ($comp != null)
+        {
+            $educationResource = $comp->getEducationalResources();
+            $educationResources = array_merge($educationResources, $educationResource->toArray());
+            $comp = $comp->getIncludes()[0];
+        }
+        return $educationResources;
     }
 
 //    /**

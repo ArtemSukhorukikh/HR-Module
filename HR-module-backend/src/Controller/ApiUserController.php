@@ -85,11 +85,11 @@ class ApiUserController extends AbstractController
      * @SecurityOA(name="Bearer")
      */
     #[Route('/current', name: 'current_user', methods: ['GET'])]
-    public function getCurrentUser(): Response
+    public function getCurrentUser(UserRepository $userRepository): Response
     {
         $user = $this->security->getUser();
         if (!$user) {
-           $this->json([
+           return $this->json([
            'status_code' => Response::HTTP_UNAUTHORIZED,
            'message' => 'User is not authenticated.'
            ], Response::HTTP_UNAUTHORIZED);
@@ -109,7 +109,7 @@ class ApiUserController extends AbstractController
             return $this->json($currentUser, Response::HTTP_OK);
         }catch (Exception $exception){
 
-    }
+        }
         if (!$user) {
             $this->json([
                 'status_code' => Response::HTTP_BAD_REQUEST,

@@ -31,4 +31,14 @@ class UserDto
     #[Serializer\Type("string")]
     #[Assert\NotBlank(message: 'The username field can\'t be blank.')]
     public string $dateofhiring;
+    #[Serializer\Type("string")]
+    #[Assert\NotBlank(message: 'The username field can\'t be blank.')]
+    public string $department;
+
+    #[Serializer\Type("integer")]
+    public int $id;
+
+
+    #[Serializer\Type("float")]
+    public float $rating;
 }

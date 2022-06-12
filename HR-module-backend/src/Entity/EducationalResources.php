@@ -54,9 +54,21 @@ class EducationalResources
      */
     private $makesRating;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ApplicationForTraining::class, mappedBy="included")
+     */
+    private $applicationForTrainings;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Competence::class, mappedBy="educationalResources")
+     */
+    private $competences;
+
     public function __construct()
     {
         $this->makesRating = new ArrayCollection();
+        $this->applicationForTrainings = new ArrayCollection();
+        $this->competences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -161,6 +173,63 @@ class EducationalResources
             if ($makesRating->getEducationalResources() === $this) {
                 $makesRating->setEducationalResources(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApplicationForTraining>
+     */
+    public function getApplicationForTrainings(): Collection
+    {
+        return $this->applicationForTrainings;
+    }
+
+    public function addApplicationForTraining(ApplicationForTraining $applicationForTraining): self
+    {
+        if (!$this->applicationForTrainings->contains($applicationForTraining)) {
+            $this->applicationForTrainings[] = $applicationForTraining;
+            $applicationForTraining->setIncluded($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplicationForTraining(ApplicationForTraining $applicationForTraining): self
+    {
+        if ($this->applicationForTrainings->removeElement($applicationForTraining)) {
+            // set the owning side to null (unless already changed)
+            if ($applicationForTraining->getIncluded() === $this) {
+                $applicationForTraining->setIncluded(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Competence>
+     */
+    public function getCompetences(): Collection
+    {
+        return $this->competences;
+    }
+
+    public function addCompetence(Competence $competence): self
+    {
+        if (!$this->competences->contains($competence)) {
+            $this->competences[] = $competence;
+            $competence->addEducationalResource($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompetence(Competence $competence): self
+    {
+        if ($this->competences->removeElement($competence)) {
+            $competence->removeEducationalResource($this);
         }
 
         return $this;
