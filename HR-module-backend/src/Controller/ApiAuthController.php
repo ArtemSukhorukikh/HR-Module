@@ -166,22 +166,25 @@ class ApiAuthController extends AbstractController
         $user = new User;
         $user = $this->userTransformer->transformToObject($userDto);
         $user->setPassword($this->passwordHasher->hashPassword($user, $userDto->password));
-        $user->setWorks($departmentRepository->findOneBy(["name" => $userDto->department]));
+        //$user->setWorks($departmentRepository->findOneBy(["name" => $userDto->department]));
         $entityManager->persist($user);
         $entityManager->flush();
-        $competence = $user->getWorks()->getMainCompetence();
-        $competence->addUser($user);
-        $skills = $competence->getSkills();
-        foreach ($skills as $skill){
-            $skillsAssessment = new SkillAssessment();
-            $skillsAssessment->setUser($user);
-            $skillsAssessment->setSkills($skill);
-            $skillsAssessment->setEstimation(0);
-            $date = new DateTime();
-            $skillsAssessment->setDate($date);
-            $entityManager->persist($skillsAssessment);
-            $entityManager->flush();
+        if ($user->getWorks()){
+            $competence = $user->getWorks()->getMainCompetence();
+            $competence->addUser($user);
+            $skills = $competence->getSkills();
+            foreach ($skills as $skill){
+                $skillsAssessment = new SkillAssessment();
+                $skillsAssessment->setUser($user);
+                $skillsAssessment->setSkills($skill);
+                $skillsAssessment->setEstimation(0);
+                $date = new DateTime();
+                $skillsAssessment->setDate($date);
+                $entityManager->persist($skillsAssessment);
+                $entityManager->flush();
+            }
         }
+
 
         $userAuth = new UserAuthDto();
         $userAuth->roles =  $user->getRoles();

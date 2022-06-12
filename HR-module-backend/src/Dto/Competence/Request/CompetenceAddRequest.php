@@ -12,7 +12,7 @@ use App\Repository\EducationalResourcesRepository;
 use App\Repository\SkillsRepository;
 use App\Repository\UserRepository;
 
-class CompetenceRequest extends AbstractRequestDTOTransformer
+class CompetenceAddRequest extends AbstractRequestDTOTransformer
 {
 
     private CompetenceRepository $competenceRepository;

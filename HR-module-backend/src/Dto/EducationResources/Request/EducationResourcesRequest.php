@@ -27,7 +27,6 @@ class EducationResourcesRequest extends AbstractRequestDTOTransformer
     public function transformToObject($object): EducationalResources
     {
         $data = new EducationalResources();
-        $data->addCompetence($this->competenceRepository->find($object->id_competence));
         $data->setName($object->name);
         $data->setLink($object->link);
         $data->setDescription($object->description);

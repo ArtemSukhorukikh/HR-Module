@@ -4,7 +4,7 @@ namespace App\Dto\EducationResources;
 
 use JMS\Serializer\Annotation as Serializer;
 
-class EducationResourcesDTO
+class   EducationResourcesDTO
 {
     #[Serializer\Type("integer")]
     public int $id;

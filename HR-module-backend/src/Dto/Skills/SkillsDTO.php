@@ -18,8 +18,8 @@ class SkillsDTO
     #[Serializer\Type("string")]
     public string $description;
 
-    #[Serializer\Type("array<int>")]
-    public array $competence_id;
+    #[Serializer\Type("int")]
+    public int $competence_id;
 
     #[Serializer\Type("array<int>")]
     public array $skill_assessments;
