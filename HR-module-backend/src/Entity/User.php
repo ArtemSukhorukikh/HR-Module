@@ -46,6 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToOne(targetEntity=Workplace::class, mappedBy="userInWorkplace", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
      */
     private $workplace;
 
