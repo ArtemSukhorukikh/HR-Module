@@ -1,8 +1,8 @@
 <template>
   <FullNavbar/>
-  <div class="container bg-light">
+  <div class="container bg-light min-vh-100 w-75">
 
-    <div v-for="item in competences" v-bind:key="item" class="card mb-3 w-75 mx-auto">
+    <div v-for="item in competences" v-bind:key="item" class="card m-3 w-75 mx-auto">
       <div class="card-body">
         <a class="h6 link" @click="getDescription(item)"> {{item.name}}</a>
         <div class="progress" >
@@ -10,6 +10,20 @@
         </div>
       </div>
     </div>
+
+    <div v-if="descriptions" class="card mb-3 mx-auto w-75">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm">
+            <p>Ваш рейтинг: </p>
+          </div>
+          <div class="col-sm">
+            <p>Ваша текущий уровень компетенции:</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div v-if="descriptions" class="card mb-3 mx-auto w-75">
       <div class="card-body">
         <div class="row">

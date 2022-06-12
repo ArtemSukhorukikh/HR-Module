@@ -131,7 +131,7 @@ const routes = [
   },
   {
     path: '/createEdRes',
-    name: 'Создание образовательного ресурса',
+    name: 'Создание образовательного ресурса НЕТУ',
     component: CreateEdRes,
     beforeEnter: authGuard
   },

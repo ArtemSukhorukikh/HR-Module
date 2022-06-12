@@ -1,15 +1,15 @@
 <template>
   <FullNavbar/>
-  <div class="container bg-light">
+  <div class="container bg-light w-75 min-vh-100">
 
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item" role="presentation">
+    <ul class="nav nav-tabs mx-auto" id="myTab" role="tablist">
+      <li class="nav-item mx-auto" role="presentation">
         <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#FT" type="button" role="tab" aria-controls="FT" aria-selected="true" v-on:click="checkApplicationFT">Прохождение обучения</button>
       </li>
-      <li class="nav-item" role="presentation">
+      <li class="nav-item mx-auto" role="presentation">
         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#POT" type="button" role="tab" aria-controls="POT" aria-selected="false" v-on:click="checkApplicationPOT">Покупка обучающего ресурса</button>
       </li>
-      <li class="nav-item" role="presentation">
+      <li class="nav-item mx-auto" role="presentation">
         <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#POPT" type="button" role="tab" aria-controls="POPT" aria-selected="false" v-on:click="checkApplicationPOPT">Покупка личного обучающего ресурса</button>
       </li>
     </ul>
