@@ -8,6 +8,14 @@ import UserView from "@/views/UserView";
 import PageNotFound from "@/components/ErrorPages/Page-not-found";
 import LogOut from "@/components/LogOut";
 import ErrorServer from "@/components/ErrorPages/ErrorServer";
+import KnowledgeBase from "@/views/KnowledgeBaseView";
+import CreateAFT from "@/views/Application/CreateApplication";
+import UserAFT from "@/views/Application/UserApplications";
+import CompMap from "@/views/CompetenceMap";
+import CompMatr from "@/views/CompetenceMatrixView";
+import SkillAs from "@/views/SkillsAssessment";
+import DepAFT from "@/views/Application/DepartmentApplication";
+
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
 const authGuard = function beforeEach(to, from, next) {
@@ -73,6 +81,41 @@ const routes = [
     path:'/:pathMatch(.*)*',
     name: "PageNorFound",
     component: PageNotFound,
+  },
+  {
+    path: '/knowledgeBase',
+    name: 'База знаний',
+    component: KnowledgeBase,
+  },
+  {
+    path: '/CreateAFT',
+    name: 'Создание заявок',
+    component: CreateAFT,
+  },
+  {
+    path: '/UserAFT',
+    name: 'Просмотр заявок пользователь',
+    component: UserAFT,
+  },
+  {
+    path: '/compMap',
+    name: 'Карта компетенций',
+    component: CompMap,
+  },
+  {
+    path: '/compMatr',
+    name: 'Матрица компетенций',
+    component: CompMatr,
+  },
+  {
+    path: '/skillAs',
+    name: 'Оценка навыков',
+    component: SkillAs,
+  },
+  {
+    path: '/DepAFT',
+    name: 'Просмотр заявок отдела',
+    component: DepAFT,
   }
 ]
 

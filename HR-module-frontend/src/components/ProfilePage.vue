@@ -169,6 +169,7 @@ export default {
       },
       "noError":false,
       "userData": {
+        "userid": "",
         "username": "",
         "roles":[],
         "userInfo":{
@@ -197,7 +198,7 @@ export default {
     'userName':{
       type: String,
       require: false
-    },
+    }
   },
   methods: {
     nameFirstAndLast(){
@@ -232,6 +233,8 @@ export default {
         this.userData = responce.data
         localStorage.setItem('role', JSON.stringify(responce.data['roles']))
         localStorage.setItem('username', responce.data.username)
+        localStorage.setItem('userId', JSON.stringify(responce.data['id']))
+        console.log(localStorage.getItem('userId'))
         this.noError = true
         console.log(this.userData)}).catch(error =>{
         if (error.request.status === 401) {

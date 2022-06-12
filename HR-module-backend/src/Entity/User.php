@@ -2,11 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
-use DateInterval;
-use DatePeriod;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -99,9 +95,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $writing;
 
     /**
+     * @ORM\OneToMany(targetEntity=ApplicationForTraining::class, mappedBy="compose")
+     */
+    private $applicationForTrainings;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ApplicationPurchaseOfTraining::class, mappedBy="compose")
+     */
+    private $applicationPurchaseOfTrainings;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ResponeSurvey::class, mappedBy="user_", orphanRemoval=true)
+     */
+    private $responeSurveys;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Department::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $works;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ApplicationPurchaseOfPersonalTraining::class, mappedBy="user_")
+     */
+    private $applicationPurchaseOfPersonalTrainings;
+
+    /**
      * @ORM\ManyToMany(targetEntity=Task::class, inversedBy="users")
      */
     private $Tasks;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SkillAssessment::class, mappedBy="user_", orphanRemoval=true)
+     */
+    private $skillAssessments;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Competence::class, mappedBy="users")
+     */
+    private $competences;
 
     public function __construct()
     {
@@ -109,7 +141,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->grades = new ArrayCollection();
         $this->personalAchievements = new ArrayCollection();
         $this->writing = new ArrayCollection();
+        $this->applicationForTrainings = new ArrayCollection();
+        $this->applicationPurchaseOfTrainings = new ArrayCollection();
+        $this->responeSurveys = new ArrayCollection();
+        $this->applicationPurchaseOfPersonalTrainings = new ArrayCollection();
         $this->Tasks = new ArrayCollection();
+        $this->skillAssessments = new ArrayCollection();
+        $this->competences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -182,6 +220,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
+    public static function fromDto($userDto, UserPasswordHasherInterface $passwordHasher): User
+    {
+        $user = new self();
+        $user->setUsername($userDto->username);
+        $user->setPassword($passwordHasher->hashPassword($user,$userDto->password));
+        return $user;
+    }
 
     /**
      * @return Collection<int, Contacts>
@@ -392,6 +437,138 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * @return Collection<int, ApplicationForTraining>
+     */
+    public function getApplicationForTrainings(): Collection
+    {
+        return $this->applicationForTrainings;
+    }
+
+    public function addApplicationForTraining(ApplicationForTraining $applicationForTraining): self
+    {
+        if (!$this->applicationForTrainings->contains($applicationForTraining)) {
+            $this->applicationForTrainings[] = $applicationForTraining;
+            $applicationForTraining->setCompose($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplicationForTraining(ApplicationForTraining $applicationForTraining): self
+    {
+        if ($this->applicationForTrainings->removeElement($applicationForTraining)) {
+            // set the owning side to null (unless already changed)
+            if ($applicationForTraining->getCompose() === $this) {
+                $applicationForTraining->setCompose(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApplicationPurchaseOfTraining>
+     */
+    public function getApplicationPurchaseOfTrainings(): Collection
+    {
+        return $this->applicationPurchaseOfTrainings;
+    }
+
+    public function addApplicationPurchaseOfTraining(ApplicationPurchaseOfTraining $applicationPurchaseOfTraining): self
+    {
+        if (!$this->applicationPurchaseOfTrainings->contains($applicationPurchaseOfTraining)) {
+            $this->applicationPurchaseOfTrainings[] = $applicationPurchaseOfTraining;
+            $applicationPurchaseOfTraining->setCompose($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplicationPurchaseOfTraining(ApplicationPurchaseOfTraining $applicationPurchaseOfTraining): self
+    {
+        if ($this->applicationPurchaseOfTrainings->removeElement($applicationPurchaseOfTraining)) {
+            // set the owning side to null (unless already changed)
+            if ($applicationPurchaseOfTraining->getCompose() === $this) {
+                $applicationPurchaseOfTraining->setCompose(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ResponeSurvey>
+     */
+    public function getResponeSurveys(): Collection
+    {
+        return $this->responeSurveys;
+    }
+
+    public function addResponeSurvey(ResponeSurvey $responeSurvey): self
+    {
+        if (!$this->responeSurveys->contains($responeSurvey)) {
+            $this->responeSurveys[] = $responeSurvey;
+            $responeSurvey->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResponeSurvey(ResponeSurvey $responeSurvey): self
+    {
+        if ($this->responeSurveys->removeElement($responeSurvey)) {
+            // set the owning side to null (unless already changed)
+            if ($responeSurvey->getUser() === $this) {
+                $responeSurvey->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getWorks(): ?Department
+    {
+        return $this->works;
+    }
+
+    public function setWorks(?Department $works): self
+    {
+        $this->works = $works;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApplicationPurchaseOfPersonalTraining>
+     */
+    public function getApplicationPurchaseOfPersonalTrainings(): Collection
+    {
+        return $this->applicationPurchaseOfPersonalTrainings;
+    }
+
+    public function addApplicationPurchaseOfPersonalTraining(ApplicationPurchaseOfPersonalTraining $applicationPurchaseOfPersonalTraining): self
+    {
+        if (!$this->applicationPurchaseOfPersonalTrainings->contains($applicationPurchaseOfPersonalTraining)) {
+            $this->applicationPurchaseOfPersonalTrainings[] = $applicationPurchaseOfPersonalTraining;
+            $applicationPurchaseOfPersonalTraining->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplicationPurchaseOfPersonalTraining(ApplicationPurchaseOfPersonalTraining $applicationPurchaseOfPersonalTraining): self
+    {
+        if ($this->applicationPurchaseOfPersonalTrainings->removeElement($applicationPurchaseOfPersonalTraining)) {
+            // set the owning side to null (unless already changed)
+            if ($applicationPurchaseOfPersonalTraining->getUser() === $this) {
+                $applicationPurchaseOfPersonalTraining->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * @return Collection<int, Task>
      */
     public function getTasks(): Collection
@@ -449,101 +626,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
             }
             if ($tasksCount != 0) {
-
-                return $woweekends * 8 / $tasksCount;
-            }
-            return 0.0;
-
+    /**
+     * @return Collection<int, SkillAssessment>
+     */
+    public function getSkillAssessments(): Collection
+    {
+        return $this->skillAssessments;
     }
 
-    public function countHoursInMounth() {
-        $start = date('m-01-Y 00:00');
-        $end = date('Y-m-t 23:59');
-        $startDate = new DateTime($start);
-        $endDate = new DateTime($end);
-        $tasks = $this->getTasks();
-        $leftDate = [];
-        $rightDate = [];
-        $tasksHours = 0.0;
-        foreach ($tasks as $task) {
-            if ($task->getStartDate() > $startDate && $task->getCloseDate() < $endDate) {
-                $leftDate[] = $task->getStartDate()->format("Y-m-d H:i");
-                $rightDate[] = $task->getCloseDate()->format("Y-m-d H:i");
-                }
+    public function addSkillAssessment(SkillAssessment $skillAssessment): self
+    {
+        if (!$this->skillAssessments->contains($skillAssessment)) {
+            $this->skillAssessments[] = $skillAssessment;
+            $skillAssessment->setUser($this);
         }
 
-        usort($leftDate, [$this::class, 'date_sort']);
-        usort($rightDate, [$this::class, 'date_sort']);
-        $datetime1 = new DateTime($leftDate[0]);
-        $datetime2 = new DateTime(end($rightDate));
-        $interval = $datetime1->diff($datetime2);
-        $woweekends = 0;
-        for($i=0; $i<=$interval->d; $i++){
-            $datetime1->modify('+1 day');
-            $weekday = $datetime1->format('w');
-
-            if($weekday !== "0" && $weekday !== "6"){ // 0 for Sunday and 6 for Saturday
-                $woweekends++;
-            }
-
-        }
-
-        return $woweekends * 8;
+        return $this;
     }
 
-    public function date_sort($a, $b) {
-        return strtotime($a) - strtotime($b);
-    }
-    public function avgMarkMounth() {
-
-        $tasks = $this->getTasks();
-        $tasksMark = 0.0;
-        $countMarks = 0;
-        foreach ($tasks as $task) {
-            $mark = $task->getTaskEvaluation();
-            if ($mark) {
-                $tasksMark += $mark->getValue();
-                $countMarks ++;
+    public function removeSkillAssessment(SkillAssessment $skillAssessment): self
+    {
+        if ($this->skillAssessments->removeElement($skillAssessment)) {
+            // set the owning side to null (unless already changed)
+            if ($skillAssessment->getUser() === $this) {
+                $skillAssessment->setUser(null);
             }
         }
-        if ($countMarks > 0) {
-            return $tasksMark/$countMarks;
-        }
-        else {
-            return 0.0;
-        }
+
+        return $this;
     }
 
-    public function achivmentsAvg(){
-        $achs = $this->getPersonalAchievements();
-        $achValue = 0.0;
-        $achCount = 0;
-        foreach ($achs as $ach) {
-            $achValue += $ach->getValue();
-        }
-        if ($achCount == 0){
-            return 0;
-        }
-        return $achValue;
+    /**
+     * @return Collection<int, Competence>
+     */
+    public function getCompetences(): Collection
+    {
+        return $this->competences;
     }
 
-    public function tasksInWork() {
+    public function addCompetence(Competence $competence): self
+    {
+        if (!$this->competences->contains($competence)) {
+            $this->competences[] = $competence;
+            $competence->addUser($this);
+        }
 
-        $tasks = $this->getTasks();
-        $tasksCount = 0;
-        $count = 0;
-        foreach ($tasks as $task) {
-            $status = $task->getStatus();
-            if ($status === 'Новая' || $status === 'В работе') {
-                $tasksCount++;
-            }
-            $count++;
+        return $this;
+    }
+
+    public function removeCompetence(Competence $competence): self
+    {
+        if ($this->competences->removeElement($competence)) {
+            $competence->removeUser($this);
         }
-        if ($count > 0) {
-            return $tasksCount/$count;
-        }
-        else {
-            return 0.0;
-        }
+
+        return $this;
     }
 }
