@@ -19,37 +19,36 @@
                         <label class="form-label" for="form3Example1c">Имя пользователя в системе RedMine</label>
                         <input type="text" id="form3Example1c" v-model="username" class="form-control"/>
                       </div>
-                      <div class="form-label" v-if="v$.username.required.$invalid">Данное поле должно быть заполенно</div>
                     </div>
-
+                    <div class="form-label" v-if="v$.username.required.$invalid">Данное поле должно быть заполенно</div>
                     <div class="d-flex flex-row align-items-center mb-2">
                       <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0" :class="{ error: v$.password.$errors.length }">
                         <label class="form-label" for="form3Example4c">Пароль</label>
                         <input type="password" id="form3Example4c" v-model="password" class="form-control" @blur="v$.password.$touch()"/>
                       </div>
-                      <div class="form-label" v-if="v$.password.required.$invalid">Данное поле должно быть заполенно</div>
-                      <div class="form-label" v-if="v$.password.minLength.$invalid">Минимальное кол-во символов 6!</div>
-                    </div>
 
+                    </div>
+                    <div class="form-label" v-if="v$.password.required.$invalid">Данное поле должно быть заполенно</div>
+                    <div class="form-label" v-if="v$.password.minLength.$invalid">Минимальное кол-во символов 6!</div>
                     <div class="d-flex flex-row align-items-center mb-2">
                       <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0"  :class="{ error: v$.firstname.$errors.length }">
                         <label class="form-label" for="form3Example3c">Имя</label>
                         <input type="text" id="form3Example3c" v-model="firstname" class="form-control" />
                       </div>
-                      <div class="form-label" v-if="v$.firstname.required.$invalid">Данное поле должно быть заполенно</div>
-                    </div>
 
+                    </div>
+                    <div class="form-label" v-if="v$.firstname.required.$invalid">Данное поле должно быть заполенно</div>
                     <div class="d-flex flex-row align-items-center mb-2">
                       <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0" :class="{ error: v$.lastname.$errors.length }">
                         <label class="form-label" for="form3Example3c">Фамилия</label>
                         <input type="text" id="form3Example3c" v-model="lastname" class="form-control" />
                       </div>
-                      <div class="form-label" v-if="v$.lastname.required.$invalid">Данное поле должно быть заполенно</div>
-                    </div>
 
+                    </div>
+                    <div class="form-label" v-if="v$.lastname.required.$invalid">Данное поле должно быть заполенно</div>
                     <div class="d-flex flex-row align-items-center mb-2">
                       <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0">
@@ -64,18 +63,18 @@
                         <label class="form-label" for="form3Example3c">Должность</label>
                         <input type="text" id="form3Example3c" v-model="position" class="form-control" />
                       </div>
-                      <div class="form-label" v-if="v$.position.required.$invalid">Данное поле должно быть заполенно</div>
-                    </div>
 
+                    </div>
+                    <div class="form-label" v-if="v$.position.required.$invalid">Данное поле должно быть заполенно</div>
                     <div class="d-flex flex-row align-items-center mb-2">
                       <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0" :class="{ error: v$.department.$errors.length }">
                         <label class="form-label" for="form3Example3c">Отдел</label>
                         <input type="text" id="form3Example3c" v-model="department" class="form-control" />
                       </div>
-                      <div class="form-label" v-if="v$.department.required.$invalid">Данное поле должно быть заполенно</div>
-                    </div>
 
+                    </div>
+                    <div class="form-label" v-if="v$.department.required.$invalid">Данное поле должно быть заполенно</div>
                     <div class="d-flex flex-row align-items-center mb-2">
                       <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0">

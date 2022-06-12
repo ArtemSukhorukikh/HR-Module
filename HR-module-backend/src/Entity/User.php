@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -649,7 +650,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $rightDate[] = $task->getCloseDate()->format("Y-m-d H:i");
             }
         }
-
+        if (count($leftDate) === 0 or count($rightDate) === 0){
+            return 0.0;
+        }
         usort($leftDate, [$this::class, 'date_sort']);
         usort($rightDate, [$this::class, 'date_sort']);
         $datetime1 = new DateTime($leftDate[0]);
