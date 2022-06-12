@@ -24,6 +24,7 @@ class Workplace
 
     /**
      * @ORM\OneToOne(targetEntity=User::class, inversedBy="workplace", cascade={"persist", "remove"})
+     * @ORM\OrderBy({"RoomInTheOffice" = "ASC"})
      */
     private $userInWorkplace;
 

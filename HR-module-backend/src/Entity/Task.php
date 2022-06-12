@@ -64,6 +64,11 @@ class Task
      */
     private $users;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $update_on;
+
     public function __construct()
     {
         $this->userToDo = new ArrayCollection();
@@ -206,6 +211,18 @@ class Task
         if ($this->users->removeElement($user)) {
             $user->removeTask($this);
         }
+
+        return $this;
+    }
+
+    public function getUpdateOn(): ?\DateTimeInterface
+    {
+        return $this->update_on;
+    }
+
+    public function setUpdateOn(?\DateTimeInterface $update_on): self
+    {
+        $this->update_on = $update_on;
 
         return $this;
     }

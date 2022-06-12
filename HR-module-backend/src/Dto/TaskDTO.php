@@ -22,6 +22,9 @@ class TaskDTO
     public string $start_date;
 
     #[Serializer\Type("string")]
+    public string $updated_on;
+
+    #[Serializer\Type("string")]
     public string $closed_on;
 
     #[Serializer\Type("float")]

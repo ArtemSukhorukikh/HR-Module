@@ -31,6 +31,7 @@ class Office
 
     /**
      * @ORM\OneToMany(targetEntity=Workplace::class, mappedBy="office")
+     * @ORM\OrderBy({"id" = "ASC"})
      */
     private $workplaces;
 

@@ -603,9 +603,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $leftDate = [];
         $rightDate = [];
         foreach ($tasks as $task) {
-            if ($task->getCloseDate()){
+            if ($task->getCloseDate() != null){
                 $leftDate[] = $task->getStartDate()->format("Y-m-d H:i");
                 $rightDate[] = $task->getCloseDate()->format("Y-m-d H:i");
+                $tasksCount++;
+            } elseif ($task->getUpdateOn() != null){
+                $leftDate[] = $task->getStartDate()->format("Y-m-d H:i");
+                $rightDate[] = $task->getUpdateOn()->format("Y-m-d H:i");
                 $tasksCount++;
             }
         }
@@ -645,9 +649,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $rightDate = [];
         $tasksHours = 0.0;
         foreach ($tasks as $task) {
-            if ($task->getStartDate() > $startDate && $task->getCloseDate() < $endDate) {
+            if ($task->getStartDate() > $startDate && $task->getCloseDate() < $endDate && $task->getCloseDate() != null) {
                 $leftDate[] = $task->getStartDate()->format("Y-m-d H:i");
                 $rightDate[] = $task->getCloseDate()->format("Y-m-d H:i");
+            }
+            elseif ($task->getStartDate() > $startDate && $task->getUpdateOn() < $endDate && $task->getUpdateOn() != null){
+                $leftDate[] = $task->getStartDate()->format("Y-m-d H:i");
+                $rightDate[] = $task->getUpdateOn()->format("Y-m-d H:i");
             }
         }
         if (count($leftDate) === 0 or count($rightDate) === 0){

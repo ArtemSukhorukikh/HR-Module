@@ -63,6 +63,17 @@ class TasksController extends AbstractController
                     }
                 }
             }
+            if ($task['closed_on'] != null) {
+                $timeEnd = mb_substr($task['closed_on'],0,10);
+                $timeEnd = DateTime::createFromFormat("Y-m-d", $timeEnd );
+                $taskHR->setCloseDate($timeEnd);
+            }
+            if ($task['closed_on'] == null && $task['updated_on'] != null)
+            {
+                $timeUpdate = mb_substr($task['updated_on'],0,10);
+                $timeUpdate = DateTime::createFromFormat("Y-m-d", $timeUpdate);
+                $taskHR->setUpdateOn($timeUpdate);
+            }
             $taskHR->setProjectTask($projectsRepository->find($task['project']['id']));
             $entityManager->persist($taskHR);
             $entityManager->flush();
