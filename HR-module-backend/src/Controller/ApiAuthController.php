@@ -163,10 +163,13 @@ class ApiAuthController extends AbstractController
                 'errors' => $jsonErrors,
             ], Response::HTTP_BAD_REQUEST);
         }
-        $user = new User;
+
         $user = $this->userTransformer->transformToObject($userDto);
         $user->setPassword($this->passwordHasher->hashPassword($user, $userDto->password));
-        //$user->setWorks($departmentRepository->findOneBy(["name" => $userDto->department]));
+        $user->setWorks($departmentRepository->findOneBy(["name" => $userDto->department]));
+        if ($user->getPosition() === "Работник HR-Отдела") {
+            $user->setRoles(array('ROLE_HR'));
+        }
         $entityManager->persist($user);
         $entityManager->flush();
         if ($user->getWorks()){
@@ -220,6 +223,9 @@ class ApiAuthController extends AbstractController
             $user->setLastName($userChange->getLastName());
             $user->setPatronymic($userChange->getPatronymic());
             $user->setPosition($userChange->getPosition());
+            if ($user->getPosition() === "Работник HR-Отдела") {
+                $user->setRoles(array('ROLE_HR'));
+            }
             $entityManager->persist($user);
             $entityManager->flush();
             $answer = new AnswearDTO();

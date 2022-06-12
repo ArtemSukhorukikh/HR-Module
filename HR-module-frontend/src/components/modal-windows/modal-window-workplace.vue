@@ -62,19 +62,18 @@
                   </div>
                 </div>
               </div>
-              <div v-else class="row">
-                <!--                <div v-if="isHRUser">-->
-                <!--                  <div class="form-floating mb-3">-->
-                <!--                    <input type="text" class="form-control" id="floatingInput" v-model="setUsername" placeholder="username" required>-->
-                <!--                    <label for="floatingInput">Имя пользователя</label>-->
-                <!--                  </div>-->
-                <!--                  <div class="col">-->
-                <!--                    <button @click="setPlace()" class="mt-4 btn btn-outline-primary">Занять место</button>-->
-                <!--                  </div>-->
-                <!--                </div>-->
-                <!--                <div v-else class="col">-->
+              <div v-else-if="this.userHR" class="row">
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" v-model="setUsername" placeholder="username" required>
+                    <label for="floatingInput">Имя пользователя</label>
+                  </div>
+                  <div class="col">
+                    <button @click="setPlace()" class="mt-4 btn btn-outline-primary">Занять место</button>
+
+              </div>
+              </div>
+              <div v-else class="col">
                 <button @click="setPlace()" class="mt-4 btn btn-outline-primary">Занять место</button>
-                <!--                </div>-->
               </div>
               <div v-if="isUser" class="row"><button @click="unsetPlace()" class="btn btn-outline-danger">Удалить</button></div>
             </div>
@@ -113,19 +112,29 @@ export default {
       },
       place: 0,
       isUser:"",
-      setUsername:""
+      setUsername:"",
+      userHR:false
     }
   },
-
+  created() {
+    let roles = JSON.parse(localStorage.getItem('roles'))
+    for (let i in roles){
+      if (roles[i] === "ROLE_HR"){
+        this.userHR = true
+      }
+    }
+  },
   methods: {
     close() {
+      this.setUsername = ""
       this.error = false
       this.isUser = false
       this.$emit('close');
+
     },
     setPlace() {
       axios.post(`http://localhost:84/api/v1/offices/set/workplace/${this.office.workplaces.id}`,{
-        'username':localStorage.getItem('username')
+        'username':this.setUsername
       }).then(response => {
         console.log(response.data)
         this.$router.go('/officemap/floor'+this.office.floor)
@@ -135,10 +144,10 @@ export default {
 
         }
         if (errors.request.status === 401) {
-          this.$router.go('/login')
+          //this.$router.go('/login')
         }
         if (errors.request.status >= 500) {
-          this.$router.go(`/error/${errors.request.status}`)
+          //this.$router.go(`/error/${errors.request.status}`)
         }
       })
     },

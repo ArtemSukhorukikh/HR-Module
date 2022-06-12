@@ -80,7 +80,7 @@
                 </div>
               </div>
               <hr>
-                <div v-if="currentUser" class="col-sm-12">
+                <div v-if="currentUser || userHR" class="col-sm-12">
                   <button @click="openModal()" class="btn btn-outline-primary my-2 " >Редактировать</button>
                 </div>
               </div>
@@ -147,6 +147,7 @@ export default {
   },
   data() {
     return {
+      userHR: false,
       isModalVisible: false,
       isModalContactVisible: false,
       chartOptions: {
@@ -264,10 +265,19 @@ export default {
       this.isModalVisible = false;
     }
   },
+  created() {
+    let roles = JSON.parse(localStorage.getItem('roles'))
+    for (let i in roles){
+      if (roles[i] === "ROLE_HR"){
+        this.userHR = true
+      }
+    }
+  },
   beforeCreate() {
+    //this.userHR = !!JSON.parse(localStorage.getItem('roles')).response.items.find(function (e){return e === "ROLE_HR"})
     if (this.currentUser === false) {
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-      axios.post("http://localhost:84/api/v1/users/search", {"id": this.userName}).then(responce => {
+      axios.post("http://localhost:84/api/v1/users/search", {"username": this.userName}).then(responce => {
         this.userData = responce.data
         this.noError = true
 
@@ -288,6 +298,7 @@ export default {
       axios.get("http://localhost:84/api/v1/users/current").then( responce => {
         this.userData = responce.data
         localStorage.setItem('role', JSON.stringify(responce.data['roles']))
+        localStorage.setItem('username', responce.data.username)
         this.noError = true
         console.log(this.userData)}).catch(error =>{
         if (error.request.status === 401) {

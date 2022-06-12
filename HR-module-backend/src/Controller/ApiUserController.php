@@ -7,6 +7,7 @@ use App\Dto\Transformer\Response\UserResponseDTOTransformer;
 use App\Dto\UserAuthDto;
 use App\Dto\UserCurrentDto;
 use App\Dto\UserDto;
+use App\Dto\UsersDto;
 use App\Entity\SkillAssessment;
 use App\Entity\User;
 use App\Repository\CompetenceRepository;
@@ -186,6 +187,14 @@ class ApiUserController extends AbstractController
 
 
 
+    }
+
+
+    #[Route('/all', name: 'user_all', methods: ['GET'])]
+    public function getUsers(UserRepository $userRepository){
+        $usersDTO = new UsersDto();
+        $usersDTO->users = $this->userResponseDTOTransformer->transformFromObjects($userRepository->findAll());
+        return $this->json($usersDTO, Response::HTTP_OK);
     }
 
 }

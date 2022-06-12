@@ -101,7 +101,7 @@ export default {
         console.log(responce)
         this.ok = true
         this.error = false
-        setTimeout(this.$router.go(), 2000)
+        setTimeout(this.$router.go(this.$router.currentRoute), 2000)
       }).catch(errors => {
         this.error = true
         console.log(errors)
