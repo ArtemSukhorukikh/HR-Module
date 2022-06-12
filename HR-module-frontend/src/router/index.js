@@ -16,6 +16,9 @@ import CompMatr from "@/views/CompetenceMatrixView";
 import SkillAs from "@/views/SkillsAssessment";
 import DepAFT from "@/views/Application/DepartmentApplication";
 import CreateEdRes from "@/views/CreateEducationResource";
+import CreateComp from "@/views/CreateChangeCompetence";
+import CreateSkills from "@/views/CreateChangeSkill";
+import SettingRes from "@/views/EducationResources/SettingsResourcesView";
 
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
@@ -130,6 +133,24 @@ const routes = [
     path: '/createEdRes',
     name: 'Создание образовательного ресурса',
     component: CreateEdRes,
+    beforeEnter: authGuard
+  },
+  {
+    path: '/compRed',
+    name: 'Создание изменение компетенции',
+    component: CreateComp,
+    beforeEnter: authGuard
+  },
+  {
+    path: '/skillsRed',
+    name: 'Создание изменение навыков',
+    component: CreateSkills,
+    beforeEnter: authGuard
+  },
+  {
+    path: '/settingRes',
+    name: 'Создание изменение образовательных ресурсов',
+    component: SettingRes,
     beforeEnter: authGuard
   }
 ]

@@ -4,6 +4,7 @@
   <div class="container">
     <div class="row">
       <div class="col-4">
+        <router-link class="nav-link"  to="/logout">Настройка базы знаний</router-link>
         <div class="accordion" id="accordionExample">
           <div class="accordion-item" v-for="(item, index) in educationResourcesAll" v-bind:key="item">
             <h2 class="accordion-header" v-bind:id="'heading'+index">
@@ -38,40 +39,43 @@
         </div>
 
       </div>
-      <div class="col-sm w-25">
-        <h1 class="text-black mb-3 ">{{educationResources.name}}</h1>
-        <p class="text-black mb-3 text-wrap">Описание: {{educationResources.description}}</p>
-        <div class="text-black mb-3 ">Цена ресурса: {{educationResources.price}}</div>
-        <div class="text-black mb-3 ">Дата добавления: {{educationResources.date}}</div>
-        <div class="text-black mb-3 " v-if="educationResources.type === 0">Тип ресурса: Книга</div>
-        <div class="text-black mb-3 " v-if="educationResources.type === 1">Тип ресурса: Онлайн курс</div>
-        <div class="text-black mb-3 " v-if="educationResources.type === 2">Тип ресурса: Онлайн тренинг</div>
-        <div class="text-black mb-3 " v-if="educationResources.type === 3">Тип ресурса: Личный ресурс</div>
-        <div class="text-black mb-3 ">Ссылка: {{educationResources.link}} </div>
-        <form class="w-100">
-          <div v-if="userFeedback">
-            <h3 class="fw-bold text-black mb-3 ">Ваш отзыв</h3>
-            <div class="text-black mb-3 ">{{ userFeedback.note }}</div>
-            <div class="text-black mb-3 ">Оценка: {{ userFeedback.estimation }}</div>
-            <button @click="deleteFeedback()" class="w-100 btn btn-lg btn-primary" type="submit">Удалить отзыв</button>
-          </div>
-          <div v-if="!userFeedback">
-            <h3 class="h1 fw-bold text-black mb-3 ">Отзыв</h3>
-            <div class="form-floating">
-              <input v-model="feedbackDTO.note" type="text" class="form-control" id="floatingPassword" placeholder="Пароль">
-              <label for="floatingPassword">Отзыв</label>
-            </div>
-            <select class="form-select form-select-sm" aria-label=".form-select-sm example" v-model="feedbackDTO.estimation">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select>
-            <button @click="sendFeedback" class="w-100 btn btn-lg btn-primary" type="submit">Оставить отзыв</button>
-          </div>
+      <div class="col-sm w-25" >
+        <div v-if="educationResources.id">
 
-        </form>
+          <h1 class="text-black mb-3 ">{{educationResources.name}}</h1>
+          <p class="text-black mb-3 text-wrap">Описание: {{educationResources.description}}</p>
+          <div class="text-black mb-3 ">Цена ресурса: {{educationResources.price}}</div>
+          <div class="text-black mb-3 ">Дата добавления: {{educationResources.date}}</div>
+          <div class="text-black mb-3 " v-if="educationResources.type === 0">Тип ресурса: Книга</div>
+          <div class="text-black mb-3 " v-if="educationResources.type === 1">Тип ресурса: Онлайн курс</div>
+          <div class="text-black mb-3 " v-if="educationResources.type === 2">Тип ресурса: Онлайн тренинг</div>
+          <div class="text-black mb-3 " v-if="educationResources.type === 3">Тип ресурса: Личный ресурс</div>
+          <div class="text-black mb-3 ">Ссылка: {{educationResources.link}} </div>
+          <form class="w-100">
+            <div v-if="userFeedback">
+              <h3 class="fw-bold text-black mb-3 ">Ваш отзыв</h3>
+              <div class="text-black mb-3 ">{{ userFeedback.note }}</div>
+              <div class="text-black mb-3 ">Оценка: {{ userFeedback.estimation }}</div>
+              <button @click="deleteFeedback()" class="w-100 btn btn-lg btn-primary" type="submit">Удалить отзыв</button>
+            </div>
+            <div v-if="!userFeedback">
+              <h3 class="h1 fw-bold text-black mb-3 ">Отзыв</h3>
+              <div class="form-floating">
+                <input v-model="feedbackDTO.note" type="text" class="form-control" id="floatingPassword" placeholder="Пароль">
+                <label for="floatingPassword">Отзыв</label>
+              </div>
+              <select class="form-select form-select-sm" aria-label=".form-select-sm example" v-model="feedbackDTO.estimation">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+              <button @click="sendFeedback" class="w-100 btn btn-lg btn-primary" type="submit">Оставить отзыв</button>
+            </div>
+          </form>
+
+        </div>
       </div>
     </div>
 
