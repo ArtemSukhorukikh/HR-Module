@@ -5,7 +5,6 @@
   <div class="container mt-3">
     <div class="row">
       <div class="col-4">
-        <router-link class="btn btn-outline-primary my-2 "  to="/logout">Настройка базы знаний</router-link>
         <div class="accordion" id="accordionExample">
           <div class="accordion-item" v-for="(item, index) in educationResourcesAll" v-bind:key="item">
             <h2 class="accordion-header" v-bind:id="'heading'+index">
@@ -15,11 +14,12 @@
             </h2>
             <div v-bind:id="'collapse'+ index " class="accordion-collapse collapse" v-bind:aria-labelledby="'heading'+ index">
               <div class="accordion-body" v-for="item_ in item.educationResourcesCompetence" v-bind:key="item_">
-                <a class="link-primary" v-on:click="checkFeedback(item_.id)">{{ item_.name }}</a>
+                <a class="link-primary" @click="checkFeedback(item_.id)">{{ item_.name }}</a>
               </div>
             </div>
           </div>
         </div>
+        <router-link class="btn btn-outline-primary my-2 "  to="/logout">Настройка базы знаний</router-link>
       </div>
       <div class="col-sm">
         <div v-if="feedbacks">
@@ -59,7 +59,7 @@
                 <h5 class="fw-bold text-black mb-3 ">Ваш отзыв</h5>
                 <div class="text-black mb-3 ">{{ userFeedback.note }}</div>
                 <div class="text-black mb-3 ">Оценка: {{ userFeedback.estimation }}</div>
-                <button @click="deleteFeedback()" class="w-100 btn btn-lg btn-primary" type="submit">Удалить отзыв</button>
+                <button @click="deleteFeedback(); " class="w-100 btn btn-lg btn-primary" type="submit">Удалить отзыв</button>
               </form>
             </div>
           </div>
@@ -90,6 +90,7 @@ export default {
   data() {
     return {
       isModalVisible: false,
+      isFeedback: '',
       "educationResourcesAll": {},
       "feedbacks": {},
       "educationResources": {},
@@ -129,16 +130,16 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+      this.checkFeedback(this.educationResources.id)
     },
     deleteFeedback(){
       axios
           .post("http://localhost:84/api/v1/feedback/delete/" + this.userFeedback.id)
           .then(response => {
             console.log(response.data)
+            this.checkFeedback(this.educationResources.id)
           });
-      this.userFeedback = null
-      console.log(this.educationResources.id)
-      this.checkFeedback(this.educationResources.id)
+
     },
     getDate(date){
       return moment(date).format("YYYY-MM-DD")

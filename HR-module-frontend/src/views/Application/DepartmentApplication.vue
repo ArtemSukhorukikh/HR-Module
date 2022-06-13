@@ -278,9 +278,8 @@ export default {
           })
           .then(response => {
             console.log(response.data)
+            this.checkApplicationFT()
           });
-      this.checkApplicationFT()
-      this.$forceUpdate()
     },
     statusApplicationPOPT(id, status) {
       axios
@@ -290,9 +289,8 @@ export default {
           })
           .then(response => {
             console.log(response.data)
+            this.checkApplicationPOPT()
           });
-      this.checkApplicationPOPT()
-      this.$forceUpdate()
     },
     statusApplicationPOT(id, status) {
       console.log(id)
@@ -303,9 +301,8 @@ export default {
           })
           .then(response => {
             console.log(response.data)
+            this.checkApplicationPOT()
           });
-      this.checkApplicationPOT()
-      this.$forceUpdate()
     },
     makeDate(date) {
       return moment(date).format("YYYY-MM-DD")
