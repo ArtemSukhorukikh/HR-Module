@@ -84,18 +84,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $rating;
     }
 
-    public function checkGrade(User $user, Competence $competence)
+    public function checkGrade(User $user, Competence $competence): Competence
     {
         $rating = $this->checkGradeRating($user, $competence);
-        $grade = 0;
         $comp = $competence->getIncludes()[0];
+        $grade = $comp;
         while ($comp != null)
         {
-            if($comp->getNeedRating() > $rating)
+            if($comp->getNeedRating() >= $rating)
             {
                 return $grade;
             }
-            $grade = $comp->getId();
+            $grade = $comp;
             $comp = $comp->getIncludes()[0];
         }
         return $grade;

@@ -15,10 +15,10 @@
       <div class="card-body">
         <div class="row">
           <div class="col-sm">
-            <p>Ваш рейтинг: </p>
+            <p>Ваш рейтинг: {{ rating }}</p>
           </div>
           <div class="col-sm">
-            <p>Ваша текущий уровень компетенции:</p>
+            <p>Ваш текущий уровень компетенции: {{ competence_name }}</p>
           </div>
         </div>
       </div>
@@ -54,6 +54,7 @@ export default {
   data() {
     return {
       "rating": {},
+      "competence_name": "",
       "competences": {},
       "descriptions": {
         "description": "",
@@ -69,20 +70,18 @@ export default {
             .then(response => {
               this.competences = response.data.competence_dto_s
               this.rating = response.data.rating
-              console.log(this.competences)
-              console.log(this.rating.toFixed(2))
+              this.competence_name = response.data.comp_name
+              console.log(localStorage.getItem('userId'))
             });
     this.descriptions = null
   },
   methods: {
     getPersent( needRating ) {
-      console.log(needRating)
       let test = ((this.rating.toFixed(2) * 100) / parseFloat(needRating) ).toFixed(2)
       if (test > 100){
         console.log(100)
         return "100%"
       }
-      console.log(test)
       return test + "%"
     },
     getDescription( item ) {
