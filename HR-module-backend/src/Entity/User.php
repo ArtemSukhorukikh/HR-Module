@@ -136,6 +136,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $competences;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Department::class, inversedBy="director", cascade={"persist", "remove"})
+     */
+    private $directs;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
@@ -787,6 +792,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->competences->removeElement($competence)) {
             $competence->removeUser($this);
         }
+
+        return $this;
+    }
+
+    public function getDirects(): ?Department
+    {
+        return $this->directs;
+    }
+
+    public function setDirects(?Department $directs): self
+    {
+        $this->directs = $directs;
 
         return $this;
     }
