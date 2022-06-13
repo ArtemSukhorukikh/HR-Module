@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Dto\Department\DepartmentDTO;
 use App\Dto\Department\Request\DepartmentRequest;
+use App\Dto\Department\Response\DepartmentListResponse;
+use App\Dto\Department\Response\DepartmentResponse;
 use App\Dto\Department\Response\DepartmentUsersResponse;
 use App\Entity\Competence;
 use App\Repository\CompetenceRepository;
+use App\Repository\DepartmentRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerBuilder;
@@ -19,15 +22,37 @@ use Symfony\Component\Routing\Annotation\Route;
 class DepartmentController extends AbstractController
 {
     private DepartmentUsersResponse $departmentUsersResponse;
+    private DepartmentListResponse $departmentListResponse;
+    private DepartmentResponse $departmentResponse;
     private DepartmentRequest $departmentRequest;
     private $serializer;
 
     public function __construct(DepartmentUsersResponse $departmentUsersResponse,
+                                DepartmentListResponse $departmentListResponse,
+                                DepartmentResponse $departmentResponse,
                                 DepartmentRequest $departmentRequest)
     {
         $this->serializer = SerializerBuilder::create()->build();
+        $this->departmentListResponse = $departmentListResponse;
+        $this->departmentResponse = $departmentResponse;
         $this->departmentUsersResponse = $departmentUsersResponse;
         $this->departmentRequest = $departmentRequest;
+    }
+
+    #[Route('department/{id}', name: 'app_department_find', methods: "GET")]
+    public function findDepartment($id, DepartmentRepository $departmentRepository): Response
+    {
+        $department = $departmentRepository->find($id);
+        $departmentUserDTO = $this->departmentResponse->transformFromObject($department);
+        return $this->json($departmentUserDTO, Response::HTTP_OK);
+    }
+
+    #[Route('department/all', name: 'app_department_all', methods: "GET")]
+    public function findAllDepartment(DepartmentRepository $departmentRepository): Response
+    {
+        $departments = $departmentRepository->findAll();
+        $departmentUserDTO = $this->departmentListResponse->transformFromObject($departments);
+        return $this->json($departmentUserDTO, Response::HTTP_OK);
     }
 
     #[Route('department/users/{id}', name: 'app_department_users', methods: "GET")]

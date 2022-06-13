@@ -18,12 +18,18 @@ class DepartmentResponse extends AbstractResponceDTOTransformer
         $dto->name = $object->getName();
         $dto->main_competence_id = $object->getMainCompetence()->getId();
         $dto->main_competence_name = $object->getMainCompetence()->getName();
-        $dto->obeys_id = $object->getObeys()->getId();
-        $dto->obeys_name = $object->getObeys()->getName();
-        $dto->dep_id = $object->getDepartment()->getId();
-        $dto->dep_name = $object->getDepartment()->getName();
-        $dto->director_id = $object->getDirector()->getId();
-        $dto->director_name = $object->getDirector()->getFirstName().' '.$object->getDirector()->getLastName();
+        if ($object->getObeys()){
+            $dto->obeys_id = $object->getObeys()->getId();
+            $dto->obeys_name = $object->getObeys()->getName();
+        }
+        if ($object->getDepartment()){
+            $dto->dep_id = $object->getDepartment()->getId();
+            $dto->dep_name = $object->getDepartment()->getName();
+        }
+        if ($object->getDirector()){
+            $dto->director_id = $object->getDirector()->getId();
+            $dto->director_name = $object->getDirector()->getFirstName().' '.$object->getDirector()->getLastName();
+        }
         return $dto;
     }
 }
