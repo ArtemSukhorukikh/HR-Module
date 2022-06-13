@@ -102,4 +102,32 @@ class EvaluationController extends AbstractController
             return $this->json($answer, Response::HTTP_BAD_REQUEST);
         }
     }
+
+    #[Route('/evaluation/{id}', name: 'evaluation-delete')]
+    public function show(int $id,
+                           TaskRepository $repository,
+                           EntityManagerInterface $entityManager,
+                           Request $request): Response
+    {
+        $task = $repository->find($id);
+        if ($task) {
+            $mark = $task->getTaskEvaluation();
+            if ($mark) {
+                $dto = new EvaluationDTO();
+                $dto->id = $mark->getId();
+                $dto->date = $mark->getDate()->format("YYYY-MM-dd");
+                $dto->value = $mark->getValue();
+                $dto->description = $mark->getDescription();
+                return $this->json($dto, Response::HTTP_OK);
+            }
+            else {
+                return $this->json([], Response::HTTP_NO_CONTENT);
+            }
+        } else {
+            $answer = new AnswearDTO();
+            $answer->status = "Error";
+            $answer->messageAnswear = "Task ". $id . "does not find";
+            return $this->json($answer, Response::HTTP_BAD_REQUEST);
+        }
+    }
 }
