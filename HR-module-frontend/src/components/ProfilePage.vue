@@ -17,6 +17,7 @@
                 <div class="mt-3">
                   <h4>{{ nameFirstAndLast() }}</h4>
                   <p class="text-secondary mb-1">{{ this.userData.userInfo['position'] }}</p>
+                  <p class="text-secondary mb-1">{{ this.userData.userInfo['grade'] }}</p>
                 </div>
               </div>
             </div>
@@ -33,7 +34,7 @@
               <li v-for="contact in userData.contacts" v-bind:key = "contact" class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                 <h6 class="mb-0">{{contact['sourse']}}</h6>
                 <span class="text-secondary">{{contact['link']}}</span>
-                <svg @click='openModalContact("update", contact)' xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                <svg v-if="currentUser || checkHR" @click='openModalContact("update", contact)' xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                   <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                   <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                 </svg>
@@ -80,7 +81,7 @@
                 </div>
               </div>
               <hr>
-                <div v-if="currentUser || userHR" class="col-sm-12">
+                <div v-if="currentUser || checkHR" class="col-sm-12">
                   <button @click="openModal()" class="btn btn-outline-primary my-2 " >Редактировать</button>
                 </div>
               </div>
@@ -88,6 +89,87 @@
           </div>
       </div>
     </div>
+    <div class="row w-100">
+      <p>
+        <button class="btn btn-primary w-25" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+          Показать достижения
+        </button>
+      </p>
+      <div class="collapse " id="collapseExample">
+        <div class="card card-body row d-flex justify-content-evenly">
+          <div v-for="achivment in userData.achivments" v-bind:key="achivment" class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">{{achivment.name}}</h5>
+              <p class="card-text"> {{achivment.description}}</p>
+              <div v-if="checkHR">
+                <div class="accordion" id="accordionExample">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" v-bind:data-bs-target="'#collapseOne'+achivment.id" aria-expanded="true" aria-controls="collapseOne">
+                        Изменить
+                      </button>
+                    </h2>
+                    <div v-bind:id="'collapseOne'+achivment.id" class="accordion-collapse collapse " aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="floatingInput" v-model="achivment.name" placeholder="Название" required>
+                          <label for="floatingInput">Название достижения</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                          <textarea type="text" class="form-control" id="floatingInput" v-model="achivment.description" placeholder="Описание" required></textarea>
+                          <label for="floatingInput">Описание</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                          <input type="number" class="form-control" id="floatingInput" v-model="achivment.value" placeholder="Вес" required/>
+                          <label for="floatingInput">Вес достижения</label>
+                        </div>
+                        <div class="row-cols-2 d-flex justify-content-center">
+                          <div class="mb-3 ">
+                            <button class="btn btn-outline-primary" @click="updateAchivment(achivment.id, achivment.name, achivment.description, achivment.value)">Изменить</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button @click="deleteAchivmebt(achivment.id,userData.username)" v-if="checkHR" type="button" class="btn btn-outline-danger my-3">Удалить</button>
+            </div>
+          </div>
+          <div v-if="checkHR">
+            <div class="accordion" id="accordionExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Добавить новое достижение
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" id="floatingInput" v-model="achivment.name" placeholder="Название" required>
+                      <label for="floatingInput">Название достижения</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                      <textarea type="text" class="form-control" id="floatingInput" v-model="achivment.description" placeholder="Описание" required></textarea>
+                      <label for="floatingInput">Описание</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                      <input type="number" class="form-control" id="floatingInput" v-model="achivment.value" placeholder="Вес" required/>
+                      <label for="floatingInput">Вес достижения</label>
+                    </div>
+                    <div class="row-cols-2 d-flex justify-content-center">
+                      <div class="mb-3 ">
+                        <button class="btn btn-outline-primary" @click="addAchivment(userData.username)">Сохранить</button>
+                      </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div>
     <div class="row w-100">
       <h4>Проекты</h4>
       <div class="col mb-3">
@@ -99,7 +181,7 @@
                   <h5 class="card-title">{{project['name']}}</h5>
                   <p class="card-text">{{project['description']}}</p>
                   <p class="card-text"><small class="text-muted">{{project['created_on']}}</small></p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                  <router-link class="nav-link" :to="{  name : 'project', params: { id: project.id   } }">Перейти</router-link>
                 </div>
               </div>
             </div>
@@ -125,10 +207,12 @@
           </div>
         </div>
       </div>
-      <div>
+      <div class="my-3">
         <highcharts :constructor-type="'ganttChart'" :options="chartOptions"></highcharts>
       </div>
   </div>
+
+    </div>
   </div>
 </template>
 
@@ -147,7 +231,11 @@ export default {
   },
   data() {
     return {
-      userHR: false,
+      achivment:{
+        name:"",
+        description:"",
+        value:0
+      },
       isModalVisible: false,
       isModalContactVisible: false,
       chartOptions: {
@@ -217,9 +305,24 @@ export default {
         tasks: {
 
         },
-        department:""
+        department:"",
+        achivments:[]
       },
     }
+  },
+  computed: {
+    checkHR() {
+      let roles = JSON.parse(localStorage.getItem('roles'))
+      console.log(roles)
+      for (let i in roles){
+
+        if (roles[i] === "ROLE_HR"){
+          console.log('find')
+          return true
+        }
+      }
+      return false
+    },
   },
   props: {
     "currentUser": {
@@ -231,6 +334,27 @@ export default {
     }
   },
   methods: {
+    updateAchivment(id, name, description, value) {
+      axios.post(`http://localhost:84/api/v1/achievements/update/${id}`,{name:name,description:description,value:value}).then().catch()
+    },
+    addAchivment(username){
+      axios.post("http://localhost:84/api/v1/achievements/new",{
+        name:this.achivment.name,
+        description:this.achivment.description,
+        value:this.achivment.value
+      }).then(response => {
+        axios.post("http://localhost:84/api/v1/achievements/add",{
+          id:response.data,
+          username:username,
+        }).then()
+      })
+    },
+    deleteAchivmebt(id,username) {
+      axios.post("http://localhost:84/api/v1/achievements/unset",{
+        id:id,
+        username:username
+      }).then()//this.$router.go(this.$router.currentRoute))
+    },
     nameFirstAndLast(){
       if (this.userData !== null) return this.userData.userInfo['firstname'] + " " + this.userData.userInfo['lastname'];
     },
@@ -265,16 +389,7 @@ export default {
       this.isModalVisible = false;
     }
   },
-  created() {
-    let roles = JSON.parse(localStorage.getItem('roles'))
-    for (let i in roles){
-      if (roles[i] === "ROLE_HR"){
-        this.userHR = true
-      }
-    }
-  },
   beforeCreate() {
-    //this.userHR = !!JSON.parse(localStorage.getItem('roles')).response.items.find(function (e){return e === "ROLE_HR"})
     if (this.currentUser === false) {
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
       axios.post("http://localhost:84/api/v1/users/search", {"username": this.userName}).then(responce => {
@@ -297,7 +412,7 @@ export default {
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
       axios.get("http://localhost:84/api/v1/users/current").then( responce => {
         this.userData = responce.data
-        localStorage.setItem('role', JSON.stringify(responce.data['roles']))
+        localStorage.setItem('roles', JSON.stringify(responce.data['roles']))
         localStorage.setItem('username', responce.data.username)
         localStorage.setItem('id', responce.data.id)
         this.noError = true

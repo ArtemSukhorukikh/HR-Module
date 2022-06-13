@@ -45,7 +45,13 @@ class UserCurrentDto
     #[Serializer\Type("float")]
     public float $taskInWork;
 
+    #[Serializer\Type(PersonalAchievementsDTO::class)]
+    public array $achivments;
+
     #[Serializer\Type("float")]
     public float $effectiveness;
+
+    #[Serializer\Type("string")]
+    public float $grade;
 
 }

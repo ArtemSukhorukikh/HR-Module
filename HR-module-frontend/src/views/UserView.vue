@@ -1,5 +1,5 @@
 <template>
-  <FullNavbar/>
+  <FullNavbar />
   <ProfilePage v-bind:currentUser = "false"  v-bind:userName = "this.$route.params.username"/>
 </template>
 

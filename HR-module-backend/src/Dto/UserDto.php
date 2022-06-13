@@ -38,7 +38,6 @@ class UserDto
     #[Serializer\Type("integer")]
     public int $id;
 
-
     #[Serializer\Type("float")]
     public float $rating;
 }

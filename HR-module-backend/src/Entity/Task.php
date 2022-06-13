@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TaskRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -225,5 +226,34 @@ class Task
         $this->update_on = $update_on;
 
         return $this;
+    }
+
+    public function timeTask(): float|int
+    {
+
+        if ($this->getStartDate() == NULL){
+            return 0.0;
+        }
+        else {
+            $datetime1 = new DateTime($this->getStartDate()->format("Y-m-d H:i"));
+        }
+        if ($this->getCloseDate() != NULL) {
+            $datetime2 = new DateTime($this->getCloseDate()->format("Y-m-d H:i"));
+        }
+        else {
+            $datetime2 = new DateTime($this->getUpdateOn()->format("Y-m-d H:i"));
+        }
+        $interval = $datetime1->diff($datetime2);
+        $woweekends = 0;
+        for($i=0; $i<=$interval->d; $i++){
+            $datetime1->modify('+1 day');
+            $weekday = $datetime1->format('w');
+
+            if($weekday !== "0" && $weekday !== "6"){ // 0 for Sunday and 6 for Saturday
+                $woweekends++;
+            }
+
+        }
+        return $woweekends * 8;
     }
 }

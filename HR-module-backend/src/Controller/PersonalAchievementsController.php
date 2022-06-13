@@ -70,13 +70,21 @@ class PersonalAchievementsController extends AbstractController
     }
 
     #[Route('/new', name: 'app_personal_achievements_new', methods: "POST")]
-    public function newPersonalAchievements(EntityManagerInterface $entityManager, Request $request): Response
+    public function newPersonalAchievements(PersonalAchievementsRepository $repository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $data = $this->serializer->deserialize($request->getContent(), PersonalAchievementsDTO::class, 'json');
         if ($data) {
             $achivment = $this->achievementsRequestDTOTransformer->transformToObject($data);
-            $entityManager->persist($achivment);
-            $entityManager->flush();
+            $achivmentInDB = $repository->findOneBy(['name' => $achivment->getName(),
+                'description' => $achivment->getDescription(),
+                'value' => $achivment->getValue()]);
+            if (!$achivmentInDB) {
+                $entityManager->persist($achivment);
+                $entityManager->flush();
+                return $this->json($achivment->getId(),Response::HTTP_CREATED);
+            } else {
+                return $this->json($achivmentInDB->getId(), Response::HTTP_OK);
+            }
             return $this->json($data, Response::HTTP_CREATED);
         }
         return $this->json([
@@ -104,7 +112,7 @@ class PersonalAchievementsController extends AbstractController
         ], Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('/delete/{id}', name: 'app_personal_achievements_update', methods: "POST")]
+    #[Route('/delete/{id}', name: 'app_personal_achievements_delete', methods: "POST")]
     public function deletePersonalAchievements(int $id,PersonalAchievementsRepository $repository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $achivment = $repository->find($id);
@@ -133,6 +141,24 @@ class PersonalAchievementsController extends AbstractController
             if ($user && $achievement) {
                 $achievement->addUserAchivment($user);
                 $entityManager->persist($achievement);
+                $entityManager->flush();
+                return $this->json($data, Response::HTTP_CREATED);
+            }
+        }
+        return $this->json([
+            'status_code' => Response::HTTP_BAD_REQUEST,
+            'message' => 'Bad Data.'
+        ], Response::HTTP_BAD_REQUEST);
+    }
+    #[Route('/unset', name: 'app_personal_achievements_unset', methods: "POST")]
+    public function unsetPersonalAchievements(EntityManagerInterface $entityManager, Request $request, UserRepository $userRepository, PersonalAchievementsRepository $achievementsRepository): Response
+    {
+        $data = $this->serializer->deserialize($request->getContent(), PersonalAchievementsAddUserDTO::class, 'json');
+        if ($data) {
+            $achievement = $achievementsRepository->findOneBy(["id" => $data->id]);
+            $user = $userRepository->findOneBy(["username" => $data->username]);
+            if ($user && $achievement) {
+                $achievement->removeUserAchivment($user);
                 $entityManager->flush();
                 return $this->json($data, Response::HTTP_CREATED);
             }

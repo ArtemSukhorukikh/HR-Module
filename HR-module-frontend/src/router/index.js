@@ -20,6 +20,7 @@ import CreateComp from "@/views/CreateChangeCompetence";
 import CreateSkills from "@/views/CreateChangeSkill";
 import SettingRes from "@/views/EducationResources/SettingsResourcesView";
 import UsersView from "@/views/UsersView";
+import ProjectView from "@/views/ProjectView";
 
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
@@ -36,20 +37,20 @@ const authGuard = function beforeEach(to, from, next) {
     next()
   }
 }
-// const authHRGuard = function beforeEach(to, from, next) {
-//   let nowDate = new Date()
-//   let lastDate = new Date(timeAddToken)
-//   let diff = nowDate - lastDate
-//   let hour = Math.floor(diff / 3.6e5);
-//   console.log(hour)
-//   let roles = JSON.parse(localStorage.getItem('roles'))
-//   if (!isAuthenticated || hour > 1 || roles.length < 2) {
-//     next({name: "Вход"})
-//   }
-//   else {
-//     next()
-//   }
-// }
+const authHRGuard = function beforeEach(to, from, next) {
+  let nowDate = new Date()
+  let lastDate = new Date(timeAddToken)
+  let diff = nowDate - lastDate
+  let hour = Math.floor(diff / 3.6e5);
+  console.log(hour)
+  let roles = JSON.parse(localStorage.getItem('roles'))
+  if (!isAuthenticated || hour > 1 || roles[1] === "ROLE_HR") {
+    next({name: "Вход"})
+  }
+  else {
+    next()
+  }
+}
 
 const routes = [
   {
@@ -66,14 +67,15 @@ const routes = [
   },
   {
     path: '/project/:id',
-    name: 'errorPage',
-    component: ErrorServer,
+    name: 'project',
+    component: ProjectView,
+    beforeEnter: authGuard
   },
   {
     path: '/users-all',
     name: 'usersAll',
     component: UsersView,
-    // beforeEnter: authHRGuard
+    beforeEnter: authHRGuard
   },
   {
     path: '/error/:errorCode',

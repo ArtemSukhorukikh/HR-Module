@@ -170,6 +170,12 @@ class ApiAuthController extends AbstractController
         if ($user->getPosition() === "Работник HR-Отдела") {
             $user->setRoles(array('ROLE_HR'));
         }
+        if ($user->getPosition() === "Глава отдела") {
+            $user->setRoles(array('ROLE_MAIN'));
+        }
+        if ($user->getPosition() === "Продукт менеджер") {
+            $user->setRoles(array('ROLE_PM'));
+        }
         $entityManager->persist($user);
         $entityManager->flush();
         if ($user->getWorks()){

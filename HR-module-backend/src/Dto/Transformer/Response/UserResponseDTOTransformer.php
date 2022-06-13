@@ -10,6 +10,7 @@ use App\Entity\Projects;
 use App\Entity\User;
 use App\Repository\ProjectsRepository;
 use App\Repository\TaskRepository;
+use App\Repository\UserRepository;
 use phpDocumentor\Reflection\Types\Array_;
 
 class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
@@ -19,17 +20,23 @@ class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
     public TaskRepository $taskRepository;
     public ContactResponseDTOTransformer $contactResponseDTOTransformer;
     public ProjectsRepository $projectsRepository;
+    public UserRepository $repository;
+    public PersonalAchivmentsResponseDTOTransformer $achivmentsResponseDTOTransformer;
     public function __construct(TasksResponseDTOTransformer $tasksResponseDTOTransformer,
                                 ProjectsResponseDTOTransformer $projectsResponseDTOTransformer,
                                 ProjectsRepository $projectsRepository,
                                 ContactResponseDTOTransformer $contactResponseDTOTransformer,
-    TaskRepository $taskRepository)
+    UserRepository $repository,
+    TaskRepository $taskRepository,
+    PersonalAchivmentsResponseDTOTransformer $achivmentsResponseDTOTransformer)
     {
         $this->tasksResponseDTOTransformer = $tasksResponseDTOTransformer;
         $this->projectsResponseDTOTransformer = $projectsResponseDTOTransformer;
         $this->projectsRepository = $projectsRepository;
         $this->contactResponseDTOTransformer = $contactResponseDTOTransformer;
         $this->taskRepository = $taskRepository;
+        $this->achivmentsResponseDTOTransformer = $achivmentsResponseDTOTransformer;
+        $this->repository = $repository;
     }
 
     /**
@@ -69,7 +76,9 @@ class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
         $dto->avgMark = $user->avgMarkMounth();
         $dto->avgAch = $user->achivmentsAvg();
         $dto->taskInWork = $user->tasksInWork();
+        $dto->achivments = $this->achivmentsResponseDTOTransformer->transformFromObjects($user->getPersonalAchievements());
         $dto->effectiveness = round((0.6 * $dto->hours - 0.2 * $dto->speed - 0.2 * $dto->taskInWork + 0.1 * $user->avgMarkMounth() + $dto->avgAch),4);
+        //$dto->grade = $this->repository->checkGradeRating($user, $user->getWorks()->getMainCompetence());
         return $dto;
     }
 }

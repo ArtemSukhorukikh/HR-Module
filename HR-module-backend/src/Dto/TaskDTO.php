@@ -29,4 +29,10 @@ class TaskDTO
 
     #[Serializer\Type("float")]
     public float $estimated_hours;
+
+    #[Serializer\Type("float")]
+    public float $taskHours;
+
+    #[Serializer\Type("string")]
+    public array $users;
 }

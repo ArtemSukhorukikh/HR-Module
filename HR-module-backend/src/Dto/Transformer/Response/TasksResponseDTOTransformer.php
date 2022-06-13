@@ -25,6 +25,18 @@ class TasksResponseDTOTransformer extends AbstractResponceDTOTransformer
         if ($closeDate) {
             $dto->closed_on = $closeDate->format("Y-m-d H-m");
         }
+        $dto->taskHours = $task->timeTask();
+        if ($task){
+            $dto->estimated_hours = $task->getEstimatedHours();
+        }
+        $users = $task->getUsers();
+        if ($users) {
+            foreach ($users as $user) {
+                $dto->users[] = $user->getLastName() . "" . $user->getFirstName();
+            }
+        }else {
+            $dto->users[] = "Задача не назначена";
+        }
         return $dto;
     }
 }
