@@ -6,6 +6,7 @@
         <li class="nav-item mx-5"><router-link class="nav-link"  to="/knowledgeBase">База знаний</router-link></li>
         <li class="nav-item mx-5"><router-link class="nav-link"  to="/officemap/floor2">Карта офиса этаж 2</router-link></li>
         <li class="nav-item mx-5"><router-link class="nav-link"  to="/officemap/floor3">Карта офиса этаж 3</router-link></li>
+        <li class="nav-item mx-5"><router-link class="nav-link"  to="/users-all">Информация о пользователях</router-link></li>
         <li class="nav-item mx-5"><router-link class="nav-link"  to="/logout">Выход</router-link></li>
       </ul>
     </header>
@@ -15,13 +16,26 @@
 <script>
 export default {
   name: "FullNavbar",
+  data (){
+    return {
+      userHR: false
+    }
+  },
   methods: {
     exit(){
       localStorage.removeItem('token');
       localStorage.removeItem('date');
       location.reload();
     }
-  }
+  },
+  created() {
+    let roles = JSON.parse(localStorage.getItem('roles'))
+    for (let i in roles){
+      if (roles[i] === "ROLE_HR"){
+        this.userHR = true
+      }
+    }
+  },
 }
 
 </script>

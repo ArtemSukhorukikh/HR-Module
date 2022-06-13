@@ -1,6 +1,7 @@
 <template>
   <FullNavbar/>
   <div>
+    <modal-window-workplace ref="modal" v-show="isModalVisible" @close="closeModal"></modal-window-workplace>
     <img class="w-auto h-auto" src="../assets/img/Floor3.png" usemap="#image-map">
     <map name="image-map">
       <area @click="clickOnMap(1,1)" target="" alt="" coords="79,102,139,143" shape="0">
@@ -85,13 +86,62 @@
 
 <script>
 import FullNavbar from "@/components/Navbars/FullNavbar";
+import ModalWindowWorkplace from "@/components/modal-windows/modal-window-workplace";
+import axios from "axios";
 export default {
   name: "OfficeMapFloor3View",
-  components: {FullNavbar},
+  data() {
+    return {
+      loaded: false,
+      isModalVisible: false,
+      dataOffices:{
+        offices: undefined
+      }
+    };
+  },
+  components: {ModalWindowWorkplace, FullNavbar},
+  beforeCreate() {
+    axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
+    axios.get('http://localhost:84/api/v1/offices').then(response => {
+      console.log(response.data)
+      this.dataOffices = (response.data)
+      this.loaded = true
+    }).catch(errors =>{
+      console.log(errors)
+    })
+  },
   methods: {
-    clickOnMap(office, place) {
-      console.log(office)
-      console.log(place)
+    clickOnMap(officeNumber, place) {
+
+      this.isModalVisible = true;
+      this.$refs.modal.office.name = this.dataOffices.offices[officeNumber - 1].name
+      this.$refs.modal.office.floor = this.dataOffices.offices[officeNumber - 1].floor
+      this.$refs.modal.office.workplaces.id = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].id
+      this.$refs.modal.office.workplaces.RoomInTheOffice = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].RoomInTheOffice
+      if (this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user) {
+        this.$refs.modal.office.workplaces.showUser = true
+        this.$refs.modal.office.workplaces.user.firstname = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.userInfo.firstname
+        this.$refs.modal.office.workplaces.user.lastname = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.userInfo.lastname
+        this.$refs.modal.office.workplaces.user.patronymic = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.userInfo.patronymic
+        this.$refs.modal.office.workplaces.user.position = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.userInfo.position
+        this.$refs.modal.office.workplaces.user.contacts = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.userInfo.contacts
+        this.$refs.modal.office.workplaces.user.username = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.username
+        if (this.$refs.modal.office.workplaces.user.username === localStorage.getItem('username')) {
+          this.$refs.modal.isUser = true
+        }
+      }
+      else {
+        this.$refs.modal.office.workplaces.showUser = false
+        this.$refs.modal.office.workplaces.user.firstname = ""
+        this.$refs.modal.office.workplaces.user.lastname = ""
+        this.$refs.modal.office.workplaces.user.patronymic = ""
+        this.$refs.modal.office.workplaces.user.position = ""
+      }
+      this.$refs.modal.place = place - 1
+      this.$refs.modal.render = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
     }
   }
 }
