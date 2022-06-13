@@ -73,7 +73,6 @@ export default {
         date: date_
       }).then(responce => {
         console.log(responce)
-        setTimeout(this.$router.go(), 2000)
       }).catch(errors => {
         console.log(errors)
       })

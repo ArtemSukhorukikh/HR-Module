@@ -52,6 +52,7 @@ class CompetenceMatrixResponse
             $userDTO->firstname = $user->getFirstName();
             $userDTO->lastname = $user->getLastName();
             $userDTO->rating = $this->userRepository->checkGradeRating($user, $competence);
+            $dto->competences[] = $this->userRepository->checkGrade($user, $competence)->getName();
             $dto->users[] = $userDTO;
         }
         return $dto;

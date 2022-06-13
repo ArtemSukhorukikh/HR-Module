@@ -18,6 +18,7 @@ class ApplicationPurchaseOfPersonalTrainingResponse extends AbstractResponceDTOT
     public function transformFromObject($object): ApplicationPurchaseOfPersonalTrainingDTO
     {
         $dto = new ApplicationPurchaseOfPersonalTrainingDTO();
+        $dto->id = $object->getId();
         $dto->user_id = $object->getUser()->getId();
         $dto->link = $object->getLink();
         $dto->note = $object->getNote();

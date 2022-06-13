@@ -8,11 +8,14 @@ use App\Dto\Skills\Response\SkillsCompetenceResponse;
 use App\Dto\Skills\Response\SkillsDepartmentResponse;
 use App\Dto\Skills\Response\SkillsResponse;
 use App\Dto\Skills\SkillsDTO;
+use App\Entity\SkillAssessment;
 use App\Entity\Skills;
+use App\Entity\User;
 use App\Repository\CompetenceRepository;
 use App\Repository\DepartmentRepository;
 use App\Repository\SkillsRepository;
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use JMS\Serializer\SerializerBuilder;
@@ -59,20 +62,37 @@ class SkillsController extends AbstractController
     }
 
     #[Route('skills/competence/{id}', name: 'app_skills_competence', methods: "GET")]
-    public function findSkills($id, CompetenceRepository $competenceRepository, UserRepository $userRepository): Response
+    public function findSkills($id, UserRepository $userRepository): Response
     {
-        $competence = $competenceRepository->find($id);
+        $user = $userRepository->find($id);
+        $competence = $user->getWorks()->getMainCompetence();
         $skillsDTO = $this->skillsCompetenceResponse->transformFromObject($competence);
         return $this->json($skillsDTO, Response::HTTP_OK);
     }
 
-    #[Route('skills/new', name: 'app_skills_new', methods: "POST")]
-    public function newSkill(Request $request, CompetenceRepository $competenceRepository, EntityManagerInterface $entityManager): Response
+    #[Route('skills/new/{id}', name: 'app_skills_new', methods: "POST")]
+    public function newSkill($id, Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager, ManagerRegistry  $doctrine): Response
     {
+        $user_ = $userRepository->find($id);
+        $competence = $user_->getWorks()->getMainCompetence();
         $data = $this->serializer->deserialize($request->getContent(), SkillsDTO::class, 'json');
         $skill = $this->skillsRequest->transformToObject($data);
+        $skill->addCompetence($competence);
         $entityManager->persist($skill);
         $entityManager->flush();
+
+        $entityManager_ = $doctrine->getManager();
+        $users = $skill->getCompetence()[0]->getUsers();
+        foreach ($users as $user){
+            $skillAs = new SkillAssessment();
+            $skillAs->setSkills($skill);
+            $skillAs->setUser($user);
+            $skillAs->setEstimation(0);
+            $date = new DateTime;
+            $skillAs->setDate($date);
+            $entityManager_->persist($skillAs);
+            $entityManager_->flush();
+        }
 
         return $this->json($data, Response::HTTP_CREATED);
     }

@@ -24,7 +24,6 @@ class SkillsRequest
         $data->setName($object->name);
         $data->setDescription($object->description);
         $data->setType(0);
-        $data->addCompetence($this->competenceRepository->find($object->competence_id));
         return $data;
     }
 }

@@ -18,7 +18,8 @@
             <p>Ваш рейтинг: {{ rating }}</p>
           </div>
           <div class="col-sm">
-            <p>Ваш текущий уровень компетенции: {{ competence_name }}</p>
+            <p>Ваш текущий уровень компетенции:</p>
+            <p>{{ competence_name }}</p>
           </div>
         </div>
       </div>
@@ -33,9 +34,10 @@
           </div>
           <div class="col-sm">
             <p>Список образовательных ресурсов:</p>
-            <div v-for="item in descriptions.educationResources" v-bind:key="item" >
-              {{ item.name }}
-            </div>
+            <p v-for="item in descriptions.educationResources" v-bind:key="item">
+              <router-link :to="{  name : 'knowledgeBase', params: { id: item.id   } }" class="link-primary">{{ item.name }}
+              </router-link>
+            </p>
           </div>
         </div>
       </div>
@@ -76,6 +78,9 @@ export default {
     this.descriptions = null
   },
   methods: {
+    checkEdRes(){
+
+    },
     getPersent( needRating ) {
       let test = ((this.rating.toFixed(2) * 100) / parseFloat(needRating) ).toFixed(2)
       if (test > 100){

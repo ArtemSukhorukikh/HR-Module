@@ -1,16 +1,16 @@
 <template>
   <FullNavbar/>
 
-  <div class="container bg-light">
+  <div class="container bg-light w-75 min-vh-100">
 
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item" role="presentation">
+    <ul class="nav nav-tabs mx-auto" id="myTab" role="tablist">
+      <li class="nav-item mx-auto" role="presentation">
         <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#FT" type="button" role="tab" aria-controls="FT" aria-selected="true">Прохождение обучения</button>
       </li>
-      <li class="nav-item" role="presentation">
+      <li class="nav-item mx-auto" role="presentation">
         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#POT" type="button" role="tab" aria-controls="POT" aria-selected="false">Покупка обучающего ресурса</button>
       </li>
-      <li class="nav-item" role="presentation">
+      <li class="nav-item mx-auto" role="presentation">
         <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#POPT" type="button" role="tab" aria-controls="POPT" aria-selected="false">Покупка личного обучающего ресурса</button>
       </li>
     </ul>
@@ -46,8 +46,8 @@
                           <div class="d-flex flex-row align-items-center mb-2 mt-1">
                             <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                             <div class="form-outline flex-fill mb-0">
-                              <label class="form-label" for="form3Example3c">Дата окончания обучения</label>
-                              <input type="date" id="form3Example3c" v-model="applicationDTO.end_date" class="form-control" />
+                              <label class="form-label" for="form3Example3c1">Дата окончания обучения</label>
+                              <input type="date" id="form3Example3c1" v-model="applicationDTO.end_date" class="form-control" />
                             </div>
                           </div>
 
@@ -209,30 +209,14 @@ export default {
   beforeCreate() {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
-        .get("http://localhost:84/api/v1/educationalResources/findAll",)
+        .get("http://localhost:84/api/v1/educationalResources/findAllEB",)
         .then(response => {
           this.educationResourcesAll = response.data.educationResourcesCompetence
           console.log(this.educationResourcesAll)
         });
   },
   methods:{
-    checkFeedback(id_) {
-      axios
-          .get("http://localhost:84/api/v1/feedback/resource/" + id_)
-          .then(response => {
-            this.feedbacks = response.data.feedbackDTO
-            console.log(this.feedbacks)
-          });
-      axios
-          .get("http://localhost:84/api/v1/educationalResources/" + id_)
-          .then(response => {
-            this.educationResources = response.data
-            console.log(this.educationResources)
-          });
-    },
     sendApplication() {
-      this.applicationDTO.start_date = moment(this.start_date).format("YYYY-MM-DD")
-      this.applicationDTO.end_date = moment(this.end_date).format("YYYY-MM-DD")
       this.applicationDTO.user_id =  localStorage.getItem('userId')
       console.log(this.method_of_passage)
       console.log(this.applicationDTO)
@@ -241,8 +225,8 @@ export default {
             id: this.applicationDTO.id,
             user_id: this.applicationDTO.user_id,
             ed_res_id: String(this.applicationDTO.ed_res_id),
-            start_date: this.applicationDTO.start_date,
-            end_date: this.applicationDTO.end_date,
+            start_date: moment(this.applicationDTO.start_date).format("YYYY-MM-DD"),
+            end_date: moment(this.applicationDTO.end_date).format("YYYY-MM-DD"),
             method_of_passage: this.applicationDTO.method_of_passage,
             note: this.applicationDTO.note,
             status: "0"})
@@ -265,8 +249,6 @@ export default {
           });
     },
     sendApplicationPOT() {
-      this.start_date = moment(this.start_date).format("YYYY-MM-DD")
-      this.end_date = moment(this.end_date).format("YYYY-MM-DD")
       this.user_id =  localStorage.getItem('userId')
       console.log(this.applicationDTO)
       axios

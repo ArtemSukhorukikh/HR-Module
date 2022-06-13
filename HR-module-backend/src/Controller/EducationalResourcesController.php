@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Dto\AnswearDTO;
-use App\Dto\EducationResources\EducationResourcesAllDTO;
 use App\Dto\EducationResources\EducationResourcesDTO;
 use App\Dto\EducationResources\Request\EducationResourcesRequest;
 use App\Dto\EducationResources\Response\EducationResourcesAllResponse;
@@ -64,13 +63,28 @@ class EducationalResourcesController extends AbstractController
         return $this->json($educationalResourcesDTO, Response::HTTP_OK);
     }
 
-    #[Route('/educationalResources/findAll', name: 'app_educationalResources_find_all', methods: "GET")]
-    public function findUseAll(CompetenceRepository $competenceRepository, EducationalResourcesRepository $educationalResourcesRepository): Response
+    #[Route('/educationalResources/findAllEB', name: 'app_educationalResources_find_alleb', methods: "GET")]
+    public function findUseAllEB(CompetenceRepository $competenceRepository, EducationalResourcesRepository $educationalResourcesRepository): Response
     {
         $data = $educationalResourcesRepository->findAll();
         $objects = [];
         foreach($data as $object){
-            if ($object->getType() != 1){
+            if ($object->getType() != 3 && $object->getType() != 0){
+                $objects[] = $object;
+            }
+        }
+        $educationalResourcesDTO = $this->educationResourcesUseResponse->transformFromObject($objects);
+        return $this->json($educationalResourcesDTO, Response::HTTP_OK);
+    }
+
+    #[Route('/educationalResources/findAll', name: 'app_educationalResources_find_all', methods: "GET")]
+    public function findUseAll(CompetenceRepository $competenceRepository, EducationalResourcesRepository $educationalResourcesRepository): Response
+    {
+        // && $object->getType() != 0
+        $data = $educationalResourcesRepository->findAll();
+        $objects = [];
+        foreach($data as $object){
+            if ($object->getType() != 3){
                 $objects[] = $object;
             }
         }
