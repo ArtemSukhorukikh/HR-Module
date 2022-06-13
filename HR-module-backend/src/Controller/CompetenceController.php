@@ -79,6 +79,7 @@ class CompetenceController extends AbstractController
         $competence = $user->getWorks()->getMainCompetence();
         $competenceDTO = $this->competenceRatingResponse->transformFromObject($competence);
         $competenceDTO->rating = $userRepository->checkGradeRating($user, $competence);
+        $competenceDTO->comp_name = $userRepository->checkGrade($user, $competence)->getName();
         return $this->json($competenceDTO, Response::HTTP_OK);
     }
 
