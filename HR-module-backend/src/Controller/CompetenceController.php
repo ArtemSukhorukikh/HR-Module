@@ -83,7 +83,7 @@ class CompetenceController extends AbstractController
         return $this->json($competenceDTO, Response::HTTP_OK);
     }
 
-    #[Route('/competence/list/{id}', name: 'app_competence_find', methods: "GET")]
+    #[Route('/competence/list/{id}', name: 'app_competence_findlist', methods: "GET")]
     public function findAll($id, CompetenceRepository $competenceRepository, UserRepository $userRepository): Response
     {
         $user = $userRepository->find($id);
@@ -147,6 +147,12 @@ class CompetenceController extends AbstractController
         $entityManager = $doctrine->getManager();
         $competence = $entityManager->getRepository(Competence::class)->find($id);
         if ($competence) {
+            $comp = $competence->getIncludes()[0];
+            while ($comp != null)
+            {
+                $entityManager->remove($comp);
+                $comp = $comp->getIncludes()[0];
+            }
             $entityManager->remove($competence);
             $entityManager->flush();
             $answer = new AnswearDTO();

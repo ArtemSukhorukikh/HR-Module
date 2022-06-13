@@ -8,10 +8,10 @@
         <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#new" type="button" role="tab" aria-controls="new" aria-selected="true" >Создать</button>
       </li>
       <li class="nav-item mx-auto" role="presentation">
-        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#change" type="button" role="tab" aria-controls="change" aria-selected="false" >Изменить</button>
+        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#change" type="button" role="tab" aria-controls="change" aria-selected="false" @click="checkComps">Изменить</button>
       </li>
       <li class="nav-item mx-auto" role="presentation">
-        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#delete" type="button" role="tab" aria-controls="delete" aria-selected="false" >Удалить</button>
+        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#delete" type="button" role="tab" aria-controls="delete" aria-selected="false" @click="checkComps">Удалить</button>
       </li>
     </ul>
     <div class="tab-content" id="myTabContent">
@@ -55,7 +55,7 @@
             <h1>Изменение компетенции отдела</h1>
 
             <label class="form-label mt-3">Компетенция</label>
-            <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="competence.id" >
+            <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="competence.id" @change="checkComp">
               <option disabled="disabled">Сделайте выбор</option>
               <option v-for="item in competences" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
             </select>
@@ -128,7 +128,6 @@ export default {
     };
   },
   beforeCreate() {
-    console.log(localStorage.getItem('userId'))
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
         .get("http://localhost:84/api/v1/competence/list/" + localStorage.getItem('userId'))
@@ -138,6 +137,22 @@ export default {
         });
   },
   methods: {
+    checkComps(){
+      axios
+          .get("http://localhost:84/api/v1/competence/list/" + localStorage.getItem('userId'))
+          .then(response => {
+            this.competences = response.data.competence_dto_s
+            console.log(this.competences)
+          });
+    },
+    checkComp(){
+      axios
+          .get("http://localhost:84/api/v1/competence/" + this.competence.id)
+          .then(response => {
+            this.competence = response.data
+            console.log(this.competences)
+          });
+    },
     createComp(){
       axios
           .post('http://localhost:84/api/v1/competence/add/' + this.competences[0].id,{
@@ -149,6 +164,7 @@ export default {
           .then(response => {
             console.log(response.data)
           });
+      this.checkComps()
     },
     changeComp(){
       axios

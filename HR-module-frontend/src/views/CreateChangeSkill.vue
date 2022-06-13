@@ -8,10 +8,10 @@
         <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#new" type="button" role="tab" aria-controls="new" aria-selected="true" >Создать</button>
       </li>
       <li class="nav-item mx-auto" role="presentation">
-        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#change" type="button" role="tab" aria-controls="change" aria-selected="false" >Изменить</button>
+        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#change" type="button" role="tab" aria-controls="change" aria-selected="false" @click="checkSkills()">Изменить</button>
       </li>
       <li class="nav-item mx-auto" role="presentation">
-        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#delete" type="button" role="tab" aria-controls="delete" aria-selected="false" >Удалить</button>
+        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#delete" type="button" role="tab" aria-controls="delete" aria-selected="false" @click="checkSkills()">Удалить</button>
       </li>
     </ul>
     <div class="tab-content" id="myTabContent">
@@ -22,12 +22,6 @@
           <form class="mx-1 mx-md-4">
 
             <h1>Создание навыка для компетенции отдела</h1>
-
-            <label class="form-label mt-3">Компетенция</label>
-            <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="competence.id" >
-              <option disabled="disabled">Сделайте выбор</option>
-              <option v-for="item in competences" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
-            </select>
 
             <div class="form-floating mt-3">
               <input v-model="skill.name" type="text" class="form-control" id="name" placeholder="Название">
@@ -52,12 +46,6 @@
           <form class="mx-1 mx-md-4">
 
             <h1>Изменение компетенции отдела</h1>
-
-            <label class="form-label mt-3">Компетенция</label>
-            <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="competence.id" @change="checkSkills()">
-              <option disabled="disabled">Сделайте выбор</option>
-              <option v-for="item in competences" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
-            </select>
 
             <label class="form-label mt-3">Навык</label>
             <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="skill.id" @change="checkSkill()">
@@ -90,14 +78,8 @@
 
             <h1>Удаление навыка компетенции отдела</h1>
 
-            <label class="form-label mt-3">Компетенция</label>
-            <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="competence.id" @change="checkSkills()">
-              <option disabled="disabled">Сделайте выбор</option>
-              <option v-for="item in competences" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
-            </select>
-
             <label class="form-label mt-3">Навык</label>
-            <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="skill.id" @change="checkSkill()">
+            <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="skill.id">
               <option disabled="disabled">Сделайте выбор</option>
               <option v-for="item in skills" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
             </select>
@@ -138,17 +120,11 @@ export default {
   beforeCreate() {
     console.log(localStorage.getItem('userId'))
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-    axios
-        .get("http://localhost:84/api/v1/competence/list/" + localStorage.getItem('userId'))
-        .then(response => {
-          this.competences = response.data.competence_dto_s
-          console.log(this.competences)
-        });
   },
   methods: {
       checkSkills(){
         axios
-            .get("http://localhost:84/api/v1/skills/competence/" + this.competence.id)
+            .get("http://localhost:84/api/v1/skills/competence/" + localStorage.getItem('userId'))
             .then(response => {
               this.skills = response.data.skills
               console.log(this.skills)
@@ -165,8 +141,7 @@ export default {
     },
     createSkill(){
       axios
-          .post('http://localhost:84/api/v1/skills/new',{
-            competence_id: this.competence.id,
+          .post('http://localhost:84/api/v1/skills/new/' + localStorage.getItem('userId'),{
             name: this.skill.name,
             description: this.skill.description
           })

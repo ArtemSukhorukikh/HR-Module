@@ -5,7 +5,6 @@
   <div class="container mt-3">
     <div class="row">
       <div class="col-4">
-        <router-link class="btn btn-outline-primary my-2 "  to="/logout">Настройка базы знаний</router-link>
         <div class="accordion" id="accordionExample">
           <div class="accordion-item" v-for="(item, index) in educationResourcesAll" v-bind:key="item">
             <h2 class="accordion-header" v-bind:id="'heading'+index">
@@ -15,11 +14,12 @@
             </h2>
             <div v-bind:id="'collapse'+ index " class="accordion-collapse collapse" v-bind:aria-labelledby="'heading'+ index">
               <div class="accordion-body" v-for="item_ in item.educationResourcesCompetence" v-bind:key="item_">
-                <a class="link-primary" v-on:click="checkFeedback(item_.id)">{{ item_.name }}</a>
+                <a class="link-primary" @click="checkFeedback(item_.id)">{{ item_.name }}</a>
               </div>
             </div>
           </div>
         </div>
+        <router-link class="btn btn-outline-primary my-2 "  to="/logout">Настройка базы знаний</router-link>
       </div>
       <div class="col-sm">
         <div v-if="feedbacks">
@@ -50,36 +50,18 @@
           <div class="text-black mb-3 " v-if="educationResources.type === 1">Тип ресурса: Онлайн курс</div>
           <div class="text-black mb-3 " v-if="educationResources.type === 2">Тип ресурса: Онлайн тренинг</div>
           <div class="text-black mb-3 " v-if="educationResources.type === 3">Тип ресурса: Личный ресурс</div>
-          <div class="card">
-
+          <div v-if="!userFeedback">
+            <button @click="openModal()" class="btn btn-outline-primary my-2 " >Оставить отзыв</button>
+          </div>
+          <div class="card" v-if="userFeedback">
             <div class="card-body">
-
               <form class="w-100">
-                <div v-if="userFeedback">
-                  <h5 class="fw-bold text-black mb-3 ">Ваш отзыв</h5>
-                  <div class="text-black mb-3 ">{{ userFeedback.note }}</div>
-                  <div class="text-black mb-3 ">Оценка: {{ userFeedback.estimation }}</div>
-                  <button @click="deleteFeedback()" class="w-100 btn btn-lg btn-primary" type="submit">Удалить отзыв</button>
-                </div>
-                <div v-if="!userFeedback">
-                  <h3 class="h1 fw-bold text-black mb-3 ">Отзыв</h3>
-                  <div class="form-floating mb-3" >
-                    <textarea v-model="feedbackDTO.note" type="text" class="form-control" id="floatingPassword" placeholder="Пароль"/>
-                    <label for="floatingPassword">Отзыв</label>
-                  </div>
-                  <select class="form-select form-select-sm" aria-label=".form-select-sm example " v-model="feedbackDTO.estimation">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
-                  <button @click="openModal()" class="btn btn-outline-primary my-2 " >Оставить отзыв</button>
-                </div>
+                <h5 class="fw-bold text-black mb-3 ">Ваш отзыв</h5>
+                <div class="text-black mb-3 ">{{ userFeedback.note }}</div>
+                <div class="text-black mb-3 ">Оценка: {{ userFeedback.estimation }}</div>
+                <button @click="deleteFeedback(); " class="w-100 btn btn-lg btn-primary" type="submit">Удалить отзыв</button>
               </form>
-
             </div>
-
           </div>
 
 
@@ -108,6 +90,7 @@ export default {
   data() {
     return {
       isModalVisible: false,
+      isFeedback: '',
       "educationResourcesAll": {},
       "feedbacks": {},
       "educationResources": {},
@@ -131,6 +114,14 @@ export default {
           this.educationResourcesAll = response.data.educationResourcesAll
           console.log(this.educationResourcesAll)
         });
+    console.log(this.$route.params)
+  },
+  created() {
+
+    if(this.$route.params.id != null){
+      console.log(this.$route.params.id)
+      this.checkFeedback(this.$route.params.id)
+    }
   },
   methods:{
     openModal() {
@@ -139,16 +130,15 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+      this.checkFeedback(this.educationResources.id)
     },
     deleteFeedback(){
       axios
           .post("http://localhost:84/api/v1/feedback/delete/" + this.userFeedback.id)
           .then(response => {
             console.log(response.data)
+            this.checkFeedback(this.educationResources.id)
           });
-      this.userFeedback = null
-      console.log(this.educationResources.id)
-      this.checkFeedback(this.educationResources.id)
     },
     getDate(date){
       return moment(date).format("YYYY-MM-DD")

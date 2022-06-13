@@ -147,7 +147,7 @@
                           <h5 v-if="item.status === 3">
                             Отказано
                           </h5>
-                          <div class="card-body">
+                          <div class="card-body" v-bind:key="item.id">
                             {{item.note}}
                           </div>
                           <button class="btn btn-primary" @click="statusApplicationPOPT(item.id, 1)" v-if="item.status ===  0">Принять</button>
@@ -257,11 +257,11 @@ export default {
   components: {FullNavbar},
   data() {
     return {
-      "applicationFT": {},
-      "applicationPOPT": {},
-      "applicationPOT": {},
+      applicationFT: {},
+      applicationPOPT: {},
+      applicationPOT: {},
       "status": ''
-    };
+    }
   },
   created() {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
@@ -278,8 +278,8 @@ export default {
           })
           .then(response => {
             console.log(response.data)
+            this.checkApplicationFT()
           });
-      this.checkApplicationFT()
     },
     statusApplicationPOPT(id, status) {
       axios
@@ -289,10 +289,11 @@ export default {
           })
           .then(response => {
             console.log(response.data)
+            this.checkApplicationPOPT()
           });
-      this.checkApplicationPOPT()
     },
     statusApplicationPOT(id, status) {
+      console.log(id)
       axios
           .post("http://localhost:84/api/v1/applicationPOT/status",{
             id: id,
@@ -300,8 +301,8 @@ export default {
           })
           .then(response => {
             console.log(response.data)
+            this.checkApplicationPOT()
           });
-      this.checkApplicationPOT()
     },
     makeDate(date) {
       return moment(date).format("YYYY-MM-DD")

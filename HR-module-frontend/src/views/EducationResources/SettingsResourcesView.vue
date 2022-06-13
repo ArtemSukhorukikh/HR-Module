@@ -1,21 +1,21 @@
 <template>
   <FullNavbar/>
-  <div class="container bg-light">
+  <div class="container bg-light w-75 min-vh-100">
 
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item" role="presentation">
+    <ul class="nav nav-tabs mx-auto" id="myTab" role="tablist">
+      <li class="nav-item mx-auto" role="presentation">
         <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#new" type="button" role="tab" aria-controls="new" aria-selected="true" @click="clear">Создать</button>
       </li>
-      <li class="nav-item" role="presentation">
+      <li class="nav-item mx-auto" role="presentation">
         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#change" type="button" role="tab" aria-controls="change" aria-selected="false" @click="clear">Изменить</button>
       </li>
-      <li class="nav-item" role="presentation">
+      <li class="nav-item mx-auto" role="presentation">
         <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#delete" type="button" role="tab" aria-controls="delete" aria-selected="false" @click="clear">Удалить</button>
       </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#add" type="button" role="tab" aria-controls="add" aria-selected="false" @click="clear">Добавить</button>
+      <li class="nav-item mx-auto" role="presentation">
+        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#add" type="button" role="tab" aria-controls="add" aria-selected="false" @click="clear(); findAllResource()">Добавить</button>
       </li>
-      <li class="nav-item" role="presentation">
+      <li class="nav-item mx-auto" role="presentation">
         <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#remove" type="button" role="tab" aria-controls="remove" aria-selected="false" @click="clear">Убрать</button>
       </li>
     </ul>
@@ -311,32 +311,32 @@ export default {
           })
           .then(response => {
             console.log(response.data)
+            this.findRes()
           });
-      this.findRes()
     },
     deleteEdRes(){
       axios
           .post('http://localhost:84/api/v1/educationalResources/delete/' + this.idRes)
           .then(response => {
             console.log(response.data)
+            this.findRes()
           });
-      this.findRes()
     },
     compAddEdRes(){
       axios
           .post('http://localhost:84/api/v1/educationalResources/add/' + this.competence.id  + "/" + this.idRes)
           .then(response => {
             console.log(response.data)
+            this.findRes()
           });
-      this.findRes()
     },
     compDeleteEdRes(){
       axios
           .post('http://localhost:84/api/v1/educationalResources/delete/' + this.competence.id  + "/" + this.idRes)
           .then(response => {
             console.log(response.data)
+            this.findRes()
           });
-      this.findRes()
     }
 
   }

@@ -21,6 +21,7 @@ import CreateSkills from "@/views/CreateChangeSkill";
 import SettingRes from "@/views/EducationResources/SettingsResourcesView";
 import UsersView from "@/views/UsersView";
 import ProjectView from "@/views/ProjectView";
+import DevPlan from "@/views/ProfessionalDevelopmentPlan";
 
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
@@ -116,8 +117,8 @@ const routes = [
     beforeEnter: authGuard
   },
   {
-    path: '/knowledgeBase',
-    name: 'База знаний',
+    path: '/knowledgeBase/:id',
+    name: 'knowledgeBase',
     component: KnowledgeBase,
     beforeEnter: authGuard
   },
@@ -179,6 +180,12 @@ const routes = [
     path: '/settingRes',
     name: 'Создание изменение образовательных ресурсов',
     component: SettingRes,
+    beforeEnter: authGuard
+  },
+  {
+    path: '/DevPlan',
+    name: 'План повышения квалификации',
+    component: DevPlan,
     beforeEnter: authGuard
   }
 ]

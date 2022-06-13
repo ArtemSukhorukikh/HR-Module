@@ -11,4 +11,7 @@ class CompetenceMatrixDTO
 
     #[Serializer\Type("array<App\Dto\UserDto>")]
     public array $users;
+
+    #[Serializer\Type("array<string>")]
+    public array $competences;
 }

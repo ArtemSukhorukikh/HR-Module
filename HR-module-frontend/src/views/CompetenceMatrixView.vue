@@ -3,8 +3,8 @@
   <modal-window-skills-form ref="modal" v-show="isModalVisible" @close="closeModal"></modal-window-skills-form>
 
   <div>
-    <button class="btn btn-outline-primary my-2 m-3" ><router-link to="/compRed"></router-link>Настройка компетенций</button>
-    <button class="btn btn-outline-primary my-2 m-3" ><router-link class="link"  to="/skillsRed"></router-link>Настройка навыков</button>
+    <router-link to="/compRed" class="btn btn-outline-primary my-2 m-3">Настройка компетенций</router-link>
+    <router-link  to="/skillsRed" class="btn btn-outline-primary my-2 m-3">Настройка навыков</router-link>
     <button class="btn btn-outline-primary my-2 m-3" @click="openModal">Оценка навыков сотрудника</button>
   </div>
 
@@ -22,8 +22,12 @@
     </tr>
     </tbody>
     <tfoot>
-      <th scope="row" class="">Рейтинг</th>
-      <td v-for="item in users" v-bind:key="item">{{item.rating.toFixed(2)}}</td>
+    <th scope="row" class="">Грейд</th>
+    <td v-for="item in competences" v-bind:key="item">{{item}}</td>
+    </tfoot>
+    <tfoot>
+    <th scope="row" class="">Рейтинг</th>
+    <td v-for="item in users" v-bind:key="item">{{item.rating.toFixed(2)}}</td>
     </tfoot>
   </table>
 
@@ -43,6 +47,7 @@ export default {
       isModalVisible: false,
       "users": {},
       "skillsAssessment": {},
+      "competences": {},
       "skills": {},
       "users0": {}
     };
@@ -54,6 +59,7 @@ export default {
         .then(response => {
           this.users = response.data.users
           this.skillsAssessment = response.data.skill_assessment
+          this.competences = response.data.competences
           console.log(this.users)
           console.log(this.skillsAssessment)
         });
@@ -80,6 +86,15 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+      axios
+          .get("http://localhost:84/api/v1/competenceMatrix/" + localStorage.getItem('userId'))
+          .then(response => {
+            this.users = response.data.users
+            this.skillsAssessment = response.data.skill_assessment
+            this.competences = response.data.competences
+            console.log(this.users)
+            console.log(this.skillsAssessment)
+          });
     },
   }
 }
