@@ -139,7 +139,6 @@ export default {
             console.log(response.data)
             this.checkFeedback(this.educationResources.id)
           });
-
     },
     getDate(date){
       return moment(date).format("YYYY-MM-DD")

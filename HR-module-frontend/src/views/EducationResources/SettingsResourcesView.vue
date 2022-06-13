@@ -311,32 +311,32 @@ export default {
           })
           .then(response => {
             console.log(response.data)
+            this.findRes()
           });
-      this.findRes()
     },
     deleteEdRes(){
       axios
           .post('http://localhost:84/api/v1/educationalResources/delete/' + this.idRes)
           .then(response => {
             console.log(response.data)
+            this.findRes()
           });
-      this.findRes()
     },
     compAddEdRes(){
       axios
           .post('http://localhost:84/api/v1/educationalResources/add/' + this.competence.id  + "/" + this.idRes)
           .then(response => {
             console.log(response.data)
+            this.findRes()
           });
-      this.findRes()
     },
     compDeleteEdRes(){
       axios
           .post('http://localhost:84/api/v1/educationalResources/delete/' + this.competence.id  + "/" + this.idRes)
           .then(response => {
             console.log(response.data)
+            this.findRes()
           });
-      this.findRes()
     }
 
   }

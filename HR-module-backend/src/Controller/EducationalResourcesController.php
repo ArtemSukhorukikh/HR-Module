@@ -6,7 +6,7 @@ use App\Dto\AnswearDTO;
 use App\Dto\EducationResources\EducationResourcesDTO;
 use App\Dto\EducationResources\Request\EducationResourcesRequest;
 use App\Dto\EducationResources\Response\EducationResourcesAllResponse;
-use App\Dto\EducationResources\Response\EducationResourcesListResponse;
+use App\Dto\EducationResources\Response\EducationResourcesCompetenceResponse;
 use App\Dto\EducationResources\Response\EducationResourcesResponse;
 use App\Dto\EducationResources\Response\EducationResourcesUseResponse;
 use App\Entity\Competence;
@@ -27,7 +27,7 @@ class EducationalResourcesController extends AbstractController
     private EducationResourcesAllResponse $educationResourcesAllResponse;
     private EducationResourcesRequest $educationResourcesRequest;
     private EducationResourcesResponse $educationResourcesResponse;
-    private EducationResourcesListResponse $educationResourcesListResponse;
+    private EducationResourcesCompetenceResponse $educationResourcesCompetenceResponse;
     private EducationResourcesUseResponse $educationResourcesUseResponse;
     private $serializer;
     public function __construct(
@@ -35,14 +35,14 @@ class EducationalResourcesController extends AbstractController
         EducationResourcesResponse $educationResourcesResponse,
         EducationResourcesUseResponse $educationResourcesUseResponse,
         EducationResourcesRequest $educationResourcesRequest,
-        EducationResourcesListResponse $educationResourcesListResponse)
+        EducationResourcesCompetenceResponse $educationResourcesCompetenceResponse)
     {
         $this->serializer = SerializerBuilder::create()->build();
         $this->educationResourcesRequest = $educationResourcesRequest;
         $this->educationResourcesAllResponse = $educationResourcesAllResponse;
         $this->educationResourcesUseResponse = $educationResourcesUseResponse;
         $this->educationResourcesResponse = $educationResourcesResponse;
-        $this->educationResourcesListResponse = $educationResourcesListResponse;
+        $this->educationResourcesCompetenceResponse = $educationResourcesCompetenceResponse;
     }
 
 
@@ -59,7 +59,7 @@ class EducationalResourcesController extends AbstractController
     public function findCompetence($id, CompetenceRepository $competenceRepository): Response
     {
         $competence = $competenceRepository->find($id);
-        $educationalResourcesDTO = $this->educationResourcesListResponse->transformFromObject($competence);
+        $educationalResourcesDTO = $this->educationResourcesCompetenceResponse->transformFromObject($competence);
         return $this->json($educationalResourcesDTO, Response::HTTP_OK);
     }
 
