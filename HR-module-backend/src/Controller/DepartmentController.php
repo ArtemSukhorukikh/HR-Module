@@ -49,12 +49,12 @@ class DepartmentController extends AbstractController
         return $this->json($departmentUserDTO, Response::HTTP_OK);
     }
 
-    #[Route('department/all', name: 'app_department_all', methods: "GET")]
-    public function findAllDepartment(DepartmentRepository $departmentRepository): Response
+    #[Route('department', name: 'test', methods: "GET")]
+    public function test(DepartmentRepository $departmentRepository): Response
     {
-        $departments = $departmentRepository->findAll();
+        $departments = $departmentRepository->find(1);
         $departmentUserDTO = $this->departmentListResponse->transformFromObject($departments);
-        return $this->json($departmentUserDTO, Response::HTTP_OK);
+        return $this->json( $departmentUserDTO,Response::HTTP_OK);
     }
 
     #[Route('department/users/{id}', name: 'app_department_users', methods: "GET")]
@@ -84,13 +84,13 @@ class DepartmentController extends AbstractController
         return $this->json($data, Response::HTTP_CREATED);
     }
 
-    #[Route('/department/update/{id}', name: 'app_competence_add', methods: "POST")]
+    #[Route('department/update/{id}', name: 'app_competence_add', methods: "POST")]
     public function addCompetence($id, Request $request, CompetenceRepository $competenceRepository, ManagerRegistry  $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
         $department = $entityManager->getRepository(Department::class)->find($id);
 
         $entityManager->flush();
-        return $this->json($data, Response::HTTP_CREATED);
+        return $this->json( Response::HTTP_CREATED);
     }
 }

@@ -19,16 +19,10 @@ class DepartmentDTO
     public string $main_competence_name;
 
     #[Serializer\Type("integer")]
-    public array $users;
-
-    #[Serializer\Type("integer")]
     public int $obeys_id;
 
-    #[Serializer\Type("integer")]
-    public int $obeys_name;
-
-    #[Serializer\Type("array<integer>")]
-    public array $deps;
+    #[Serializer\Type("array<App\Dto\Department\DepartmentDTO>")]
+    public array $children;
 
     #[Serializer\Type("string")]
     public string $director_id;
