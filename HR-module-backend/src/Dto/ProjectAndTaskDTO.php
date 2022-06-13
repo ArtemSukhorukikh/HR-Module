@@ -24,6 +24,9 @@ class ProjectAndTaskDTO
     #[Serializer\Type("string")]
     public $closed_on;
 
+    #[Serializer\Type("string")]
+    public array $team;
+
     #[Serializer\Type(TaskDTO::class)]
     public array $tasks;
 }

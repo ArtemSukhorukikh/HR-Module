@@ -28,6 +28,15 @@ class ProjectAndTasksResponseDTOTransformer extends AbstractResponceDTOTransform
         if ($clodeDate) {
             $dto->closed_on = $clodeDate->format("YYYY-MM-dd");
         }
+        $fullTeam = [];
+        foreach ($project->getTasks() as $task) {
+            $users = $task->getUsers();
+            foreach ($users as $user) {
+                $fullTeam[] = $user->getLastName() . " " . $user->getFirstName() . " " . $user->getPatronymic();
+            }
+        }
+        $team = array_unique($fullTeam);
+        $dto->team = $team;
         $dto->tasks =  $this->tasksResponseDTOTransformer->transformFromObjects($project->getTasks());
         return $dto;
     }
