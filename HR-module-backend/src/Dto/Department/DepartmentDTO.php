@@ -24,14 +24,11 @@ class DepartmentDTO
     #[Serializer\Type("integer")]
     public int $obeys_id;
 
-    #[Serializer\Type("string")]
-    public string $obeys_name;
-
     #[Serializer\Type("integer")]
-    public int $dep_id;
+    public int $obeys_name;
 
-    #[Serializer\Type("string")]
-    public string $dep_name;
+    #[Serializer\Type("array<integer>")]
+    public array $deps;
 
     #[Serializer\Type("string")]
     public string $director_id;

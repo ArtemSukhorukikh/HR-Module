@@ -46,19 +46,20 @@ class Department
     private $director;
 
     /**
-     * @ORM\OneToOne(targetEntity=Department::class, inversedBy="department", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Department::class, inversedBy="departments")
      */
-    private $Obeys;
+    private $obeys;
 
     /**
-     * @ORM\OneToOne(targetEntity=Department::class, mappedBy="Obeys", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity=Department::class, mappedBy="obeys")
      */
-    private $department;
+    private $departments;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->surveys = new ArrayCollection();
+        $this->departments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -174,34 +175,42 @@ class Department
 
     public function getObeys(): ?self
     {
-        return $this->Obeys;
+        return $this->obeys;
     }
 
-    public function setObeys(?self $Obeys): self
+    public function setObeys(?self $obeys): self
     {
-        $this->Obeys = $Obeys;
+        $this->obeys = $obeys;
 
         return $this;
     }
 
-    public function getDepartment(): ?self
+    /**
+     * @return Collection<int, self>
+     */
+    public function getDepartments(): Collection
     {
-        return $this->department;
+        return $this->departments;
     }
 
-    public function setDepartment(?self $department): self
+    public function addDepartment(self $department): self
     {
-        // unset the owning side of the relation if necessary
-        if ($department === null && $this->department !== null) {
-            $this->department->setObeys(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($department !== null && $department->getObeys() !== $this) {
+        if (!$this->departments->contains($department)) {
+            $this->departments[] = $department;
             $department->setObeys($this);
         }
 
-        $this->department = $department;
+        return $this;
+    }
+
+    public function removeDepartment(self $department): self
+    {
+        if ($this->departments->removeElement($department)) {
+            // set the owning side to null (unless already changed)
+            if ($department->getObeys() === $this) {
+                $department->setObeys(null);
+            }
+        }
 
         return $this;
     }

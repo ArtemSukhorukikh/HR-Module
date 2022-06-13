@@ -8,10 +8,12 @@ use App\Dto\Department\Response\DepartmentListResponse;
 use App\Dto\Department\Response\DepartmentResponse;
 use App\Dto\Department\Response\DepartmentUsersResponse;
 use App\Entity\Competence;
+use App\Entity\Department;
 use App\Repository\CompetenceRepository;
 use App\Repository\DepartmentRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use JMS\Serializer\SerializerBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -78,6 +80,16 @@ class DepartmentController extends AbstractController
         $entityManager->flush();
         $department->setMainCompetence($competence);
         $entityManager->persist($department);
+        $entityManager->flush();
+        return $this->json($data, Response::HTTP_CREATED);
+    }
+
+    #[Route('/department/update/{id}', name: 'app_competence_add', methods: "POST")]
+    public function addCompetence($id, Request $request, CompetenceRepository $competenceRepository, ManagerRegistry  $doctrine): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $department = $entityManager->getRepository(Department::class)->find($id);
+
         $entityManager->flush();
         return $this->json($data, Response::HTTP_CREATED);
     }
