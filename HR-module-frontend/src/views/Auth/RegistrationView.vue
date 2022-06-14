@@ -1,5 +1,5 @@
 <template>
-  <LoginNavbar/>
+  <FullNavbar></FullNavbar>
   <section class=" mt-0" style="background-color: white;">
     <div class="container mt-2">
       <div class="row d-flex justify-content-center align-items-center h-100">
@@ -102,12 +102,12 @@
 
 <script>
 import axios from "axios";
-import LoginNavbar from "@/components/Navbars/LoginNavbar";
 import useVuelidate from '@vuelidate/core'
 import { required, minLength } from '@vuelidate/validators'
+import FullNavbar from "@/components/Navbars/FullNavbar";
 export default {
   name: "RegistrationView",
-  components: {LoginNavbar},
+  components: {FullNavbar},
   data() {
     return {
       v$: useVuelidate(),
@@ -159,16 +159,12 @@ export default {
           position: this.position,
           dateofhiring: this.dateofhiring,
           department: this.department
-        }).then(responce => {
-          localStorage.setItem('token', responce.data.token)
-          localStorage.setItem('roles', JSON.stringify(responce.data.roles))
-          let date;
-          date = new Date()
-          localStorage.setItem('date', date.toString())
-          this.$router.push("/")
-        }).catch(errors =>{
+        }).then(
+
+        ).catch(errors =>{
           console.log(errors)
         })
+        this.$router.push({name: "userPage", params:{ username:this.username}})
       }
     }
   },

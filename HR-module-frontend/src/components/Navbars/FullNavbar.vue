@@ -2,27 +2,22 @@
   <div class="px-2 w-100">
     <header class="d-flex justify-content-center py-3">
       <ul class="nav nav-pills">
-        <li class="nav-item mx-auto"><router-link class="nav-link"  to="/">Профиль</router-link></li>
-        <li class="nav-item mx-auto"><router-link class="nav-link"  :to="{  name : 'knowledgeBase', params: { id: 'null' } }">База знаний</router-link></li>
-        <select class="form-select w-auto mx-auto" aria-label="Пример выбора по умолчанию" @change="getRoute()" v-model="id">
-          <option selected disabled>Карты</option>
-          <option value="/officemap/floor2"><li class="nav-item mx-5">Карта офиса этаж 2</li></option>
-          <option value="/officemap/floor3"><li class="nav-item mx-5">Карта офиса этаж 3</li></option>
-        </select>
-        <div v-if="userHR === false || !userMain === false">
-          <select  class="form-select w-auto mx-auto" aria-label="Пример выбора по умолчанию" @change="getRoute()" v-model="id">
-            <option selected disabled>Заявки</option>
-            <option value="/UserAFT"><li class="nav-item mx-5">Список заявок</li></option>
-            <option value="/CreateAFT"><li class="nav-item mx-5">Создание заявок</li></option>
-          </select>
-        </div>
-        <li v-if="!userMain" class="nav-item mx-auto"><router-link class="nav-link"  to="/officemap/floor3">Карта компетенций</router-link></li>
-        <li v-if="userHR" class="nav-item mx-auto"><router-link class="nav-link"  to="/users-all">Информация о пользователях</router-link></li>
-        <li v-if="userHR || userMain" class="nav-item mx-auto"><router-link class="nav-link"  to="/compMatr">Матрица компетенций</router-link></li>
-        <li v-if="userHR || userMain" class="nav-item mx-auto"><router-link class="nav-link"  to="/DevPlan">План прохождения обучения</router-link></li>
-        <li v-if="userHR" class="nav-item mx-auto"><router-link class="nav-link"  to="/users-all">Отделы</router-link></li>
-        <li v-if="userMain" class="nav-item mx-auto"><router-link class="nav-link"  to="/DepAFT">Заявки</router-link></li>
-        <li class="nav-item mx-auto"><router-link class="nav-link"  to="/logout">Выход</router-link></li>
+        <li class="nav-item"><router-link class="nav-link"  to="/">Профиль</router-link></li>
+        <li class="nav-item"><router-link class="nav-link"  :to="{  name : 'knowledgeBase', params: { id: 'null' } }">База знаний</router-link></li>
+        <li class="nav-item"><router-link class="nav-link"  to="/officemap/floor2">Карта офиса этаж 2</router-link></li>
+        <li class="nav-item"><router-link class="nav-link"  to="/officemap/floor3">Карта офиса этаж 3</router-link></li>
+        <li v-if="!userMain" class="nav-item "><router-link class="nav-link"  to="/UserAFT">Список заявок</router-link></li>
+        <li v-if="!userMain" class="nav-item "><router-link class="nav-link"  to="/CreateAFT">Создание заявок</router-link></li>
+        <li v-if="!userMain" class="nav-item "><router-link class="nav-link"  to="/compMap">Карта компетенций</router-link></li>
+        <li v-if="userHR" class="nav-item "><router-link class="nav-link"  to="/users-all">Информация о пользователях</router-link></li>
+        <li v-if="userHR || userMain" class="nav-item "><router-link class="nav-link"  to="/compMatr">Матрица компетенций</router-link></li>
+        <li v-if="userHR || userMain" class="nav-item "><router-link class="nav-link"  to="/DevPlan">План прохождения обучения</router-link></li>
+        <li v-if="userHR" class="nav-item "><router-link class="nav-link"  to="/departments">Отделы</router-link></li>
+        <li v-if="userMain" class="nav-item "><router-link class="nav-link"  to="/DepAFT">Заявки</router-link></li>
+        <li class="nav-item mx-5"><router-link class="nav-link"  :to="{  name : 'knowledgeBase', params: { id: 'null'   } }">База знаний</router-link></li>
+        <li v-if="userPM" class="nav-item "><router-link class="nav-link"  to="/tasks">Информация о задачах</router-link></li>
+        <li v-if="userHR" class="nav-item "><router-link class="nav-link"  to="/notifications">Уведомления</router-link></li>
+        <li class="nav-item mx-5"><router-link class="nav-link"  to="/logout">Выход</router-link></li>
       </ul>
     </header>
   </div>
@@ -36,6 +31,7 @@ export default {
       id: {},
       userHR: false,
       userMain: false,
+      userPM: false
     }
   },
   methods: {
@@ -48,7 +44,7 @@ export default {
       location.reload();
     }
   },
-  created() {
+  beforeMount() {
     let roles = JSON.parse(localStorage.getItem('roles'))
     for (let i in roles){
       if (roles[i] === "ROLE_HR"){
@@ -56,6 +52,9 @@ export default {
       }
       if (roles[i] === "ROLE_MAIN"){
         this.userMain = true
+      }
+      if (roles[i] === "ROLE_PM"){
+        this.userPM = true
       }
     }
   },

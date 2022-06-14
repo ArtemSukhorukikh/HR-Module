@@ -81,6 +81,14 @@
                 </div>
               </div>
               <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Дата найма</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  {{ userData.userInfo.dateofhiring}}
+                </div>
+              </div>
                 <div v-if="currentUser || checkHR" class="col-sm-12">
                   <button @click="openModal()" class="btn btn-outline-primary my-2 " >Редактировать</button>
                 </div>
