@@ -41,6 +41,14 @@ class DepartmentController extends AbstractController
         $this->departmentRequest = $departmentRequest;
     }
 
+    #[Route('department/findAll', name: 'app_department_findAll', methods: "GET")]
+    public function findAll(DepartmentRepository $departmentRepository): Response
+    {
+        $departments = $departmentRepository->findAll();
+        $departmentUserDTO = $this->departmentResponse->transformFromObjects($departments);
+        return $this->json( $departmentUserDTO,Response::HTTP_OK);
+    }
+
     #[Route('department/{id}', name: 'app_department_find', methods: "GET")]
     public function findDepartment($id, DepartmentRepository $departmentRepository): Response
     {

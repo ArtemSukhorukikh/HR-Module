@@ -19,7 +19,7 @@
             </div>
           </div>
         </div>
-        <router-link class="btn btn-outline-primary my-2 "  to="/logout">Настройка базы знаний</router-link>
+        <router-link v-if="userMain" class="btn btn-outline-primary my-2 "  to="/logout">Настройка базы знаний</router-link>
       </div>
       <div class="col-sm">
         <div v-if="feedbacks">
@@ -89,6 +89,7 @@ export default {
   components: {ModalWindowFeedback, FullNavbar},
   data() {
     return {
+      userMain: false,
       isModalVisible: false,
       isFeedback: '',
       "educationResourcesAll": {},
@@ -115,6 +116,12 @@ export default {
           console.log(this.educationResourcesAll)
         });
     console.log(this.$route.params)
+    let roles = JSON.parse(localStorage.getItem('roles'))
+    for (let i in roles){
+      if (roles[i] === "ROLE_MAIN"){
+        this.userMain = true
+      }
+    }
   },
   created() {
 
