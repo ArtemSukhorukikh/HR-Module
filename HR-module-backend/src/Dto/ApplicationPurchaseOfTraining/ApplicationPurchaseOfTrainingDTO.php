@@ -16,6 +16,9 @@ class ApplicationPurchaseOfTrainingDTO
     public int $user_name;
 
     #[Serializer\Type("string")]
+    public string $user_username;
+
+    #[Serializer\Type("string")]
     public string $description;
 
     #[Serializer\Type("string")]
