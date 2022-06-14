@@ -650,7 +650,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function countHoursInMounth() {
-        $start = date('m-01-Y 00:00');
+        $start = date('Y-m-01 00:00');
         $end = date('Y-m-t 23:59');
         $startDate = new DateTime($start);
         $endDate = new DateTime($end);

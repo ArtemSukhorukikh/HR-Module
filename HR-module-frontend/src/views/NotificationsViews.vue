@@ -41,6 +41,17 @@
         </div>
       </div>
     </div>
+    <div class="row mt-5">
+      <div v-for="notification in notifications" v-bind:key="notification" class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ notification.date }}</h5>
+            <p class="card-text">{{ notification.text }}</p>
+            <button @click="del(notification.id)" class="btn btn-danger">Удалить</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -67,7 +78,13 @@ export default {
           type: "All",
 
         }
-        axios.post("http://localhost:84/api/v1/notification/new", data)
+        axios.post("http://localhost:84/api/v1/notification/new", data).then(responce => {
+          console.log(responce)
+          setTimeout(function (){console.log(responce)},2000)
+          axios.get("http://localhost:84/api/v1/notification/all").then(responce => {
+            this.notifications = responce.data
+          })
+        })
       }
       if ( this.type === "Department") {
         let data = {
@@ -76,7 +93,13 @@ export default {
           type: "Department",
           department: this.toSend,
         }
-        axios.post("http://localhost:84/api/v1/notification/new", data)
+        axios.post("http://localhost:84/api/v1/notification/new", data).then(responce => {
+          console.log(responce)
+          setTimeout(function (){console.log(responce)},2000)
+          axios.get("http://localhost:84/api/v1/notification/all").then(responce => {
+            this.notifications = responce.data
+          })
+        })
       }
       if ( this.type === "User") {
         let data = {
@@ -85,9 +108,22 @@ export default {
           type: "User",
           username: this.toSend,
         }
-        axios.post("http://localhost:84/api/v1/notification/new", data)
+        axios.post("http://localhost:84/api/v1/notification/new", data).then(responce => {
+
+          setTimeout(function (){console.log(responce)},2000)
+          axios.get("http://localhost:84/api/v1/notification/all").then(responce => {
+            this.notifications = responce.data
+          })
+        })
+
       }
 
+    },
+    del (id){
+      axios.post(`http://localhost:84/api/v1/notification/delete/${id}`,{})
+      axios.get("http://localhost:84/api/v1/notification/all").then(responce => {
+        this.notifications = responce.data
+      })
     }
   },
   components: {FullNavbar},

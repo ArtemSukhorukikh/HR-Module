@@ -62,16 +62,6 @@
                   </div>
                 </div>
               </div>
-              <div v-else-if="this.userHR" class="row">
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" v-model="setUsername" placeholder="username" required>
-                    <label for="floatingInput">Имя пользователя</label>
-                  </div>
-                  <div class="col">
-                    <button @click="setPlace()" class="mt-4 btn btn-outline-primary">Занять место</button>
-
-              </div>
-              </div>
               <div v-else class="col">
                 <button @click="setPlace()" class="mt-4 btn btn-outline-primary">Занять место</button>
               </div>

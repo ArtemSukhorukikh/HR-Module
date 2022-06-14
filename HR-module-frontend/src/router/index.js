@@ -31,7 +31,7 @@ const authGuard = function beforeEach(to, from, next) {
   let nowDate = new Date()
   let lastDate = new Date(timeAddToken)
   let diff = nowDate - lastDate
-  let hour = Math.floor(diff / 3.6e5);
+  let hour = Math.round(diff/1000/60/60 % 24);
   console.log(hour)
   if (!isAuthenticated || hour > 1) {
     next({name: "Вход"})
@@ -44,11 +44,11 @@ const authHRGuard = function beforeEach(to, from, next) {
   let nowDate = new Date()
   let lastDate = new Date(timeAddToken)
   let diff = nowDate - lastDate
-  let hour = Math.floor(diff / 3.6e5);
+  let hour = Math.round(diff/1000/60/60 % 24);
   console.log(hour)
   let roles = JSON.parse(localStorage.getItem('roles'))
   if (!isAuthenticated || hour > 1 || roles[1] === "ROLE_HR") {
-    next({name: "Вход"})
+    next({name: ""})
   }
   else {
     next()
@@ -90,7 +90,7 @@ const routes = [
     path: '/notifications',
     name: 'notifications',
     component: NotificationsViews,
-    //beforeEnter: authHRGuard
+    beforeEnter: authHRGuard
   },
   {
     path: '/error/:errorCode',

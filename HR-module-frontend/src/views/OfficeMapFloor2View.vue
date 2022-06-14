@@ -40,6 +40,30 @@
       <area @click="clickOnMap(12,2)" alt=""  coords="634,507,696,575" shape="0">
     </map>
   </div>
+  <div class="container">
+    <div v-for="office in dataOffices.offices" v-bind:key="office">
+      <div v-if="office.floor === 2">
+        <table class="table">
+          <thead>
+          <tr>
+            <th scope="col">Кабинет</th>
+            <th scope="col">№ Рабочего места</th>
+            <th scope="col">Работник</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="workplace in office.workplaces" v-bind:key="workplace">
+            <td>{{ office.name }}</td>
+            <td> {{ workplace.RoomInTheOffice}}</td>
+            <td v-if="workplace.user"><router-link :to="{  name : 'userPage', params: { username: workplace.user.username   } }" class="link-primary">{{ workplace.user.userInfo.lastname }}  {{ workplace.user.userInfo.firstname}} {{ workplace.user.userInfo.patronymic}}</router-link></td>
+            <td v-else> Рабочее место не занято</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
 </template>
 
 <script>
