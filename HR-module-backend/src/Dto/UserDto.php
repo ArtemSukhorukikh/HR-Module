@@ -23,7 +23,7 @@ class UserDto
     #[Assert\NotBlank(message: 'The username field can\'t be blank.')]
     public string $firstname;
     #[Serializer\Type("string")]
-    #[Assert\NotBlank(message: 'The username field can\'t be blank.')]
+
     public string $patronymic    ;
     #[Serializer\Type("string")]
     #[Assert\NotBlank(message: 'The username field can\'t be blank.')]
