@@ -472,10 +472,9 @@ export default {
   beforeCreate() {
     if (this.currentUser === false) {
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-      axios.post("http://localhost:84/api/v1/users/search", {"username": this.userName}).then(responce => {
+      axios.post("http://localhost:84/api/v1/users/search", {"username": this.$route.params.username}).then(responce => {
         this.userData = responce.data
         this.noError = true
-
         console.log(this.userData)
       }).catch(error => {
         if (error.request.status === 401) {

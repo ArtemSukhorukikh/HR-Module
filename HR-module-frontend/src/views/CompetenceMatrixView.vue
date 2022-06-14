@@ -56,7 +56,7 @@ export default {
       departments: {},
       isModalVisible: false,
       userHR: false,
-      userMain: true,
+      userMain: false,
       "users": {},
       "skillsAssessment": {},
       "competences": {},
@@ -93,7 +93,10 @@ export default {
           this.departments = response.data
           console.log(this.departments)
         });
+  },
+  beforeMount() {
     let roles = JSON.parse(localStorage.getItem('roles'))
+    console.log(roles)
     for (let i in roles){
       if (roles[i] === "ROLE_MAIN"){
         this.userMain = true

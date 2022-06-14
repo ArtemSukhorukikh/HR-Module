@@ -1,4 +1,5 @@
 <template>
+  <FullNavbar></FullNavbar>
   <modal-window-department-create ref="modalCreate" v-show="isModalCreateVisible" @close="closeModal"></modal-window-department-create>
   <modal-window-department-update ref="modalUpdate" v-show="isModalUpdateVisible" @close="closeModal"></modal-window-department-update>
   <ModalWindowDepartmentUpdateTarget ref="modalUpdateTarg" v-show="isModalUpdateTargVisible" @close="closeModal"></ModalWindowDepartmentUpdateTarget>
@@ -29,13 +30,14 @@
 </template>
 <script>
 import VueTree from "@ssthouse/vue3-tree-chart";
+import FullNavbar from "@/components/Navbars/FullNavbar";
 import "@ssthouse/vue3-tree-chart/dist/vue3-tree-chart.css";
 import axios from "axios";
 import ModalWindowDepartmentCreate from "@/components/modal-windows/modal-window-department-create";
 import ModalWindowDepartmentUpdate from "@/components/modal-windows/modal-window-department-update";
 import ModalWindowDepartmentUpdateTarget from "@/components/modal-windows/modal-window-department-update_target";
 export default {
-  components: {ModalWindowDepartmentUpdateTarget, ModalWindowDepartmentUpdate, ModalWindowDepartmentCreate, VueTree },
+  components: {ModalWindowDepartmentUpdateTarget, ModalWindowDepartmentUpdate, ModalWindowDepartmentCreate, FullNavbar, VueTree },
   name: 'TestTest',
   data() {
     return {

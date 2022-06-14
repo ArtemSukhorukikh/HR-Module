@@ -131,7 +131,8 @@
               <div class="col-lg-12 col-xl-11">
                 <div v-for="item in applicationPOPT" v-bind:key="item">
                   <div class="card text-black" style="border-radius: 25px;" v-if="item.status === status" >
-                    <div class="card-title col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1"> {{item.name}} </div>
+                    <div class="card-title col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+                      <router-link :to="{  name : 'userPage', params: { username: item.username   } }" class="link-primary">{{item.name}}</router-link> </div>
                     <div class="card-body p-md-5" >
                       <div class="row justify-content-center">
                         <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">

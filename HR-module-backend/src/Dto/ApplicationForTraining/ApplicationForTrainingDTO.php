@@ -15,6 +15,9 @@ class ApplicationForTrainingDTO
     #[Serializer\Type("string")]
     public string $user_name;
 
+    #[Serializer\Type("string")]
+    public string $user_username;
+
     #[Serializer\Type("integer")]
     public int $ed_res_id;
 

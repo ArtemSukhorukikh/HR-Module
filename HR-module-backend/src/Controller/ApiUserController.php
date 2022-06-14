@@ -124,7 +124,6 @@ class ApiUserController extends AbstractController
             $currentUser = $this->userResponseDTOTransformer->transformFromObject($user);
             return $this->json($currentUser, Response::HTTP_OK);
         }catch (Exception $exception){
-
         }
         if (!$user) {
             $this->json([

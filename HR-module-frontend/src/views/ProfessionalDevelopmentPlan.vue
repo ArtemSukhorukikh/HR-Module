@@ -1,7 +1,7 @@
 <template>
   <FullNavbar/>
 
-  <div v-if="userHR" >
+  <div v-if="userHR === true" >
     <label class="form-label mt-3">Отдел</label>
     <select class="form-select form-select-sm mt-3 mx-auto w-auto mb-4" aria-label=".form-select-sm example" v-model="department_id" @change="checkPlan()">
       <option disabled="disabled">Сделайте выбор</option>
@@ -65,6 +65,18 @@ export default {
         });
     let roles = JSON.parse(localStorage.getItem('roles'))
     for (let i in roles){
+      if (roles[i] === "ROLE_HR"){
+        this.userHR = true
+      }
+    }
+  },
+  beforeMount() {
+    let roles = JSON.parse(localStorage.getItem('roles'))
+    console.log(roles)
+    for (let i in roles){
+      if (roles[i] === "ROLE_MAIN"){
+        this.userMain = true
+      }
       if (roles[i] === "ROLE_HR"){
         this.userHR = true
       }

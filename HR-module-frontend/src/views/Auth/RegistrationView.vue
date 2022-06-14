@@ -85,6 +85,9 @@
                     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                       <button @click="register" type="button" class="btn btn-primary btn-lg">Регистрация</button>
                     </div>
+                    <div v-if="registered">
+                      <router-link :to="{  name : 'userPage', params: { username: this.username   } }" class="link-primary">Перейти к пользователю</router-link>
+                    </div>
                   </form>
                 </div>
                 <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
@@ -119,6 +122,7 @@ export default {
       "position": "",
       "dateofhiring": "",
       "department": "",
+      registered:false,
     }
   },
   validations() {
@@ -160,11 +164,11 @@ export default {
           dateofhiring: this.dateofhiring,
           department: this.department
         }).then(
-
+          this.registered = true
         ).catch(errors =>{
           console.log(errors)
         })
-        this.$router.push({name: "userPage", params:{ username:this.username}})
+        //this.$router.push({name: "userPage", params:{ username:this.username}})
       }
     }
   },
