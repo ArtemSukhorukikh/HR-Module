@@ -41,9 +41,14 @@ class CompetenceMatrixResponse
             $skillAssessmentDTO = new SkillAssessmentDTO();
             $skillAssessmentDTO->name = $skill->getName();
             $skillAssessmentUser = [];
+            $sum = 0;
+            $i = 0;
             foreach ($users as $user){
                 $skillAssessmentUser[] = $this->skillAssessmentRepository->findBy(["skills" => $skill->getId(), "user_" => $user->getId()])[0]->getEstimation();
+                $sum += $this->skillAssessmentRepository->findBy(["skills" => $skill->getId(), "user_" => $user->getId()])[0]->getEstimation();
+                $i++;
             }
+            $skillAssessmentUser[] = $sum/$i;
             $skillAssessmentDTO->skill_assessments = $skillAssessmentUser;
             $dto->skill_assessment[] = $skillAssessmentDTO;
         }

@@ -104,6 +104,18 @@ export default {
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
       axios.post(`http://localhost:84/api/v1/department/delete/` + id).then(responce => {
         console.log(responce)
+        axios
+            .get("http://localhost:84/api/v1/department")
+            .then(response => {
+              this.vehicules = response.data
+              console.log(this.vehicules)
+            });
+        axios
+            .get("http://localhost:84/api/v1/department/findAll")
+            .then(response => {
+              this.departments = response.data
+              console.log(this.vehicules)
+            });
       }).catch(errors => {
         console.log(errors)
       })

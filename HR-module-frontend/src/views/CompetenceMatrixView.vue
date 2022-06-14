@@ -21,12 +21,13 @@
     <tr>
       <th scope="col" class="w-25" >Навыки</th>
       <th scope="col" v-for="item in users" v-bind:key="item">{{ item.firstname + ' ' + item.lastname }}</th>
+      <th>#</th>
     </tr>
     </thead>
     <tbody>
     <tr v-for="item in skillsAssessment" v-bind:key="item">
       <th scope="row" class="">{{ item.name }}</th>
-      <td v-for="item_ in item.skill_assessments" v-bind:key="item_">{{item_}}</td>
+      <td v-for="item_ in item.skill_assessments" v-bind:key="item_">{{item_.toFixed(2)}}</td>
     </tr>
     </tbody>
     <tfoot>
@@ -61,7 +62,8 @@ export default {
       "skillsAssessment": {},
       "competences": {},
       "skills": {},
-      "users0": {}
+      "users0": {},
+      "sum": 0
     };
   },
   beforeCreate() {

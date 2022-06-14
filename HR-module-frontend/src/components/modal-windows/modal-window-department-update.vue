@@ -25,7 +25,7 @@
                 <option v-for="item in departments" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
               </select>
               <div class="mb-3 d-flex justify-content-center">
-                <button class="btn btn-outline-primary" @click="createDep()">Создать отдел</button>
+                <button class="btn btn-outline-primary" @click="createDep()">Изменить отдел</button>
               </div>
             </div>
           </slot>

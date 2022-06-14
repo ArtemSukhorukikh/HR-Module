@@ -29,7 +29,7 @@ class DevelopmentPlanResponse
         {
             $apps = $user->getApplicationForTrainings();
             foreach ($apps as $app){
-                if ($app->getEndDate() > $date){
+                if ($app->getEndDate() > $date && $app->getStatus() == 1){
                     $dto_ = new DevelopmentPlanDTO();
                     $dto_->name = $user->getFirstName().' '.$user->getLastName();
                     $dto_->start_date = $app->getStartDate();

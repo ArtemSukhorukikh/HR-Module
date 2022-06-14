@@ -42,7 +42,7 @@
       </div>
       <div class="col-sm w-25" >
         <div v-if="educationResources.id">
-          <a v-bind:href="educationResources.link"><h1 class="text-black mb-3 ">{{educationResources.name}}</h1></a>
+          <a v-bind:href="'http://'+educationResources.link"><h1 class="text-black mb-3 ">{{educationResources.name}}</h1></a>
 
           <p class="text-black mb-3 text-left">{{educationResources.description}}</p>
           <div class="text-black mb-3 ">Цена ресурса: {{educationResources.price}}</div>
