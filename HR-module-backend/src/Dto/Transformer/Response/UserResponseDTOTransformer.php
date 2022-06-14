@@ -61,10 +61,9 @@ class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
         $dto->tasks = $this->tasksResponseDTOTransformer->transformFromObjects($usersTasks);
         $usersProjects = [];
         if ($usersTasks){
-
             foreach ($usersTasks as $task) {
                 $userProjectsInTask = $task->getProjectTask();
-                if ($usersProjects !== null) {
+                if ($userProjectsInTask !== null) {
                     $usersProjects[] = $userProjectsInTask->getId();
                 }
             }
