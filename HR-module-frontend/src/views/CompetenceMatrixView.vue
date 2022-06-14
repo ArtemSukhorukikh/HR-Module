@@ -2,10 +2,18 @@
   <FullNavbar/>
   <modal-window-skills-form ref="modal" v-show="isModalVisible" @close="closeModal"></modal-window-skills-form>
 
-  <div>
+  <div v-if="userMain">
     <router-link to="/compRed" class="btn btn-outline-primary my-2 m-3">Настройка компетенций</router-link>
     <router-link  to="/skillsRed" class="btn btn-outline-primary my-2 m-3">Настройка навыков</router-link>
     <button class="btn btn-outline-primary my-2 m-3" @click="openModal">Оценка навыков сотрудника</button>
+  </div>
+
+  <div v-if="userHR" >
+    <label class="form-label mt-3">Отдел</label>
+    <select class="form-select form-select-sm mt-3 mx-auto w-auto mb-4" aria-label=".form-select-sm example" v-model="department_id"  @change="checkMatr()">
+      <option disabled="disabled">Сделайте выбор</option>
+      <option v-for="item in departments" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
+    </select>
   </div>
 
   <table class="table table-responsive table-striped w-75 mx-auto table-bordered">
@@ -44,7 +52,11 @@ export default {
   components: {ModalWindowSkillsForm, FullNavbar},
   data() {
     return {
+      department_id: {},
+      departments: {},
       isModalVisible: false,
+      userHR: false,
+      userMain: true,
       "users": {},
       "skillsAssessment": {},
       "competences": {},
@@ -75,8 +87,34 @@ export default {
           this.users0 = response.data.users
           console.log(this.users)
         });
+    axios
+        .get("http://localhost:84/api/v1/department/findAll")
+        .then(response => {
+          this.departments = response.data
+          console.log(this.departments)
+        });
+    let roles = JSON.parse(localStorage.getItem('roles'))
+    for (let i in roles){
+      if (roles[i] === "ROLE_MAIN"){
+        this.userMain = true
+      }
+      if (roles[i] === "ROLE_HR"){
+        this.userHR = true
+      }
+    }
   },
   methods: {
+    checkMatr() {
+      axios
+          .get("http://localhost:84/api/v1/competenceMatrix/department/" + this.department_id)
+          .then(response => {
+            this.users = response.data.users
+            this.skillsAssessment = response.data.skill_assessment
+            this.competences = response.data.competences
+            console.log(this.users)
+            console.log(this.skillsAssessment)
+          });
+    },
     openModal() {
       this.isModalVisible = true;
       this.$refs.modal.users = this.users0

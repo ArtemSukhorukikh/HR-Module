@@ -204,7 +204,7 @@ const routes = [
   },
   {
     path: '/test',
-    name: 'План повышения квалификации',
+    name: 'test',
     component: Test
   }
 ]

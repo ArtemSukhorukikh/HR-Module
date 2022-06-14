@@ -151,14 +151,14 @@ class ApiUserController extends AbstractController
             $errors = []; //$this->validator->validate($userDto);
             if ($user->getUsername() != $userNew->getUsername()){
                 if ($userRepository->findOneBy(['username' => $userDto->username])) {
-                    $errors->add(new ConstraintViolation(
+                    $errors[] = new ConstraintViolation(
                         message: 'User ' . $userDto->username .  ' already exists.',
                         messageTemplate: 'User {{ value }} already exists.',
                         parameters: ['value' => $userDto->username],
                         root: $userDto,
                         propertyPath: 'username',
                         invalidValue: $userDto->username
-                    ));
+                    );
                 }
             }
             if (count($errors) > 0) {
