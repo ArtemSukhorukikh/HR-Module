@@ -56,7 +56,7 @@ class Task
     private $projectTask;
 
     /**
-     * @ORM\OneToOne(targetEntity=TaskEvaluation::class, mappedBy="toTask", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=TaskEvaluation::class, mappedBy="toTask")
      */
     private $taskEvaluation;
 

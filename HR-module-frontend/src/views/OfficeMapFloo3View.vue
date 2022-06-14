@@ -126,9 +126,6 @@ export default {
         this.$refs.modal.office.workplaces.user.position = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.userInfo.position
         this.$refs.modal.office.workplaces.user.contacts = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.userInfo.contacts
         this.$refs.modal.office.workplaces.user.username = this.dataOffices.offices[officeNumber - 1].workplaces[place - 1].user.username
-        if (this.$refs.modal.office.workplaces.user.username === localStorage.getItem('username')) {
-          this.$refs.modal.isUser = true
-        }
       }
       else {
         this.$refs.modal.office.workplaces.showUser = false
@@ -142,6 +139,14 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+      axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
+      axios.get('http://localhost:84/api/v1/offices').then(response => {
+        console.log(response.data)
+        this.dataOffices = (response.data)
+        this.loaded = true
+      }).catch(errors =>{
+        console.log(errors)
+      })
     }
   }
 }

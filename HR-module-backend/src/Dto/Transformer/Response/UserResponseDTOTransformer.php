@@ -22,13 +22,15 @@ class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
     public ProjectsRepository $projectsRepository;
     public UserRepository $repository;
     public PersonalAchivmentsResponseDTOTransformer $achivmentsResponseDTOTransformer;
+    public NotificationResponseDTOTransformer $notificationResponseDTOTransformer;
     public function __construct(TasksResponseDTOTransformer $tasksResponseDTOTransformer,
                                 ProjectsResponseDTOTransformer $projectsResponseDTOTransformer,
                                 ProjectsRepository $projectsRepository,
                                 ContactResponseDTOTransformer $contactResponseDTOTransformer,
-    UserRepository $repository,
-    TaskRepository $taskRepository,
-    PersonalAchivmentsResponseDTOTransformer $achivmentsResponseDTOTransformer)
+                                UserRepository $repository,
+                                TaskRepository $taskRepository,
+                                PersonalAchivmentsResponseDTOTransformer $achivmentsResponseDTOTransformer,
+                                NotificationResponseDTOTransformer $notificationResponseDTOTransformer)
     {
         $this->tasksResponseDTOTransformer = $tasksResponseDTOTransformer;
         $this->projectsResponseDTOTransformer = $projectsResponseDTOTransformer;
@@ -37,6 +39,7 @@ class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
         $this->taskRepository = $taskRepository;
         $this->achivmentsResponseDTOTransformer = $achivmentsResponseDTOTransformer;
         $this->repository = $repository;
+        $this->notificationResponseDTOTransformer = $notificationResponseDTOTransformer;
     }
 
     /**
@@ -79,6 +82,15 @@ class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
         $dto->achivments = $this->achivmentsResponseDTOTransformer->transformFromObjects($user->getPersonalAchievements());
         $dto->effectiveness = round((0.6 * $dto->hours - 0.2 * $dto->speed - 0.2 * $dto->taskInWork + 0.1 * $user->avgMarkMounth() + $dto->avgAch),4);
         //$dto->grade = $this->repository->checkGradeRating($user, $user->getWorks()->getMainCompetence());
+        $notifications = $user->getNotifications();
+        $date = new \DateTime();
+        $notificationsToSend = [];
+        foreach ($notifications as $notification) {
+            if ($notification->getDate() < $date) {
+                $notificationsToSend[] = $notification;
+            }
+        }
+        $dto->notifications = $notificationsToSend;
         return $dto;
     }
 }

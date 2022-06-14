@@ -54,4 +54,7 @@ class UserCurrentDto
     #[Serializer\Type("string")]
     public float $grade;
 
+    #[Serializer\Type(NotificationDTO::class)]
+    public array $notifications;
+
 }
