@@ -100,6 +100,13 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+      axios.get('http://localhost:84/api/v1/offices').then(response => {
+        console.log(response.data)
+        this.dataOffices = (response.data)
+        this.loaded = true
+      }).catch(errors =>{
+        console.log(errors)
+      })
     }
   }
 }

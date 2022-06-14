@@ -26,7 +26,7 @@ class DepartmentListResponse
         if ($object->getDirector()){
             $dto->director_name = $object->getDirector()->getLastName().' '.$object->getDirector()->getLastName();
         }
-        $dto->deps[] = $this->rec($object);
+        $dto->children = $this->rec($object)->children;
         return $dto;
     }
 
@@ -35,16 +35,17 @@ class DepartmentListResponse
         $dto = new DepartmentDTO();
         foreach ($object->getDepartments() as $dep){
             $dto_ = new DepartmentDTO();
-            if ($dep->getDepartments()){
+            if (count($dep->getDepartments()) > 0){
                 $req = $this->rec($dep);
-                $dto->deps[] = $req;
+                $dto_->children = $req->children;
             }
             $dto_->name = $dep->getName();
-            $dto_->director_name = 'Нет главы отдела';
             if ($dep->getDirector()){
                 $dto->director_name = $dep->getDirector()->getLastName().' '.$dep->getDirector()->getLastName();
+            } else  {
+                $dto_->director_name = 'Нет главы отдела';
             }
-            $dto->deps[] = $dto_;
+            $dto->children[] = $dto_;
         }
         return $dto;
     }
