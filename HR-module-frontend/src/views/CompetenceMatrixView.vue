@@ -56,7 +56,7 @@ export default {
       departments: {},
       isModalVisible: false,
       userHR: false,
-      userMain: false,
+      userMain: true,
       "users": {},
       "skillsAssessment": {},
       "competences": {},
@@ -67,7 +67,7 @@ export default {
   beforeCreate() {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
-        .get("http://localhost:84/api/v1/competenceMatrix/" + localStorage.getItem('userId'))
+        .get("http://localhost:84/api/v1/competenceMatrix/" + localStorage.getItem('id'))
         .then(response => {
           this.users = response.data.users
           this.skillsAssessment = response.data.skill_assessment
@@ -76,13 +76,13 @@ export default {
           console.log(this.skillsAssessment)
         });
     axios
-        .get("http://localhost:84/api/v1/skills/department/" + localStorage.getItem('userId'))
+        .get("http://localhost:84/api/v1/skills/department/" + localStorage.getItem('id'))
         .then(response => {
           this.skills = response.data.skills
           console.log(this.skills)
         });
     axios
-        .get("http://localhost:84/api/v1/department/users/" + localStorage.getItem('userId'))
+        .get("http://localhost:84/api/v1/department/users/" + localStorage.getItem('id'))
         .then(response => {
           this.users0 = response.data.users
           console.log(this.users)
@@ -128,7 +128,7 @@ export default {
     closeModal() {
       this.isModalVisible = false;
       axios
-          .get("http://localhost:84/api/v1/competenceMatrix/" + localStorage.getItem('userId'))
+          .get("http://localhost:84/api/v1/competenceMatrix/" + localStorage.getItem('id'))
           .then(response => {
             this.users = response.data.users
             this.skillsAssessment = response.data.skill_assessment

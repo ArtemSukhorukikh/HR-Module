@@ -83,6 +83,7 @@ class SkillsController extends AbstractController
 
         $entityManager_ = $doctrine->getManager();
         $users = $skill->getCompetence()[0]->getUsers();
+        var_dump($skill->getCompetence()[0]->getUsers()[0]->getId());
         foreach ($users as $user){
             $skillAs = new SkillAssessment();
             $skillAs->setSkills($skill);

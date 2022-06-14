@@ -46,7 +46,7 @@ class DepartmentListResponse extends AbstractResponceDTOTransformer
             $dto_->id = $dep->getId();
             $dto_->name = $dep->getName();
             if ($dep->getDirector()){
-                $dto->director_name = $dep->getDirector()->getFirstName().' '.$dep->getDirector()->getLastName();
+                $dto_->director_name = $dep->getDirector()->getFirstName().' '.$dep->getDirector()->getLastName();
             } else  {
                 $dto_->director_name = 'Нет главы отдела';
             }

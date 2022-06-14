@@ -130,7 +130,7 @@ export default {
   beforeCreate() {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
-        .get("http://localhost:84/api/v1/competence/list/" + localStorage.getItem('userId'))
+        .get("http://localhost:84/api/v1/competence/list/" + localStorage.getItem('id'))
         .then(response => {
           this.competences = response.data.competence_dto_s
           console.log(this.competences)
@@ -139,7 +139,7 @@ export default {
   methods: {
     checkComps(){
       axios
-          .get("http://localhost:84/api/v1/competence/list/" + localStorage.getItem('userId'))
+          .get("http://localhost:84/api/v1/competence/list/" + localStorage.getItem('id'))
           .then(response => {
             this.competences = response.data.competence_dto_s
             console.log(this.competences)
@@ -163,8 +163,8 @@ export default {
           })
           .then(response => {
             console.log(response.data)
+            this.checkComps()
           });
-      this.checkComps()
     },
     changeComp(){
       axios
@@ -176,6 +176,7 @@ export default {
           })
           .then(response => {
             console.log(response.data)
+            this.checkComps()
           });
     },
     deleteComp(){
@@ -183,6 +184,8 @@ export default {
           .post('http://localhost:84/api/v1/competence/delete/' + this.competence.id)
           .then(response => {
             console.log(response.data)
+
+            this.checkComps()
           });
     }
   }

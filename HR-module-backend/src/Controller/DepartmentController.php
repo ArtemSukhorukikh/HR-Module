@@ -126,7 +126,7 @@ class DepartmentController extends AbstractController
         return $this->json( Response::HTTP_CREATED);
     }
 
-    #[Route('department/delete/{id}', name: 'app_competence_add', methods: "POST")]
+    #[Route('department/delete/{id}', name: 'app_depcompetence_add', methods: "POST")]
     public function deleteDepartment($id, Request $request, CompetenceRepository $competenceRepository, DepartmentRepository $departmentRepository, ManagerRegistry  $doctrine): Response
     {
         $entityManager = $doctrine->getManager();

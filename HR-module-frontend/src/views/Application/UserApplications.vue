@@ -270,24 +270,24 @@ export default {
           .post("http://localhost:84/api/v1/applicationFT/delete/" + id)
           .then(response => {
             console.log(response.data)
+            this.checkApplicationFT()
           });
-      this.checkApplicationFT()
     },
     deleteApplicationPOPT(id) {
       axios
           .post("http://localhost:84/api/v1/applicationPOPT/remove/" + id)
           .then(response => {
             console.log(response.data)
+            this.checkApplicationPOPT()
           });
-      this.checkApplicationPOPT()
     },
     deleteApplicationPOT(id) {
       axios
           .post("http://localhost:84/api/v1/applicationPOT/remove/" + id)
           .then(response => {
             console.log(response.data)
+            this.checkApplicationPOT()
           });
-      this.checkApplicationPOT()
     },
     makeDate(date) {
       return moment(date).format("YYYY-MM-DD")
@@ -298,7 +298,7 @@ export default {
     },
     checkApplicationFT() {
       axios
-          .get("http://localhost:84/api/v1/applicationFT/user/" + localStorage.getItem('userId'))
+          .get("http://localhost:84/api/v1/applicationFT/user/" + localStorage.getItem('id'))
           .then(response => {
             this.applicationFT = response.data.applicationForTrainingDTO
             console.log(this.applicationFT)
@@ -306,7 +306,7 @@ export default {
     },
     checkApplicationPOPT() {
       axios
-          .get("http://localhost:84/api/v1/applicationPOPT/user/" + localStorage.getItem('userId'))
+          .get("http://localhost:84/api/v1/applicationPOPT/user/" + localStorage.getItem('id'))
           .then(response => {
             this.applicationPOPT = response.data.applicationPurchaseOfPersonalTrainingDTO
             console.log(this.applicationPOPT)
@@ -314,7 +314,7 @@ export default {
     },
     checkApplicationPOT() {
       axios
-          .get("http://localhost:84/api/v1/applicationPOT/user/" + localStorage.getItem('userId'))
+          .get("http://localhost:84/api/v1/applicationPOT/user/" + localStorage.getItem('id'))
           .then(response => {
             this.applicationPOT = response.data.applicationPurchaseOfTrainingDTO
             console.log(this.applicationPOT)

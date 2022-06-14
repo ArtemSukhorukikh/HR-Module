@@ -243,7 +243,7 @@ export default {
     console.log(localStorage.getItem('userId'))
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
-        .get("http://localhost:84/api/v1/competence/list/" + localStorage.getItem('userId'))
+        .get("http://localhost:84/api/v1/competence/list/" + localStorage.getItem('id'))
         .then(response => {
           this.competences = response.data.competence_dto_s
           console.log(this.competences)

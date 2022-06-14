@@ -52,7 +52,7 @@ export default {
   beforeCreate() {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
-        .get("http://localhost:84/api/v1/developmentPlan/" + localStorage.getItem('userId'))
+        .get("http://localhost:84/api/v1/developmentPlan/" + localStorage.getItem('id'))
         .then(response => {
           this.developmentPlan = response.data.dev_plan
           console.log(response.data)

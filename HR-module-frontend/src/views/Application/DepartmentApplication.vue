@@ -47,7 +47,7 @@
                   <div class="card-body p-md-5" >
                     <div class="row justify-content-center">
                       <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-
+                        <router-link :to="{  name : 'userPage', params: { username: item.user_username } }" class="link-primary card-title col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1 w-auto">{{item.user_name}}</router-link>
                         <h5 class="card-title">
                           Обучющий ресурс: {{ item.ed_name }}
                         </h5>
@@ -131,12 +131,10 @@
               <div class="col-lg-12 col-xl-11">
                 <div v-for="item in applicationPOPT" v-bind:key="item">
                   <div class="card text-black" style="border-radius: 25px;" v-if="item.status === status" >
-                    <div class="card-title col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-                      <router-link :to="{  name : 'userPage', params: { username: item.username   } }" class="link-primary">{{item.name}}</router-link> </div>
                     <div class="card-body p-md-5" >
                       <div class="row justify-content-center">
                         <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-
+                          <router-link :to="{  name : 'userPage', params: { username: item.user_username } }" class="link-primary card-title col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1 w-auto">{{item.user_name}}</router-link>
                           <h5 v-if="item.status === 0">
                             Ожидание
                           </h5>
@@ -149,8 +147,11 @@
                           <h5 v-if="item.status === 3">
                             Отказано
                           </h5>
-                          <div class="card-body" v-bind:key="item.id">
+                          <div class="card-body">
                             {{item.note}}
+                          </div>
+                          <div class="card-body">
+                            {{item.link}}
                           </div>
                           <button class="btn btn-primary" @click="statusApplicationPOPT(item.id, 1)" v-if="item.status ===  0">Принять</button>
                           <button class="btn btn-primary" @click="statusApplicationPOPT(item.id, 2)" v-if="item.status === 1">Купить</button>
@@ -205,10 +206,10 @@
             <div class="row d-flex justify-content-center align-items-center h-100">
               <div class="col-lg-12 col-xl-11" v-for="item in applicationPOT" v-bind:key="item">
                 <div class="card text-black" style="border-radius: 25px;" v-if="item.status === status">
-                  <div class="card-title col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1"> {{item.name}} </div>
                   <div class="card-body p-md-5" >
                     <div class="row justify-content-center">
                       <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+                        <router-link :to="{  name : 'userPage', params: { username: item.user_username } }" class="link-primary card-title col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1 w-auto">{{item.user_name}}</router-link>
                         <h5 v-if="item.status === 0">
                           Ожидание
                         </h5>
@@ -228,7 +229,7 @@
                           {{item.note}}
                         </div>
                         <div>
-                          {{item.Link}}
+                          {{item.link}}
                         </div>
                         <button class="btn btn-primary" @click="statusApplicationPOT(item.id, 1)" v-if="item.status ===  0">Принять</button>
                         <button class="btn btn-primary" @click="statusApplicationPOT(item.id, 2)" v-if="item.status === 1">Купить</button>
@@ -316,7 +317,7 @@ export default {
     },
     checkApplicationFT() {
       axios
-          .get("http://localhost:84/api/v1/applicationFT/department/" + localStorage.getItem('userId'))
+          .get("http://localhost:84/api/v1/applicationFT/department/" + localStorage.getItem('id'))
           .then(response => {
             this.applicationFT = response.data.applicationForTrainingDTO
             console.log(this.applicationFT)
@@ -324,7 +325,7 @@ export default {
     },
     checkApplicationPOPT() {
       axios
-          .get("http://localhost:84/api/v1/applicationPOPT/department/" + localStorage.getItem('userId'))
+          .get("http://localhost:84/api/v1/applicationPOPT/department/" + localStorage.getItem('id'))
           .then(response => {
             this.applicationPOPT = response.data.applicationPurchaseOfPersonalTrainingDTO
             console.log(this.applicationPOPT)
@@ -332,7 +333,7 @@ export default {
     },
     checkApplicationPOT() {
       axios
-          .get("http://localhost:84/api/v1/applicationPOT/department/" + localStorage.getItem('userId'))
+          .get("http://localhost:84/api/v1/applicationPOT/department/" + localStorage.getItem('id'))
           .then(response => {
             this.applicationPOT = response.data.applicationPurchaseOfTrainingDTO
             console.log(this.applicationPOT)

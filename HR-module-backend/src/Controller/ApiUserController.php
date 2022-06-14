@@ -175,7 +175,10 @@ class ApiUserController extends AbstractController
             $user->setPosition($userNew->getPosition());
             $user->setDateOfHiring($userNew->getDateOfHiring());
             $user->setUsername($userNew->getUsername());
-            $user->setWorks($departmentRepository->findOneBy(["name" => $userDto->department]));
+            if ($departmentRepository->findOneBy(["name" => $userDto->department])){
+                $user->setWorks($departmentRepository->findOneBy(["name" => $userDto->department]));
+                $user->addCompetence($user->getWorks()->getMainCompetence());
+            }
             $entityManager->persist($user);
             $entityManager->flush();
             return $this->json(['ok'], Response::HTTP_ACCEPTED);

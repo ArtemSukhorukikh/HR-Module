@@ -186,19 +186,19 @@ export default {
         "method_of_passage": '',
         "note": '',
         "status": '0',
-        "user_id": localStorage.getItem('userId'),
+        "user_id": localStorage.getItem('id'),
         "ed_res_id": ''
       },
       "applicationPOTDTO": {
         "id": '',
-        "user_id": localStorage.getItem('userId'),
+        "user_id": localStorage.getItem('id'),
         "link": '',
         "note": '',
         "status": '0'
       },
       "applicationPOPTDTO": {
         "id": '',
-        "user_id": localStorage.getItem('userId'),
+        "user_id": localStorage.getItem('id'),
         "description": '',
         "link": '',
         "note": '',
@@ -217,7 +217,7 @@ export default {
   },
   methods:{
     sendApplication() {
-      this.applicationDTO.user_id =  localStorage.getItem('userId')
+      this.applicationDTO.user_id =  localStorage.getItem('id')
       console.log(this.method_of_passage)
       console.log(this.applicationDTO)
       axios
@@ -235,12 +235,12 @@ export default {
           });
     },
     sendApplicationPOPT() {
-      this.user_id =  localStorage.getItem('userId')
+      this.user_id =  localStorage.getItem('id')
       console.log(this.applicationDTO)
       axios
           .post('http://localhost:84/api/v1/applicationPOPT/new',{
             id: '',
-            user_id: localStorage.getItem('userId'),
+            user_id: localStorage.getItem('id'),
             link: this.applicationPOPTDTO.link,
             note: this.applicationPOPTDTO.note,
             status: '0'})
@@ -249,12 +249,12 @@ export default {
           });
     },
     sendApplicationPOT() {
-      this.user_id =  localStorage.getItem('userId')
+      this.user_id =  localStorage.getItem('id')
       console.log(this.applicationDTO)
       axios
           .post('http://localhost:84/api/v1/applicationPOT/new',{
             id: '',
-            user_id: localStorage.getItem('userId'),
+            user_id: localStorage.getItem('id'),
             description: this.applicationPOTDTO.description,
             link: this.applicationPOTDTO.link,
             note: this.applicationPOTDTO.note,

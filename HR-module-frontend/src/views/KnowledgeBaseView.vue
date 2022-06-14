@@ -103,6 +103,18 @@ export default {
       "userFeedback": {}
     };
   },
+  beforeMount() {
+    let roles = JSON.parse(localStorage.getItem('roles'))
+    console.log(roles)
+    for (let i in roles){
+      if (roles[i] === "ROLE_MAIN"){
+        this.userMain = true
+      }
+      if (roles[i] === "ROLE_HR"){
+        this.userHR = true
+      }
+    }
+  },
   beforeCreate() {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
@@ -159,9 +171,9 @@ export default {
             this.educationResources = response.data
             console.log(this.educationResources)
           });
-      console.log(id_, localStorage.getItem('userId'))
+      console.log(id_, localStorage.getItem('id'))
       axios
-          .get("http://localhost:84/api/v1/feedback/user/" + id_ + "/" + localStorage.getItem('userId'))
+          .get("http://localhost:84/api/v1/feedback/user/" + id_ + "/" + localStorage.getItem('id'))
           .then(response => {
             this.userFeedback = response.data
             console.log(this.userFeedback)
@@ -171,7 +183,7 @@ export default {
       let date;
       date = new Date()
       this.feedbackDTO.date = moment(date).format("YYYY-MM-DD")
-      this.feedbackDTO.userId =  localStorage.getItem('userId')
+      this.feedbackDTO.userId =  localStorage.getItem('id')
       this.feedbackDTO.educationalResourcesId = this.educationResources.id
       console.log(this.feedbackDTO)
       axios

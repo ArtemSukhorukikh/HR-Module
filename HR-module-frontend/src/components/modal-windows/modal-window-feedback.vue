@@ -64,7 +64,7 @@ export default {
       let date;
       date = new Date()
       let date_ = moment(date).format("YYYY-MM-DD")
-      let userId =  localStorage.getItem('userId')
+      let userId =  localStorage.getItem('id')
       axios.post(`http://localhost:84/api/v1/feedback/new`,{
         user_id: userId,
         educational_resources_id: this.educationResources,

@@ -124,7 +124,7 @@ export default {
   methods: {
       checkSkills(){
         axios
-            .get("http://localhost:84/api/v1/skills/competence/" + localStorage.getItem('userId'))
+            .get("http://localhost:84/api/v1/skills/competence/" + localStorage.getItem('id'))
             .then(response => {
               this.skills = response.data.skills
               console.log(this.skills)
@@ -141,7 +141,7 @@ export default {
     },
     createSkill(){
       axios
-          .post('http://localhost:84/api/v1/skills/new/' + localStorage.getItem('userId'),{
+          .post('http://localhost:84/api/v1/skills/new/' + localStorage.getItem('id'),{
             name: this.skill.name,
             description: this.skill.description
           })

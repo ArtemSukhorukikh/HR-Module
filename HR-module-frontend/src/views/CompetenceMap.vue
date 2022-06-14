@@ -15,7 +15,7 @@
       <div class="card-body">
         <div class="row">
           <div class="col-sm">
-            <p>Ваш рейтинг: {{ rating }}</p>
+            <p>Ваш рейтинг: {{ rating.toFixed(2) }}</p>
           </div>
           <div class="col-sm">
             <p>Ваш текущий уровень компетенции:</p>
@@ -65,15 +65,15 @@ export default {
     };
   },
   beforeCreate() {
-    console.log(localStorage.getItem('userId'))
+    console.log(localStorage.getItem('id'))
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
         axios
-            .get("http://localhost:84/api/v1/competence/department/" + localStorage.getItem('userId'))
+            .get("http://localhost:84/api/v1/competence/department/" + localStorage.getItem('id'))
             .then(response => {
               this.competences = response.data.competence_dto_s
               this.rating = response.data.rating
               this.competence_name = response.data.comp_name
-              console.log(localStorage.getItem('userId'))
+              console.log(localStorage.getItem('id'))
             });
     this.descriptions = null
   },
