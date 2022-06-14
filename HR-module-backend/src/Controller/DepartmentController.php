@@ -4,11 +4,16 @@ namespace App\Controller;
 
 use App\Dto\Department\DepartmentDTO;
 use App\Dto\Department\Request\DepartmentRequest;
+use App\Dto\Department\Response\DepartmentListResponse;
+use App\Dto\Department\Response\DepartmentResponse;
 use App\Dto\Department\Response\DepartmentUsersResponse;
 use App\Entity\Competence;
+use App\Entity\Department;
 use App\Repository\CompetenceRepository;
+use App\Repository\DepartmentRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use JMS\Serializer\SerializerBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,15 +24,37 @@ use Symfony\Component\Routing\Annotation\Route;
 class DepartmentController extends AbstractController
 {
     private DepartmentUsersResponse $departmentUsersResponse;
+    private DepartmentListResponse $departmentListResponse;
+    private DepartmentResponse $departmentResponse;
     private DepartmentRequest $departmentRequest;
     private $serializer;
 
     public function __construct(DepartmentUsersResponse $departmentUsersResponse,
+                                DepartmentListResponse $departmentListResponse,
+                                DepartmentResponse $departmentResponse,
                                 DepartmentRequest $departmentRequest)
     {
         $this->serializer = SerializerBuilder::create()->build();
+        $this->departmentListResponse = $departmentListResponse;
+        $this->departmentResponse = $departmentResponse;
         $this->departmentUsersResponse = $departmentUsersResponse;
         $this->departmentRequest = $departmentRequest;
+    }
+
+    #[Route('department/{id}', name: 'app_department_find', methods: "GET")]
+    public function findDepartment($id, DepartmentRepository $departmentRepository): Response
+    {
+        $department = $departmentRepository->find($id);
+        $departmentUserDTO = $this->departmentResponse->transformFromObject($department);
+        return $this->json($departmentUserDTO, Response::HTTP_OK);
+    }
+
+    #[Route('department', name: 'test', methods: "GET")]
+    public function test(DepartmentRepository $departmentRepository): Response
+    {
+        $departments = $departmentRepository->find(1);
+        $departmentUserDTO = $this->departmentListResponse->transformFromObject($departments);
+        return $this->json( $departmentUserDTO,Response::HTTP_OK);
     }
 
     #[Route('department/users/{id}', name: 'app_department_users', methods: "GET")]
@@ -55,5 +82,15 @@ class DepartmentController extends AbstractController
         $entityManager->persist($department);
         $entityManager->flush();
         return $this->json($data, Response::HTTP_CREATED);
+    }
+
+    #[Route('department/update/{id}', name: 'app_competence_add', methods: "POST")]
+    public function addCompetence($id, Request $request, CompetenceRepository $competenceRepository, ManagerRegistry  $doctrine): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $department = $entityManager->getRepository(Department::class)->find($id);
+
+        $entityManager->flush();
+        return $this->json( Response::HTTP_CREATED);
     }
 }

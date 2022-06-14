@@ -134,10 +134,9 @@ export default {
     },
     setPlace() {
       axios.post(`http://localhost:84/api/v1/offices/set/workplace/${this.office.workplaces.id}`,{
-        'username':this.setUsername
+        'username':localStorage.getItem('username')
       }).then(response => {
         console.log(response.data)
-        this.$router.go('/officemap/floor'+this.office.floor)
       }).catch(errors =>{
         if (errors.request.status === 400) {
           this.error = true
@@ -154,7 +153,6 @@ export default {
     unsetPlace() {
       axios.post(`http://localhost:84/api/v1/offices/unset/workplace/${this.office.workplaces.id}`,{}).then(response => {
         console.log(response.data)
-        this.$router.go(this.$router.currentRoute)
       }).catch(errors =>{
         if (errors.request.status === 401) {
           this.$router.go('/login')

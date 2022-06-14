@@ -23,6 +23,7 @@ import UsersView from "@/views/UsersView";
 import ProjectView from "@/views/ProjectView";
 import DevPlan from "@/views/ProfessionalDevelopmentPlan";
 import TasksView from "@/views/TasksView";
+import Test from "@/views/Test";
 
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
@@ -194,6 +195,11 @@ const routes = [
     name: 'План повышения квалификации',
     component: DevPlan,
     beforeEnter: authGuard
+  },
+  {
+    path: '/test',
+    name: 'План повышения квалификации',
+    component: Test
   }
 ]
 
