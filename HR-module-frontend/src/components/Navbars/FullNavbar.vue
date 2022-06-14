@@ -21,7 +21,7 @@
         <li v-if="userHR || userMain" class="nav-item mx-auto"><router-link class="nav-link"  to="/compMatr">Матрица компетенций</router-link></li>
         <li v-if="userHR || userMain" class="nav-item mx-auto"><router-link class="nav-link"  to="/DevPlan">План прохождения обучения</router-link></li>
         <li v-if="userHR" class="nav-item mx-auto"><router-link class="nav-link"  to="/users-all">Отделы</router-link></li>
-        <li v-if="userMain" class="nav-item mx-auto"><router-link class="nav-link"  to="/users-all">Заявки</router-link></li>
+        <li v-if="userMain" class="nav-item mx-auto"><router-link class="nav-link"  to="/DepAFT">Заявки</router-link></li>
         <li class="nav-item mx-auto"><router-link class="nav-link"  to="/logout">Выход</router-link></li>
       </ul>
     </header>
@@ -33,10 +33,15 @@ export default {
   name: "FullNavbar",
   data (){
     return {
-      userHR: false
+      id: {},
+      userHR: false,
+      userMain: true,
     }
   },
   methods: {
+    getRoute(){
+      this.$router.push({path: this.id})
+    },
     exit(){
       localStorage.removeItem('token');
       localStorage.removeItem('date');
@@ -48,6 +53,9 @@ export default {
     for (let i in roles){
       if (roles[i] === "ROLE_HR"){
         this.userHR = true
+      }
+      if (roles[i] === "ROLE_MAIN"){
+        this.userMain = true
       }
     }
   },

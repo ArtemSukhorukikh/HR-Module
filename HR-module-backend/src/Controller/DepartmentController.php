@@ -41,6 +41,14 @@ class DepartmentController extends AbstractController
         $this->departmentRequest = $departmentRequest;
     }
 
+    #[Route('department/find', name: 'app_department_findAlld', methods: "GET")]
+    public function findAllD(DepartmentRepository $departmentRepository): Response
+    {
+        $departments = $departmentRepository->findAll();
+        $departmentUserDTO = $this->departmentListResponse->transformFromObjects($departments);
+        return $this->json( $departmentUserDTO,Response::HTTP_OK);
+    }
+
     #[Route('department/findAll', name: 'app_department_findAll', methods: "GET")]
     public function findAll(DepartmentRepository $departmentRepository): Response
     {
@@ -75,28 +83,49 @@ class DepartmentController extends AbstractController
     }
 
     #[Route('department/new', name: 'app_department_new', methods: "POST")]
-    public function newDepartment( Request $request, CompetenceRepository $competenceRepository, EntityManagerInterface $entityManager): Response
+    public function newDepartment( Request $request, DepartmentRepository $departmentRepository, EntityManagerInterface $entityManager): Response
     {
         $data = $this->serializer->deserialize($request->getContent(), DepartmentDTO::class, 'json');
         $department = $this->departmentRequest->transformToObject($data);
-        $competence = new Competence();
-        $competence->setName($data->main_competence_name);
-        $competence->setType(1);
-        $competence->setNeedRating(0);
-        $competence->setDescription("Старовая компетенция отдела ".$department->getName());
-        $entityManager->persist($competence);
-        $entityManager->flush();
-        $department->setMainCompetence($competence);
+        if ($data->main_competence_name){
+            $competence = new Competence();
+            $competence->setName($data->main_competence_name);
+            $competence->setType(1);
+            $competence->setNeedRating(0);
+            $competence->setDescription("Старовая компетенция отдела ".$department->getName());
+            $entityManager->persist($competence);
+            $entityManager->flush();
+            $department->setMainCompetence($competence);
+        }
+        if ($data->obeys_id){
+            $department->setObeys($departmentRepository->find($data->obeys_id));
+        }
         $entityManager->persist($department);
         $entityManager->flush();
         return $this->json($data, Response::HTTP_CREATED);
     }
 
     #[Route('department/update/{id}', name: 'app_competence_add', methods: "POST")]
-    public function addCompetence($id, Request $request, CompetenceRepository $competenceRepository, ManagerRegistry  $doctrine): Response
+    public function addCompetence($id, Request $request, CompetenceRepository $competenceRepository, DepartmentRepository $departmentRepository, ManagerRegistry  $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
         $department = $entityManager->getRepository(Department::class)->find($id);
+
+        $data = $this->serializer->deserialize($request->getContent(), DepartmentDTO::class, 'json');
+
+        if ($data->main_competence_name){
+            $competence = new Competence();
+            $competence->setName($data->main_competence_name);
+            $competence->setType(1);
+            $competence->setNeedRating(0);
+            $competence->setDescription("Старовая компетенция отдела ".$department->getName());
+            $entityManager->persist($competence);
+            $entityManager->flush();
+            $department->setMainCompetence($competence);
+        }
+        if ($data->obeys_id){
+            $department->setObeys($departmentRepository->find($data->obeys_id));
+        }
 
         $entityManager->flush();
         return $this->json( Response::HTTP_CREATED);

@@ -36,7 +36,6 @@ class Department
 
     /**
      * @ORM\OneToOne(targetEntity=Competence::class, inversedBy="department", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
      */
     private $mainCompetence;
 

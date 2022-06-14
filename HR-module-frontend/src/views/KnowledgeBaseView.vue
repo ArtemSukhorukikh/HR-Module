@@ -19,7 +19,7 @@
             </div>
           </div>
         </div>
-        <router-link v-if="userMain" class="btn btn-outline-primary my-2 "  to="/logout">Настройка базы знаний</router-link>
+        <router-link v-if="userMain" class="btn btn-outline-primary my-2 "  to="/settingRes">Настройка базы знаний</router-link>
       </div>
       <div class="col-sm">
         <div v-if="feedbacks">
@@ -89,7 +89,7 @@ export default {
   components: {ModalWindowFeedback, FullNavbar},
   data() {
     return {
-      userMain: false,
+      userMain: true,
       isModalVisible: false,
       isFeedback: '',
       "educationResourcesAll": {},
