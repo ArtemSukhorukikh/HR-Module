@@ -35,4 +35,7 @@ class TaskDTO
 
     #[Serializer\Type("string")]
     public array $users;
+
+    #[Serializer\Type(EvaluationDTO::class)]
+    public $evaluation;
 }

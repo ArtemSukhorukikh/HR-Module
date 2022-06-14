@@ -136,6 +136,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $competences;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Notification::class, mappedBy="toUser")
+     */
+    private $notifications;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
@@ -149,6 +154,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->Tasks = new ArrayCollection();
         $this->skillAssessments = new ArrayCollection();
         $this->competences = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -786,6 +792,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->competences->removeElement($competence)) {
             $competence->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->addToUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->removeElement($notification)) {
+            $notification->removeToUser($this);
         }
 
         return $this;

@@ -33,7 +33,7 @@ class TaskEvaluation
     private $value;
 
     /**
-     * @ORM\OneToOne(targetEntity=Task::class, inversedBy="taskEvaluation", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Task::class, inversedBy="taskEvaluation")
      * @ORM\JoinColumn(nullable=true)
      */
     private $toTask;

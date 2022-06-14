@@ -7,6 +7,7 @@ use App\Dto\EvaluationDTO;
 use App\Dto\Transformer\Request\EvaluationRequestDTOTransformer;
 use App\Repository\TaskEvaluationRepository;
 use App\Repository\TaskRepository;
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerBuilder;
@@ -30,7 +31,7 @@ class EvaluationController extends AbstractController
         $this->requestDTOTransformer = $requestDTOTransformer;
     }
 
-    #[Route('/evaluation-add/{id}', name: 'evaluation-add')]
+    #[Route('/evaluation/add/{id}', name: 'evaluation-add')]
     public function index(int $id,
                           TaskRepository $taskRepository,
                           EntityManagerInterface $entityManager,
@@ -55,7 +56,7 @@ class EvaluationController extends AbstractController
         }
     }
 
-    #[Route('/evaluation-update/{id}', name: 'evaluation-update')]
+    #[Route('/evaluation/update/{id}', name: 'evaluation-update')]
     public function update(int $id,
                           TaskEvaluationRepository $repository,
                           EntityManagerInterface $entityManager,
@@ -64,7 +65,7 @@ class EvaluationController extends AbstractController
         $evaluation = $repository->find($id);
         if ($evaluation) {
             $evaluationFromDTO = $this->serializer->deserialize($request->getContent(), EvaluationDTO::class, 'json');
-            $evaluation->setDate($evaluationFromDTO->date);
+            $evaluation->setDate(new DateTime($evaluationFromDTO->date));
             $evaluation->setValue($evaluationFromDTO->value);
             $evaluation->setDescription($evaluationFromDTO->description);
             $entityManager->persist($evaluation);
@@ -81,7 +82,7 @@ class EvaluationController extends AbstractController
         }
     }
 
-    #[Route('/evaluation-delete/{id}', name: 'evaluation-delete')]
+    #[Route('/evaluation/delete/{id}', name: 'evaluation-delete')]
     public function delete(int $id,
                            TaskEvaluationRepository $repository,
                            EntityManagerInterface $entityManager,
@@ -103,7 +104,7 @@ class EvaluationController extends AbstractController
         }
     }
 
-    #[Route('/evaluation/{id}', name: 'evaluation-delete')]
+    #[Route('/evaluation/{id}', name: 'evaluation-show')]
     public function show(int $id,
                            TaskRepository $repository,
                            EntityManagerInterface $entityManager,

@@ -9,6 +9,13 @@ use App\Entity\Task;
 
 class TasksResponseDTOTransformer extends AbstractResponceDTOTransformer
 {
+    public EvaluationResponseDTOTransformer $evaluationResponseDTOTransformer;
+
+    public function __construct(EvaluationResponseDTOTransformer $evaluationResponseDTOTransformer)
+    {
+        $this->evaluationResponseDTOTransformer = $evaluationResponseDTOTransformer;
+    }
+
     /**
      * @param Task $task
      */
@@ -36,6 +43,9 @@ class TasksResponseDTOTransformer extends AbstractResponceDTOTransformer
             }
         }else {
             $dto->users[] = "Задача не назначена";
+        }
+        if ($task->getTaskEvaluation()) {
+            $dto->evaluation = $this->evaluationResponseDTOTransformer->transformFromObject($task->getTaskEvaluation());
         }
         return $dto;
     }

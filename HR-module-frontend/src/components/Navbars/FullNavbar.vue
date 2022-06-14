@@ -6,8 +6,8 @@
         <li class="nav-item mx-5"><router-link class="nav-link"  :to="{  name : 'knowledgeBase', params: { id: 'null'   } }">База знаний</router-link></li>
         <li class="nav-item mx-5"><router-link class="nav-link"  to="/officemap/floor2">Карта офиса этаж 2</router-link></li>
         <li class="nav-item mx-5"><router-link class="nav-link"  to="/officemap/floor3">Карта офиса этаж 3</router-link></li>
-        <li v-if="userHR" class="nav-item mx-5"><router-link class="nav-link"  to="/users-all">Информация о пользователях</router-link></li>
-        <li class="nav-item mx-5" @click="this.$router.back()">Назад</li>
+        <li class="nav-item mx-5"><router-link class="nav-link"  to="/users-all">Информация о пользователях</router-link></li>
+        <li class="nav-item mx-5"><router-link class="nav-link"  to="/tasks">Информация о задачах</router-link></li>
         <li class="nav-item mx-5"><router-link class="nav-link"  to="/logout">Выход</router-link></li>
       </ul>
     </header>

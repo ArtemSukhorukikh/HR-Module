@@ -22,6 +22,7 @@ import SettingRes from "@/views/EducationResources/SettingsResourcesView";
 import UsersView from "@/views/UsersView";
 import ProjectView from "@/views/ProjectView";
 import DevPlan from "@/views/ProfessionalDevelopmentPlan";
+import TasksView from "@/views/TasksView";
 
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
@@ -76,6 +77,12 @@ const routes = [
     path: '/users-all',
     name: 'usersAll',
     component: UsersView,
+    beforeEnter: authHRGuard
+  },
+  {
+    path: '/tasks',
+    name: 'tasks',
+    component: TasksView,
     beforeEnter: authHRGuard
   },
   {
