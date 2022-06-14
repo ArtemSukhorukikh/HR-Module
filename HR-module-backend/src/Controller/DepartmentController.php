@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Dto\AnswearDTO;
 use App\Dto\Department\DepartmentDTO;
 use App\Dto\Department\Request\DepartmentRequest;
 use App\Dto\Department\Response\DepartmentListResponse;
@@ -57,18 +58,10 @@ class DepartmentController extends AbstractController
         return $this->json( $departmentUserDTO,Response::HTTP_OK);
     }
 
-    #[Route('department/{id}', name: 'app_department_find', methods: "GET")]
-    public function findDepartment($id, DepartmentRepository $departmentRepository): Response
-    {
-        $department = $departmentRepository->find($id);
-        $departmentUserDTO = $this->departmentResponse->transformFromObject($department);
-        return $this->json($departmentUserDTO, Response::HTTP_OK);
-    }
-
     #[Route('department', name: 'test', methods: "GET")]
     public function test(DepartmentRepository $departmentRepository): Response
     {
-        $departments = $departmentRepository->find(1);
+        $departments = $departmentRepository->findOneBy(['name' => 'Генеральный отдел']);
         $departmentUserDTO = $this->departmentListResponse->transformFromObject($departments);
         return $this->json( $departmentUserDTO,Response::HTTP_OK);
     }
@@ -97,7 +90,7 @@ class DepartmentController extends AbstractController
             $entityManager->flush();
             $department->setMainCompetence($competence);
         }
-        if ($data->obeys_id){
+        if ($data->obeys_id != null){
             $department->setObeys($departmentRepository->find($data->obeys_id));
         }
         $entityManager->persist($department);
@@ -105,7 +98,7 @@ class DepartmentController extends AbstractController
         return $this->json($data, Response::HTTP_CREATED);
     }
 
-    #[Route('department/update/{id}', name: 'app_competence_add', methods: "POST")]
+    #[Route('department/update/{id}', name: 'app_department_update', methods: "POST")]
     public function addCompetence($id, Request $request, CompetenceRepository $competenceRepository, DepartmentRepository $departmentRepository, ManagerRegistry  $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
@@ -113,12 +106,12 @@ class DepartmentController extends AbstractController
 
         $data = $this->serializer->deserialize($request->getContent(), DepartmentDTO::class, 'json');
 
-        if ($data->main_competence_name){
+        if ($data->main_competence_name && !$department->getMainCompetence()){
             $competence = new Competence();
             $competence->setName($data->main_competence_name);
             $competence->setType(1);
             $competence->setNeedRating(0);
-            $competence->setDescription("Старовая компетенция отдела ".$department->getName());
+            $competence->setDescription($data->main_competence_name);
             $entityManager->persist($competence);
             $entityManager->flush();
             $department->setMainCompetence($competence);
@@ -126,8 +119,42 @@ class DepartmentController extends AbstractController
         if ($data->obeys_id){
             $department->setObeys($departmentRepository->find($data->obeys_id));
         }
-
+        if ($data->name != null){
+            $department->setName($data->name);
+        }
         $entityManager->flush();
         return $this->json( Response::HTTP_CREATED);
+    }
+
+    #[Route('department/delete/{id}', name: 'app_competence_add', methods: "POST")]
+    public function deleteDepartment($id, Request $request, CompetenceRepository $competenceRepository, DepartmentRepository $departmentRepository, ManagerRegistry  $doctrine): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $department = $entityManager->getRepository(Department::class)->find($id);
+        if($department){
+            $competence = $department->getMainCompetence();
+            if ($competence){
+                $entityManager->remove($competence);
+                $entityManager->flush();
+            }
+            $entityManager->remove($department);
+            $entityManager->flush();
+            $answer = new AnswearDTO();
+            $answer->status = 'Deleted';
+            $answer->messageAnswear = "Deleted " . $id;
+            return $this->json($answer, Response::HTTP_OK);
+        }
+        $answer = new AnswearDTO();
+        $answer->status = 'Error delete';
+        $answer->messageAnswear = "Un  deleted " . $id;
+        return $this->json($answer, Response::HTTP_BAD_REQUEST);
+    }
+
+    #[Route('department/{id}', name: 'app_department_find', methods: "GET")]
+    public function findDepartment($id, DepartmentRepository $departmentRepository): Response
+    {
+        $department = $departmentRepository->find($id);
+        $departmentUserDTO = $this->departmentResponse->transformFromObject($department);
+        return $this->json($departmentUserDTO, Response::HTTP_OK);
     }
 }

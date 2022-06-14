@@ -28,7 +28,9 @@ class DepartmentListResponse extends AbstractResponceDTOTransformer
         if ($object->getDirector()){
             $dto->director_name = $object->getDirector()->getLastName().' '.$object->getDirector()->getLastName();
         }
-        $dto->children = $this->rec($object)->children;
+        if (count($object->getDepartments())){
+            $dto->children = $this->rec($object)->children;
+        }
         return $dto;
     }
 

@@ -35,7 +35,7 @@ export default {
     return {
       id: {},
       userHR: false,
-      userMain: true,
+      userMain: false,
     }
   },
   methods: {

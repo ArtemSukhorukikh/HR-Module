@@ -16,8 +16,10 @@ class DepartmentResponse extends AbstractResponceDTOTransformer
         $dto = new DepartmentDTO();
         $dto->id = $object->getId();
         $dto->name = $object->getName();
-        $dto->main_competence_id = $object->getMainCompetence()->getId();
-        $dto->main_competence_name = $object->getMainCompetence()->getName();
+        if ($object->getMainCompetence()){
+            $dto->main_competence_id = $object->getMainCompetence()->getId();
+            $dto->main_competence_name = $object->getMainCompetence()->getName();
+        }
         return $dto;
     }
 }

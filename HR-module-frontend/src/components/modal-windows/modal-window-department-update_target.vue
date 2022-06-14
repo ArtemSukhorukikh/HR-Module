@@ -11,12 +11,18 @@
         <section class="modal-body">
           <slot name="body">
             <div class="container">
-              <div class="form-floating mb-3">
-                <textarea type="text" class="form-control" id="floatingInput" v-model="dep_name" placeholder="Отзыв" required/>
+
+              <div>Отдел</div>
+              <select class="form-select form-select-sm" aria-label=".form-select-sm example " v-model="id" @change="change">
+                <option v-for="item in departments" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
+              </select>
+
+              <div class="form-floating mb-3 mt-3">
+                <input type="text" class="form-control" id="floatingInput" v-model="dep_name" placeholder="Отзыв" required/>
                 <label for="floatingInput">Название отдела</label>
               </div>
               <div class="form-floating mb-3">
-                <textarea type="text" class="form-control" id="floatingInput" v-model="comp_name" placeholder="Отзыв" required/>
+                <input type="text" class="form-control" id="floatingInput" v-model="comp_name" placeholder="Отзыв" required/>
                 <label for="floatingInput">Название стартовой компетенции</label>
               </div>
               <label>Какому отделу подчиняется отдел</label>
@@ -24,8 +30,9 @@
                 <option value="">Нет</option>
                 <option v-for="item in departments" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
               </select>
+
               <div class="mb-3 d-flex justify-content-center">
-                <button class="btn btn-outline-primary" @click="createDep()">Создать отдел</button>
+                <button class="btn btn-outline-primary" @click="createDep()">Изменить отдел</button>
               </div>
             </div>
           </slot>
@@ -38,7 +45,7 @@
 <script>
 import axios from "axios";
 export default {
-  name: "modal-window-department-update",
+  name: "modal-window-department-update_target",
   data: function () {
     return {
       show: false,
@@ -52,6 +59,14 @@ export default {
     }
   },
   methods: {
+    change(){
+      axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
+      axios.get(`http://localhost:84/api/v1/department/` + this.id,{
+      }).then(responce => {
+        this.dep_name = responce.data.name
+        console.log(responce)
+      })
+    },
     createDep(){
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
       axios.post(`http://localhost:84/api/v1/department/update/` + this.id,{

@@ -172,6 +172,7 @@ class ApiAuthController extends AbstractController
         }
         if ($user->getPosition() === "Глава отдела") {
             $user->setRoles(array('ROLE_MAIN'));
+            $user->setDirects($departmentRepository->findOneBy(["name" => $userDto->department]));
         }
         if ($user->getPosition() === "Продукт-менеджер") {
             $user->setRoles(array('ROLE_PM'));
