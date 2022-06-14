@@ -34,7 +34,7 @@ class NotificationController extends AbstractController
         $this->notificationResponseDTOTransformer = $notificationResponseDTOTransformer;
         $this->notificationRequestDTOTransformer = $notificationRequestDTOTransformer;
     }
-    #[Route('/notification/new', name: 'app_notification_add')]
+    #[Route('/notification/new', name: 'app_notification_add', methods: ["POST"])]
     public function new(Request $request,
                         EntityManagerInterface $entityManager,
                         UserRepository $userRepository,
@@ -72,20 +72,25 @@ class NotificationController extends AbstractController
         return $this->json(['Bad data'], Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('/notification/all', name: 'app_notification_all')]
+    #[Route('/notification/all', name: 'app_notification_all', methods: ["GET"]),]
     public function all(NotificationRepository $repository): Response
     {
        return $this->json($this->notificationResponseDTOTransformer->transformFromObjects($repository->findAll()),Response::HTTP_OK);
     }
 
-    #[Route('/notification/delete/{id}', name: 'app_notification_all')]
-    public function delete(int $id, NotificationRepository $repository, EntityManager $entityManager): Response
+    #[Route('/notification/delete/{id}', name: 'app_notification_del', methods: ["POST"])]
+    public function delete(int $id, NotificationRepository $repository, EntityManagerInterface $entityManager): Response
     {
         $notification = $repository->find($id);
+
         if ($notification) {
+            $users = $notification->getToUser();
+            foreach ($users as $user) {
+                $notification->removeToUser($user);
+            }
             $entityManager->remove($notification);
             $entityManager->flush();
-            return $this->json(['Ok', Response::HTTP_BAD_REQUEST]);
+            return $this->json(['Ok', Response::HTTP_OK]);
         } else {
             return $this->json(['Doesn`t find'], Response::HTTP_BAD_REQUEST);
         }

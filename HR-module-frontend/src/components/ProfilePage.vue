@@ -25,7 +25,7 @@
           <div class="card mt-3">
             <div class="row-cols-2 d-flex justify-content-around">
               <p>Контакты</p>
-              <svg @click='openModalContact("new", {})' xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mt-1 bi bi-plus-circle" viewBox="0 0 16 16">
+              <svg v-if="checkHR" @click='openModalContact("new", {})' xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mt-1 bi bi-plus-circle" viewBox="0 0 16 16">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
               </svg>
@@ -167,16 +167,34 @@
               </div>
           </div>
         </div>
+          </div>
+          </div>
       </div>
     </div>
-      </div>
-    <div class="row w-100">
+    <div v-if="checkHR || this.currentUser" class="row w-100">
+              <p>
+                <button class="btn btn-primary w-25" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNotification" aria-expanded="false" aria-controls="collapseExample">
+                  Показать уведомления
+                </button>
+              </p>
+              <div class="collapse " id="collapseNotification">
+                <div class="card card-body row d-flex justify-content-evenly">
+                  <div v-for="notification in userData.notifications" v-bind:key="notification" class="card mb-3">
+                    <div class="card-body">
+                      <h5 class="card-title">{{notification.text}}</h5>
+                      <p class="card-text"> {{notification.date}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    <div class=" w-100">
       <h4>Проекты</h4>
-      <div class="col mb-3">
+      <div v-if="userData.projects.length > 0" class="">
         <div class="card h-100">
           <div class="card-body">
-            <div class="row-cols-3">
-              <div v-for="project in userData.projects" v-bind:key = "project" class="card" style="width: 15rem;">
+            <div class="d-flex flex-row mb-3row-cols-3">
+              <div v-for="project in userData.projects" v-bind:key = "project" class="card mx-3" style="width: 15rem;">
                 <div  class="card-body bg-light">
                   <h5 class="card-title">{{project['name']}}</h5>
                   <p class="card-text">{{project['description']}}</p>
@@ -186,33 +204,39 @@
               </div>
             </div>
           </div>
-        </div>
       </div>
+      </div>
+      <div v-else>
+        <h5>Нет проектов</h5>
+      </div>
+    </div>
       <div class="row w-100">
         <h4>Задачи</h4>
-        <div class="col mb-3">
-          <div class="card h-100">
-            <div class="card-body">
-              <div class="row col-auto">
-                <div v-for="task in userData.tasks" v-bind:key = "task" class="card bg-light mx-5" style="width: 15rem;">
-                  <div class="card-body ">
-                    <div class="card-header">{{task['status']}}</div>
-                    <h5 class="card-title">{{task['name']}}</h5>
-                    <p class="card-text">{{task['description']}}</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+          <div v-if="userData.tasks.length > 0">
+            <div class="col mb-3">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="row col-auto">
+                    <div v-for="task in userData.tasks" v-bind:key = "task" class="card bg-light mx-5" style="width: 15rem;">
+                      <div class="card-body ">
+                        <div class="card-header">{{task['status']}}</div>
+                        <h5 class="card-title">{{task['name']}}</h5>
+                        <p class="card-text">{{task['description']}}</p>
+                        <p class="card-text">Дата создания:{{task['start_date']}}</p>
+                        <p class="card-text">Дата обновления:{{task['updated_on']}}</p>
+                        <p v-if="task['closed_on']" class="card-text">Дата закрытия:{{task['closed_on']}}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        <div v-else><h5>Нет задач</h5></div>
       </div>
-      <div class="my-3">
+      <div v-if="userData.tasks.length > 0" class="my-3">
         <highcharts :constructor-type="'ganttChart'" :options="chartOptions"></highcharts>
       </div>
-  </div>
-
-    </div>
   </div>
 </template>
 
@@ -323,6 +347,18 @@ export default {
       }
       return false
     },
+    checkPM() {
+      let roles = JSON.parse(localStorage.getItem('roles'))
+      console.log(roles)
+      for (let i in roles){
+
+        if (roles[i] === "ROLE_HR"){
+          console.log('find')
+          return true
+        }
+      }
+      return false
+    },
   },
   props: {
     "currentUser": {
@@ -335,7 +371,7 @@ export default {
   },
   methods: {
     updateAchivment(id, name, description, value) {
-      axios.post(`http://localhost:84/api/v1/achievements/update/${id}`,{name:name,description:description,value:value}).then().catch()
+      axios.post(`http://localhost:84/api/v1/achievements/update/${id}`,{name:name,description:description,value:value}).then(this.update())
     },
     addAchivment(username){
       axios.post("http://localhost:84/api/v1/achievements/new",{
@@ -346,14 +382,14 @@ export default {
         axios.post("http://localhost:84/api/v1/achievements/add",{
           id:response.data,
           username:username,
-        }).then()
+        }).then(this.update())
       })
     },
     deleteAchivmebt(id,username) {
       axios.post("http://localhost:84/api/v1/achievements/unset",{
         id:id,
         username:username
-      }).then()//this.$router.go(this.$router.currentRoute))
+      }).then(this.update())
     },
     nameFirstAndLast(){
       if (this.userData !== null) return this.userData.userInfo['firstname'] + " " + this.userData.userInfo['lastname'];
@@ -387,6 +423,42 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+    },
+    update() {
+      if (this.currentUser === false) {
+        axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
+        axios.post("http://localhost:84/api/v1/users/search", {"username": this.userName}).then(responce => {
+          this.userData = responce.data
+          this.noError = true
+
+          console.log(this.userData)
+        }).catch(error => {
+          if (error.request.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('date')
+            this.$router.go("/login")
+          }
+          if (error.request.status === 400 || error.require.status >= 500){
+            alert("Пользователь не найден или ошибка доступа к серверу", "danger")
+          }
+        })
+      }
+      else {
+        axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
+        axios.get("http://localhost:84/api/v1/users/current").then( responce => {
+          this.userData = responce.data
+          localStorage.setItem('roles', JSON.stringify(responce.data['roles']))
+          localStorage.setItem('username', responce.data.username)
+          localStorage.setItem('id', responce.data.id)
+          this.noError = true
+          console.log(this.userData)}).catch(error =>{
+          if (error.request.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('date')
+            this.$router.go("/login")
+          }
+        })
+      }
     }
   },
   beforeCreate() {

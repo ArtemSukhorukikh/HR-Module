@@ -90,7 +90,7 @@ class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
                 $notificationsToSend[] = $notification;
             }
         }
-        $dto->notifications = $notificationsToSend;
+        $dto->notifications = $this->notificationResponseDTOTransformer->transformFromObjects( $notificationsToSend);
         return $dto;
     }
 }

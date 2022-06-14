@@ -133,6 +133,11 @@ export default {
   methods: {
     deleteEvaluation(id) {
       axios.post(`http://localhost:84/api/v1/evaluation/delete/${id}`,{
+      }).then(responce =>{
+        console.log(responce.data)
+        axios.get("http://localhost:84/api/v1/tasks/").then(responce => {
+          this.tasks = responce.data
+        })
       })
     },
     setEvaluation(id) {
@@ -140,14 +145,25 @@ export default {
         description: this.newEvaluation.description,
         date: new Date(),
         value: this.newEvaluation.value
-      }).then(this.$router.push({name:'tasks'}))
+      }).then(responce =>{
+        console.log(responce.data)
+        axios.get("http://localhost:84/api/v1/tasks/").then(responce => {
+          this.tasks = responce.data
+        })
+      })
     },
     updateEvaluation(id, evaluation) {
       axios.post(`http://localhost:84/api/v1/evaluation/update/${id}`,{
         description: evaluation.description,
         date: new Date(),
         value: evaluation.value
-      }).then(this.$router.go('/tasks'))
+      }).then(responce =>{
+        console.log(responce.data)
+        axios.get("http://localhost:84/api/v1/tasks/").then(responce => {
+          this.tasks = responce.data
+        })
+      })
+
     }
   },
   computed:{
