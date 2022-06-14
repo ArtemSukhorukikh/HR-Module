@@ -82,19 +82,14 @@
                         <input type="date" id="form3Example3c" v-model="dateofhiring" class="form-control" />
                       </div>
                     </div>
-
                     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                       <button @click="register" type="button" class="btn btn-primary btn-lg">Регистрация</button>
                     </div>
-
                   </form>
-
                 </div>
                 <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
-
                   <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
                        class="img-fluid" alt="Sample image">
-
                 </div>
               </div>
             </div>

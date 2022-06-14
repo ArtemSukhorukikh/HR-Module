@@ -193,12 +193,7 @@ class ApiAuthController extends AbstractController
                 $entityManager->flush();
             }
         }
-
-
-        $userAuth = new UserAuthDto();
-        $userAuth->roles =  $user->getRoles();
-        $userAuth->token = $JWTTokenManager->create($user);
-        return $this->json($userAuth, Response::HTTP_CREATED);
+        return $this->json(['ok'], Response::HTTP_CREATED);
     }
 
     #[Route('/user/update', name: 'api_user_update', methods: ['PUT', 'POST'])]

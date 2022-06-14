@@ -371,7 +371,7 @@ export default {
   },
   methods: {
     updateAchivment(id, name, description, value) {
-      axios.post(`http://localhost:84/api/v1/achievements/update/${id}`,{name:name,description:description,value:value}).then(this.$router.go("/"))
+      axios.post(`http://localhost:84/api/v1/achievements/update/${id}`,{name:name,description:description,value:value}).then(this.update())
     },
     addAchivment(username){
       axios.post("http://localhost:84/api/v1/achievements/new",{
@@ -382,14 +382,14 @@ export default {
         axios.post("http://localhost:84/api/v1/achievements/add",{
           id:response.data,
           username:username,
-        }).then(this.$router.go("/"))
+        }).then(this.update())
       })
     },
     deleteAchivmebt(id,username) {
       axios.post("http://localhost:84/api/v1/achievements/unset",{
         id:id,
         username:username
-      }).then(this.$router.go("/"))
+      }).then(this.update())
     },
     nameFirstAndLast(){
       if (this.userData !== null) return this.userData.userInfo['firstname'] + " " + this.userData.userInfo['lastname'];
@@ -423,6 +423,42 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+    },
+    update() {
+      if (this.currentUser === false) {
+        axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
+        axios.post("http://localhost:84/api/v1/users/search", {"username": this.userName}).then(responce => {
+          this.userData = responce.data
+          this.noError = true
+
+          console.log(this.userData)
+        }).catch(error => {
+          if (error.request.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('date')
+            this.$router.go("/login")
+          }
+          if (error.request.status === 400 || error.require.status >= 500){
+            alert("Пользователь не найден или ошибка доступа к серверу", "danger")
+          }
+        })
+      }
+      else {
+        axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
+        axios.get("http://localhost:84/api/v1/users/current").then( responce => {
+          this.userData = responce.data
+          localStorage.setItem('roles', JSON.stringify(responce.data['roles']))
+          localStorage.setItem('username', responce.data.username)
+          localStorage.setItem('id', responce.data.id)
+          this.noError = true
+          console.log(this.userData)}).catch(error =>{
+          if (error.request.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('date')
+            this.$router.go("/login")
+          }
+        })
+      }
     }
   },
   beforeCreate() {

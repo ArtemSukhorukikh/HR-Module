@@ -45,8 +45,15 @@ export default {
         let date;
         date = new Date()
         localStorage.setItem('date', date.toString())
+        axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
+        axios.get("http://localhost:84/api/v1/users/current").then( responce => {
+          this.userData = responce.data
+          localStorage.setItem('roles', JSON.stringify(responce.data['roles']))
+          localStorage.setItem('username', responce.data.username)
+          localStorage.setItem('id', responce.data.id)
+        })
         this.$router.go('/')
-      }).catch(errors =>{
+        }).catch(errors =>{
         if (errors.request.status === 401) {
           this.errorAuth = true
         }
