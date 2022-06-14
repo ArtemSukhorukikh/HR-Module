@@ -105,6 +105,18 @@ export default {
       }).catch(errors => {
         console.log(errors)
       })
+      axios
+          .get("http://localhost:84/api/v1/department")
+          .then(response => {
+            this.vehicules = response.data
+            console.log(this.vehicules)
+          });
+      axios
+          .get("http://localhost:84/api/v1/department/findAll")
+          .then(response => {
+            this.departments = response.data
+            console.log(this.vehicules)
+          });
     },
   }
 }

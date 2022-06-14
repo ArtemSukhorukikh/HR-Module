@@ -17,6 +17,7 @@ class ApplicationPurchaseOfTrainingResponse extends AbstractResponceDTOTransform
     {
         $dto = new ApplicationPurchaseOfTrainingDTO();
         $dto->id = $object->getId();
+        $dto->user_name = $object->getCompose()->getFirstName().' '.$object->getCompose()->getLastName();
         $dto->description = $object->getDescription();
         $dto->link = $object->getLink();
         $dto->note = $object->getNote();

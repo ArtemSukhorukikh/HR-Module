@@ -166,7 +166,9 @@ class ApiAuthController extends AbstractController
 
         $user = $this->userTransformer->transformToObject($userDto);
         $user->setPassword($this->passwordHasher->hashPassword($user, $userDto->password));
-        $user->setWorks($departmentRepository->findOneBy(["name" => $userDto->department]));
+        if ($departmentRepository->findOneBy(["name" => $userDto->department])){
+            $user->setWorks($departmentRepository->findOneBy(["name" => $userDto->department]));
+        }
         if ($user->getPosition() === "Работник HR-Отдела") {
             $user->setRoles(array('ROLE_HR'));
         }

@@ -20,6 +20,7 @@ class ApplicationPurchaseOfPersonalTrainingResponse extends AbstractResponceDTOT
         $dto = new ApplicationPurchaseOfPersonalTrainingDTO();
         $dto->id = $object->getId();
         $dto->user_id = $object->getUser()->getId();
+        $dto->user_name = $object->getUser()->getFirstName().' '.$object->getUser()->getLastName();
         $dto->link = $object->getLink();
         $dto->note = $object->getNote();
         $dto->status = $object->getStatus();

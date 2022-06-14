@@ -26,7 +26,7 @@ class DepartmentListResponse extends AbstractResponceDTOTransformer
         $dto->name = $object->getName();
         $dto->director_name = 'Нет главы отдела';
         if ($object->getDirector()){
-            $dto->director_name = $object->getDirector()->getLastName().' '.$object->getDirector()->getLastName();
+            $dto->director_name = $object->getDirector()->getFirstName().' '.$object->getDirector()->getLastName();
         }
         if (count($object->getDepartments())){
             $dto->children = $this->rec($object)->children;
@@ -46,7 +46,7 @@ class DepartmentListResponse extends AbstractResponceDTOTransformer
             $dto_->id = $dep->getId();
             $dto_->name = $dep->getName();
             if ($dep->getDirector()){
-                $dto->director_name = $dep->getDirector()->getLastName().' '.$dep->getDirector()->getLastName();
+                $dto->director_name = $dep->getDirector()->getFirstName().' '.$dep->getDirector()->getLastName();
             } else  {
                 $dto_->director_name = 'Нет главы отдела';
             }

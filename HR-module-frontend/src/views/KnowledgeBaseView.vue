@@ -70,10 +70,6 @@
     </div>
 
 
-
-
-
-
   </div>
 
 
@@ -89,7 +85,7 @@ export default {
   components: {ModalWindowFeedback, FullNavbar},
   data() {
     return {
-      userMain: true,
+      userMain: false,
       isModalVisible: false,
       isFeedback: '',
       "educationResourcesAll": {},

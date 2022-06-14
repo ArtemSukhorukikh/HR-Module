@@ -73,7 +73,9 @@ class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
         }
         $dto->projects = $this->projectsResponseDTOTransformer->transformFromObjects($usersProjectsUniq);
         $dto->contacts = $this->contactResponseDTOTransformer->transformFromObjects($user->getContacts());
-        $dto->department = $user->getWorks()->getName();
+        if ($user->getWorks()){
+            $dto->department = $user->getWorks()->getName();
+        }
         $dto->speed = $user->countSpeedTask();
         $dto->hours = $user->countHoursInMounth();
         $dto->avgMark = $user->avgMarkMounth();
