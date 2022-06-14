@@ -24,7 +24,7 @@ import ProjectView from "@/views/ProjectView";
 import DevPlan from "@/views/ProfessionalDevelopmentPlan";
 import TasksView from "@/views/TasksView";
 import Test from "@/views/Test";
-
+import NotificationsViews from "@/views/NotificationsViews";
 const isAuthenticated = localStorage.getItem('token')
 const timeAddToken = localStorage.getItem('date')
 const authGuard = function beforeEach(to, from, next) {
@@ -85,6 +85,12 @@ const routes = [
     name: 'tasks',
     component: TasksView,
     beforeEnter: authHRGuard
+  },
+  {
+    path: '/notifications',
+    name: 'notifications',
+    component: NotificationsViews,
+    //beforeEnter: authHRGuard
   },
   {
     path: '/error/:errorCode',
