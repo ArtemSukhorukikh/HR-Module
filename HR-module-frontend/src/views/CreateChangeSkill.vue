@@ -21,7 +21,7 @@
         <div class="container" style="max-width: 600px">
           <form class="mx-1 mx-md-4">
 
-            <h1>Создание навыка для компетенции отдела</h1>
+            <h1>Создание навыка для отдела</h1>
 
             <div class="form-floating mt-3">
               <input v-model="skill.name" type="text" class="form-control" id="name" placeholder="Название">

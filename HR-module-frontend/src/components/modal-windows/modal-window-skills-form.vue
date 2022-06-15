@@ -34,7 +34,7 @@
                 <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                 <div class="form-outline flex-fill mb-0">
                   <label class="form-label" for="form3Example3c">Навык</label>
-                  <select class="form-control form-control" v-model="skill">
+                  <select class="form-control form-control" v-model="skill" @change="check">
                     <option v-for="item in skills" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
                   </select>
                 </div>
@@ -53,6 +53,8 @@
                   </select>
                 </div>
               </div>
+
+              <div>{{skill_node}}</div>
 
 
               <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
@@ -79,12 +81,21 @@ export default {
       ok:"",
       users: {},
       skills: {},
+      skill_node: '',
       "user": '',
       "skill": '',
       "estimation": ''
     }
   },
   methods: {
+    check(){
+      axios
+          .get('http://localhost:84/api/v1/skills/' + this.skill)
+          .then(response => {
+            this.skill_node = response.data.description
+            console.log(this.skill_node)
+          });
+    },
     astimate(){
       console.log(this.user)
       console.log(this.skill)

@@ -8,7 +8,7 @@ use App\Entity\ApplicationForTraining;
 use App\Repository\EducationalResourcesRepository;
 use App\Repository\UserRepository;
 
-class ApplicationForTrainingRequest extends AbstractRequestDTOTransformer
+class ApplicationForTrainingRequest
 {
     private UserRepository $userRepository;
     private EducationalResourcesRepository $educationalResourcesRepository;

@@ -45,7 +45,7 @@
           <a v-bind:href="'http://'+educationResources.link"><h1 class="text-black mb-3 ">{{educationResources.name}}</h1></a>
 
           <p class="text-black mb-3 text-left">{{educationResources.description}}</p>
-          <div class="text-black mb-3 ">Цена ресурса: {{educationResources.price}}</div>
+          <div class="text-black mb-3 ">Цена ресурса: {{educationResources.price}} руб.</div>
           <div class="text-black mb-3 " v-if="educationResources.type === 0">Тип ресурса: Книга</div>
           <div class="text-black mb-3 " v-if="educationResources.type === 1">Тип ресурса: Онлайн курс</div>
           <div class="text-black mb-3 " v-if="educationResources.type === 2">Тип ресурса: Онлайн тренинг</div>

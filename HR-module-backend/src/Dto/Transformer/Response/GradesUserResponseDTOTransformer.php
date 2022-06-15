@@ -10,7 +10,7 @@ use App\Entity\Office;
 use phpDocumentor\Reflection\Types\Collection;
 
 
-class GradesUserResponseDTOTransformer
+class GradesUserResponseDTOTransformer extends AbstractResponceDTOTransformer
 {
     private GradeResponseDTOTransformer $gradeResponseDTOTransformer;
 
