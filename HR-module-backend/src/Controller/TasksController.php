@@ -23,8 +23,9 @@ class TasksController extends AbstractController
     public TasksResponseDTOTransformer $tasksResponseDTOTransformer;
     public function __construct(TasksResponseDTOTransformer $tasksResponseDTOTransformer)
     {
-        $this->client = new NativeCurlClient("http://192.168.0.16:3000", "0fb32ce4b235496fb8cb386cd6e7a0dfefa2e2df");
+        $this->client = new NativeCurlClient(getenv('REDMINE_ADRESS'), getenv('REDMINE_TOKEN'));
         $this->tasksResponseDTOTransformer = $tasksResponseDTOTransformer;
+
     }
 
     #[Route('/sync/tasks', name: 'app_tasks_sync', methods: "GET")]
