@@ -15,6 +15,7 @@ use phpDocumentor\Reflection\Types\Array_;
 
 class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
 {
+    public UserRepository $userRepository;
     public TasksResponseDTOTransformer $tasksResponseDTOTransformer;
     public ProjectsResponseDTOTransformer $projectsResponseDTOTransformer;
     public TaskRepository $taskRepository;
@@ -23,7 +24,8 @@ class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
     public UserRepository $repository;
     public PersonalAchivmentsResponseDTOTransformer $achivmentsResponseDTOTransformer;
     public NotificationResponseDTOTransformer $notificationResponseDTOTransformer;
-    public function __construct(TasksResponseDTOTransformer $tasksResponseDTOTransformer,
+    public function __construct(UserRepository $userRepository,
+                                TasksResponseDTOTransformer $tasksResponseDTOTransformer,
                                 ProjectsResponseDTOTransformer $projectsResponseDTOTransformer,
                                 ProjectsRepository $projectsRepository,
                                 ContactResponseDTOTransformer $contactResponseDTOTransformer,
@@ -40,6 +42,7 @@ class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
         $this->achivmentsResponseDTOTransformer = $achivmentsResponseDTOTransformer;
         $this->repository = $repository;
         $this->notificationResponseDTOTransformer = $notificationResponseDTOTransformer;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -57,6 +60,7 @@ class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
         $dto->userInfo->patronymic = $user->getPatronymic();
         $dto->userInfo->dateofhiring = $user->getDateOfHiring()->format("Y-m-d");
         $dto->userInfo->position = $user->getPosition();
+        $dto->userInfo->grade = $this->userRepository->checkGrade($user, $user->getWorks()->getMainCompetence())->getName();
         $usersTasks = $user->getTasks();
         $dto->tasks = $this->tasksResponseDTOTransformer->transformFromObjects($usersTasks);
         $usersProjects = [];

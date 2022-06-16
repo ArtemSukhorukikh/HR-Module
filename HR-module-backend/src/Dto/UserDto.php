@@ -40,4 +40,7 @@ class UserDto
 
     #[Serializer\Type("float")]
     public float $rating;
+
+    #[Serializer\Type("string")]
+    public string $grade;
 }

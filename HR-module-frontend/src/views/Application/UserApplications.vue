@@ -148,6 +148,9 @@
                           <div class="card-body">
                             {{item.note}}
                           </div>
+                          <div class="card-body">
+                            {{item.link}}
+                          </div>
                           <if v-if="item.status == 0 || item.status == 1">
                             <button class="btn btn-primary" @click="deleteApplicationPOPT(item.id)">Удалить</button>
                           </if>
@@ -223,7 +226,7 @@
                           {{item.note}}
                         </div>
                         <div>
-                          {{item.Link}}
+                          {{item.link}}
                         </div>
                         <if v-if="item.status == 0 || item.status == 1">
                           <button class="btn btn-primary" @click="deleteApplicationPOT(item.id)" >Удалить</button>
