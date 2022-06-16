@@ -18,7 +18,7 @@
             <p>Ваш рейтинг: {{ rating.toFixed(2) }}</p>
           </div>
           <div class="col-sm">
-            <p>Ваш текущий уровень компетенции:</p>
+            <p>Ваш текущий уровень грейда:</p>
             <p>{{ competence_name }}</p>
           </div>
         </div>
@@ -29,7 +29,7 @@
       <div class="card-body">
         <div class="row">
           <div class="col-sm">
-            <p>Описание компетенции:</p>
+            <p>Описание грейда:</p>
             <p> {{ descriptions.description }} </p>
           </div>
           <div class="col-sm">

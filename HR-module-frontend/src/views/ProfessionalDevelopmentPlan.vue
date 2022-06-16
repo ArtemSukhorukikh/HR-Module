@@ -17,7 +17,7 @@
       <th scope="col" class="w-25" >Дата проведения</th>
       <th scope="col" class="w-25" >Образовательный ресурс</th>
       <th scope="col" class="w-25" >Способ прохождения</th>
-      <th scope="col" class="w-25" >Уровень компетенции</th>
+      <th scope="col" class="w-25" >Грейд</th>
     </tr>
     </thead>
     <tbody>

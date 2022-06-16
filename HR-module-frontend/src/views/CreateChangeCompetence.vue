@@ -21,9 +21,9 @@
         <div class="container" style="max-width: 600px">
           <form class="mx-1 mx-md-4">
 
-            <h1>Создание компетенции для отдела</h1>
+            <h1>Создание грейда для отдела</h1>
 
-            <label class="form-label">Последняя компетенция: {{ competences[0].name }}</label>
+            <label class="form-label">Последний грейд: {{ competences[0].name }}</label>
 
             <div class="form-floating mt-3">
               <input v-model="competence.name" type="text" class="form-control" id="name" placeholder="Название">
@@ -40,7 +40,7 @@
               <label for="price">Необходимый рейтинг</label>
             </div>
 
-            <button @click="createComp" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Создать компетенцию</button>
+            <button @click="createComp" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Создать грейд</button>
 
           </form>
         </div>
@@ -52,9 +52,9 @@
         <div class="container" style="max-width: 600px">
           <form class="mx-1 mx-md-4">
 
-            <h1>Изменение компетенции отдела</h1>
+            <h1>Изменение грейд отдела</h1>
 
-            <label class="form-label mt-3">Компетенция</label>
+            <label class="form-label mt-3">Грейд</label>
             <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="competence.id" @change="checkComp">
               <option disabled="disabled">Сделайте выбор</option>
               <option v-for="item in competences" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
@@ -75,7 +75,7 @@
               <label for="price">Необходимый рейтинг</label>
             </div>
 
-            <button @click="changeComp" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Изменить компетенцию</button>
+            <button @click="changeComp" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Изменить грейд</button>
 
           </form>
 
@@ -88,15 +88,15 @@
         <div class="container" style="max-width: 600px">
           <form class="mx-1 mx-md-4">
 
-            <h1>Удаление компетенции отдела</h1>
+            <h1>Удаление грейда отдела</h1>
 
-            <label class="form-label mt-3">Компетенция</label>
+            <label class="form-label mt-3">Грейд</label>
             <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="competence.id" >
               <option disabled="disabled">Сделайте выбор</option>
               <option v-for="item in competences" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
             </select>
 
-            <button @click="deleteComp" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Удалить компетенцию</button>
+            <button @click="deleteComp" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Удалить грейд</button>
 
           </form>
 

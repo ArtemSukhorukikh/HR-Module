@@ -33,7 +33,7 @@
               <div class="d-flex flex-row align-items-center mb-2">
                 <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                 <div class="form-outline flex-fill mb-0">
-                  <label class="form-label" for="form3Example3c">Навык</label>
+                  <label class="form-label" for="form3Example3c">Компетенция</label>
                   <select class="form-control form-control" v-model="skill" @change="check">
                     <option v-for="item in skills" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
                   </select>

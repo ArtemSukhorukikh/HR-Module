@@ -17,7 +17,7 @@
               </div>
               <div class="form-floating mb-3">
                 <textarea type="text" class="form-control" id="floatingInput" v-model="comp_name" placeholder="Отзыв" required/>
-                <label for="floatingInput">Название стартовой компетенции</label>
+                <label for="floatingInput">Название стартового грейда</label>
               </div>
               <label>Какому отделу подчиняется отдел</label>
               <select class="form-select form-select-sm" aria-label=".form-select-sm example " v-model="obeys_id">

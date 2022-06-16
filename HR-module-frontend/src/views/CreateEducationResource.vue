@@ -4,7 +4,7 @@
 
     <form class="mx-1 mx-md-4">
 
-      <label class="form-label">Компетенция</label>
+      <label class="form-label">Грейд</label>
       <select class="form-select form-select-sm  mt-1" aria-label=".form-select-sm example" v-model="educationalResource.id_competence" >
         <option disabled="disabled">Сделайте выбор</option>
         <option v-for="item in competences" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>

@@ -9,7 +9,7 @@
               <div class="row justify-content-center">
                 <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-                  <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Оценка навыков сотрудника</p>
+                  <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Оценка компетенции сотрудника</p>
 
                   <form class="mx-1 mx-md-4">
 
@@ -26,7 +26,7 @@
                     <div class="d-flex flex-row align-items-center mb-2">
                       <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0">
-                        <label class="form-label" for="form3Example3c">Навык</label>
+                        <label class="form-label" for="form3Example3c">Компетенция</label>
                         <select class="form-control form-control" v-model="skill">
                           <option v-for="item in skills" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
                         </select>

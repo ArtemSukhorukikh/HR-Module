@@ -21,7 +21,7 @@
         <div class="container" style="max-width: 600px">
           <form class="mx-1 mx-md-4">
 
-            <h1>Создание навыка для отдела</h1>
+            <h1>Создание компетенции для отдела</h1>
 
             <div class="form-floating mt-3">
               <input v-model="skill.name" type="text" class="form-control" id="name" placeholder="Название">
@@ -33,7 +33,7 @@
               <label for="description">Описание</label>
             </div>
 
-            <button @click="createSkill" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Создать навык</button>
+            <button @click="createSkill" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Создать компетенцию</button>
 
           </form>
         </div>
@@ -47,7 +47,7 @@
 
             <h1>Изменение компетенции отдела</h1>
 
-            <label class="form-label mt-3">Навык</label>
+            <label class="form-label mt-3">Компетенция</label>
             <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="skill.id" @change="checkSkill()">
               <option disabled="disabled">Сделайте выбор</option>
               <option v-for="item in skills" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
@@ -76,15 +76,15 @@
         <div class="container" style="max-width: 600px">
           <form class="mx-1 mx-md-4">
 
-            <h1>Удаление навыка компетенции отдела</h1>
+            <h1>Удаление компетенции компетенции отдела</h1>
 
-            <label class="form-label mt-3">Навык</label>
+            <label class="form-label mt-3">Компетенция</label>
             <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="skill.id">
               <option disabled="disabled">Сделайте выбор</option>
               <option v-for="item in skills" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
             </select>
 
-            <button @click="deleteSkill" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Удалить навык</button>
+            <button @click="deleteSkill" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Удалить компетенция</button>
 
           </form>
 

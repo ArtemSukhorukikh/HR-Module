@@ -28,7 +28,7 @@
 
             <h1>Создание образовательного ресурса для отдела</h1>
 
-            <label class="form-label mt-3">Компетенция</label>
+            <label class="form-label mt-3">Грейд</label>
             <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="competence.id" >
               <option disabled="disabled">Сделайте выбор</option>
               <option v-for="item in competences" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
@@ -62,7 +62,7 @@
               <option value="3">Личный ресурс</option>
             </select>
 
-            <button @click="newEdRes" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Создать компетенцию</button>
+            <button @click="newEdRes" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Создать ресурс</button>
 
           </form>
         </div>
@@ -76,7 +76,7 @@
 
             <h1>Измененить образовательный ресурс отдела</h1>
 
-            <label class="form-label mt-3">Компетенция</label>
+            <label class="form-label mt-3">Грейд</label>
             <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="competence.id" @change="findResource">
               <option disabled="disabled">Сделайте выбор</option>
               <option v-for="item in competences" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
@@ -131,7 +131,7 @@
 
             <h1>Удаление образовательного ресурса отдела</h1>
 
-            <label class="form-label mt-3">Компетенция</label>
+            <label class="form-label mt-3">Грейд</label>
             <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="competence.id" @change="findResource">
               <option disabled="disabled">Сделайте выбор</option>
               <option v-for="item in competences" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
@@ -156,9 +156,9 @@
         <div class="container" style="max-width: 600px">
           <form class="mx-1 mx-md-4">
 
-            <h1>Добавить компетенции образовательный ресурс</h1>
+            <h1>Добавить грейду образовательный ресурс</h1>
 
-            <label class="form-label mt-3">Компетенция</label>
+            <label class="form-label mt-3">Грейд</label>
             <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="competence.id">
               <option disabled="disabled">Сделайте выбор</option>
               <option v-for="item in competences" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>
@@ -183,9 +183,9 @@
         <div class="container" style="max-width: 600px">
           <form class="mx-1 mx-md-4">
 
-            <h1>Убрать образовательный ресурс из компетенции</h1>
+            <h1>Убрать образовательный ресурс из грейда</h1>
 
-            <label class="form-label mt-3">Компетенция</label>
+            <label class="form-label mt-3">Грейд</label>
             <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" v-model="competence.id" @change="findResource">
               <option disabled="disabled">Сделайте выбор</option>
               <option v-for="item in competences" v-bind:key="item" v-bind:value="item.id">{{item.name}}</option>

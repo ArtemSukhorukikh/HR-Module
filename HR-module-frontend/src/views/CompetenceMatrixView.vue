@@ -3,8 +3,8 @@
   <modal-window-skills-form ref="modal" v-show="isModalVisible" @close="closeModal"></modal-window-skills-form>
 
   <div v-if="userMain">
-    <router-link to="/compRed" class="btn btn-outline-primary my-2 m-3">Настройка компетенций</router-link>
-    <router-link  to="/skillsRed" class="btn btn-outline-primary my-2 m-3">Настройка навыков</router-link>
+    <router-link to="/compRed" class="btn btn-outline-primary my-2 m-3">Настройка грейдов</router-link>
+    <router-link  to="/skillsRed" class="btn btn-outline-primary my-2 m-3">Настройка компетенции</router-link>
     <button class="btn btn-outline-primary my-2 m-3" @click="openModal">Оценка навыков сотрудника</button>
   </div>
 
@@ -19,7 +19,7 @@
   <table class="table table-responsive table-striped w-75 mx-auto table-bordered">
     <thead class="thead-light">
     <tr>
-      <th scope="col" class="w-25" >Навыки</th>
+      <th scope="col" class="w-25" >Компетенции</th>
       <th scope="col" v-for="item in users" v-bind:key="item">{{ item.firstname + ' ' + item.lastname }}</th>
       <th>#</th>
     </tr>
