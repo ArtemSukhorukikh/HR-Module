@@ -87,11 +87,8 @@ export default {
       axios
           .get("http://localhost:84/api/v1/developmentPlan/department/" + this.department_id)
           .then(response => {
-            this.users = response.data.users
-            this.skillsAssessment = response.data.skill_assessment
-            this.competences = response.data.competences
-            console.log(this.users)
-            console.log(this.skillsAssessment)
+            this.developmentPlan = response.data.dev_plan
+            console.log(response)
           });
     },
     getData(start, end) {
