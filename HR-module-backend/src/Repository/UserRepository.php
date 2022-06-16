@@ -80,6 +80,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $count += 1;
             $sum += $trueSkillAssessment->getEstimation();
         }
+        if ($count === 0)
+        {
+            return 0;
+        }
         $rating = $sum / $count;
         return $rating;
     }

@@ -60,7 +60,9 @@ class UserResponseDTOTransformer extends AbstractResponceDTOTransformer
         $dto->userInfo->patronymic = $user->getPatronymic();
         $dto->userInfo->dateofhiring = $user->getDateOfHiring()->format("Y-m-d");
         $dto->userInfo->position = $user->getPosition();
-        $dto->userInfo->grade = $this->userRepository->checkGrade($user, $user->getWorks()->getMainCompetence())->getName();
+        if ($user->getWorks()->getMainCompetence()){
+            $dto->userInfo->grade = $this->userRepository->checkGrade($user, $user->getWorks()->getMainCompetence())->getName();
+        }
         $usersTasks = $user->getTasks();
         $dto->tasks = $this->tasksResponseDTOTransformer->transformFromObjects($usersTasks);
         $usersProjects = [];
