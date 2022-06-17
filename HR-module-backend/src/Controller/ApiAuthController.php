@@ -170,7 +170,7 @@ class ApiAuthController extends AbstractController
             $user->setWorks($departmentRepository->findOneBy(["name" => $userDto->department]));
             $user->addCompetence($user->getWorks()->getMainCompetence());
         }
-        if ($user->getPosition() === "Работник HR-Отдела") {
+        if ($user->getPosition() === "Работник HR-отдела") {
             $user->setRoles(array('ROLE_HR'));
         }
         if ($user->getPosition() === "Глава отдела") {
