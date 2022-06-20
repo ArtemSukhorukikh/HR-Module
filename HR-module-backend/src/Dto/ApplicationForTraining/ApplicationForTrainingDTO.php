@@ -38,4 +38,7 @@ class ApplicationForTrainingDTO
 
     #[Serializer\Type("integer")]
     public int $status;
+
+    #[Serializer\Type(ApplicationForTrainingAnswer::class)]
+    public $application_answer;
 }

@@ -75,6 +75,16 @@
                           <h5 >
                             Конец обучения: {{this.makeDate(item.end_date)}}
                           </h5>
+                          <div class="card" v-if="item.status === 1">
+                            <div class="card-body">
+                              <h5 >
+                                Логин: {{item.application_answer.login}}
+                              </h5>
+                              <h5 >
+                                Пароль: {{item.application_answer.password}}
+                              </h5>
+                            </div>
+                          </div>
                         </div>
                         <div v-if="item.status === 0">
                           <button class="btn btn-primary" @click="deleteApplicationFT(item.id)">Удалить</button>

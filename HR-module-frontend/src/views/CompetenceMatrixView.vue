@@ -57,7 +57,7 @@ export default {
       departments: {},
       isModalVisible: false,
       userHR: false,
-      userMain: true,
+      userMain: false,
       "users": {},
       "skillsAssessment": {},
       "competences": {},

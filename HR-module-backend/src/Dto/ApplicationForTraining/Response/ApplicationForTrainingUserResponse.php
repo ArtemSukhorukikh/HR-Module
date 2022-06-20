@@ -2,6 +2,7 @@
 
 namespace App\Dto\ApplicationForTraining\Response;
 
+use App\Dto\ApplicationForTraining\ApplicationForTrainingAnswer;
 use App\Dto\ApplicationForTraining\ApplicationForTrainingDTO;
 use App\Dto\ApplicationForTraining\ApplicationForTrainingListDTO;
 use App\Dto\Transformer\Response\AbstractResponceDTOTransformer;
@@ -44,6 +45,13 @@ class ApplicationForTrainingUserResponse extends AbstractResponceDTOTransformer
             $dto_->method_of_passage = $app->getMathodOfPassage();
             $dto_->note = $app->getNote();
             $dto_->status = $app->getStatus();
+            if ($app->getResponseToRequest()){
+                $dtoAnswer = new ApplicationForTrainingAnswer();
+                $dtoAnswer->id = $app->getResponseToRequest()->getId();
+                $dtoAnswer->login = $app->getResponseToRequest()->getLogin();
+                $dtoAnswer->password = $app->getResponseToRequest()->getPassword();
+                $dto_->application_answer = $dtoAnswer;
+            }
             array_push($dto->applicationForTrainingDTO, $dto_);
         }
         return $dto;

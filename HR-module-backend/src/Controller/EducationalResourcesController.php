@@ -69,7 +69,7 @@ class EducationalResourcesController extends AbstractController
         $data = $educationalResourcesRepository->findAll();
         $objects = [];
         foreach($data as $object){
-            if ($object->getType() != 3 && $object->getType() != 0){
+            if ($object->getType() == 4 || $object->getType() == 5){
                 $objects[] = $object;
             }
         }
