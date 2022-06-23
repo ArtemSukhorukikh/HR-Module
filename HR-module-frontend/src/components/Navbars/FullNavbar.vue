@@ -8,7 +8,7 @@
         <li class="nav-item"><router-link class="nav-link"  to="/officemap/floor3">Карта офиса этаж 3</router-link></li>
         <li v-if="!userMain" class="nav-item "><router-link class="nav-link"  to="/UserAFT">Список заявок</router-link></li>
         <li v-if="!userMain" class="nav-item "><router-link class="nav-link"  to="/CreateAFT">Создание заявок</router-link></li>
-        <li v-if="!userMain" class="nav-item "><router-link class="nav-link"  to="/compMap">Карта компетенций</router-link></li>
+        <li v-if="!userMain" class="nav-item "><router-link class="nav-link"  to="/compMap">Карта грейдов</router-link></li>
         <li v-if="userHR" class="nav-item "><router-link class="nav-link"  to="/users-all">Информация о пользователях</router-link></li>
         <li v-if="userHR || userMain" class="nav-item "><router-link class="nav-link"  to="/compMatr">Матрица компетенций</router-link></li>
         <li v-if="userHR || userMain" class="nav-item "><router-link class="nav-link"  to="/DevPlan">План прохождения обучения</router-link></li>

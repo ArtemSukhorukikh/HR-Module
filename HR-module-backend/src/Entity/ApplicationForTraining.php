@@ -54,6 +54,11 @@ class ApplicationForTraining
      */
     private $included;
 
+    /**
+     * @ORM\OneToOne(targetEntity=ResponseToRequest::class, mappedBy="application", cascade={"persist", "remove"})
+     */
+    private $responseToRequest;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -139,6 +144,23 @@ class ApplicationForTraining
     public function setIncluded(?EducationalResources $included): self
     {
         $this->included = $included;
+
+        return $this;
+    }
+
+    public function getResponseToRequest(): ?ResponseToRequest
+    {
+        return $this->responseToRequest;
+    }
+
+    public function setResponseToRequest(ResponseToRequest $responseToRequest): self
+    {
+        // set the owning side of the relation if necessary
+        if ($responseToRequest->getApplication() !== $this) {
+            $responseToRequest->setApplication($this);
+        }
+
+        $this->responseToRequest = $responseToRequest;
 
         return $this;
     }

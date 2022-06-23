@@ -50,6 +50,8 @@
           <div class="text-black mb-3 " v-if="educationResources.type === 1">Тип ресурса: Онлайн курс</div>
           <div class="text-black mb-3 " v-if="educationResources.type === 2">Тип ресурса: Онлайн тренинг</div>
           <div class="text-black mb-3 " v-if="educationResources.type === 3">Тип ресурса: Личный ресурс</div>
+          <div class="text-black mb-3 " v-if="educationResources.type === 4">Тип ресурса: Онлайн курс компании</div>
+          <div class="text-black mb-3 " v-if="educationResources.type === 5">Тип ресурса: Онлайн тренинг компании</div>
           <div v-if="!userFeedback">
             <button @click="openModal()" class="btn btn-outline-primary my-2 " >Оставить отзыв</button>
           </div>

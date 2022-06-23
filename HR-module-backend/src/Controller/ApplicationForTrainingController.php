@@ -16,6 +16,7 @@ use App\Dto\ApplicationForTraining\Response\ApplicationForTrainingUserFalseRespo
 use App\Dto\ApplicationForTraining\Response\ApplicationForTrainingUserResponse;
 use App\Entity\ApplicationForTraining;
 use App\Entity\Department;
+use App\Entity\ResponseToRequest;
 use App\Repository\ApplicationForTrainingRepository;
 use App\Repository\DepartmentRepository;
 use App\Repository\UserRepository;
@@ -114,11 +115,19 @@ class ApplicationForTrainingController extends AbstractController
     #[Route('applicationFT/status', name: 'app_applicationForTraining_status', methods: "POST")]
     public function statusApplicationForTraining(Request $request, ManagerRegistry  $doctrine): Response
     {
-        $data = $this->serializer->deserialize($request->getContent(), ApplicationForTrainingStatusDTO::class, 'json');
+        $data = $this->serializer->deserialize($request->getContent(), ApplicationForTrainingDTO::class, 'json');
         $entityManager = $doctrine->getManager();
         $application = $entityManager->getRepository(ApplicationForTraining::class)->find($data->id);
         if ($application) {
             $application->setStatus($data->status);
+            if ($data->status === 1){
+                $answer = new ResponseToRequest();
+                $answer->setLogin($data->application_answer->login);
+                $answer->setPassword($data->application_answer->password);
+                $answer->setApplication($application);
+                $entityManager->persist($answer);
+                $entityManager->flush();
+            }
             $entityManager->flush();
 
             return $this->json($data, Response::HTTP_CREATED);

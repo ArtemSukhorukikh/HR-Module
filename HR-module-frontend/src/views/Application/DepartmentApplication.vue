@@ -1,5 +1,6 @@
 <template>
   <FullNavbar/>
+  <modal-window-answer-create ref="modal" v-show="isModalVisible" @close="closeModal"></modal-window-answer-create>
   <div class="container bg-light w-75 min-vh-100">
 
     <ul class="nav nav-tabs mx-auto" id="myTab" role="tablist">
@@ -76,9 +77,19 @@
                           <h5 >
                             Конец обучения: {{this.makeDate(item.end_date)}}
                           </h5>
+                          <div class="card" v-if="item.status === 1">
+                            <div class="card-body">
+                              <h5 >
+                                Логин: {{item.application_answer.login}}
+                              </h5>
+                              <h5 >
+                                Пароль: {{item.application_answer.password}}
+                              </h5>
+                            </div>
+                          </div>
                         </div>
                         <div v-if="item.status === 0">
-                          <button class="btn btn-primary" @click="statusApplicationFT(item.id,1)">Принять</button>
+                          <button class="btn btn-primary" @click="openModal(item.id)">Принять</button>
                           <button class="btn btn-primary" @click="statusApplicationFT(item.id, 2)">Отказать</button>
                         </div>
 
@@ -256,11 +267,13 @@
 import FullNavbar from "@/components/Navbars/FullNavbar";
 import axios from "axios";
 import moment from "moment";
+import ModalWindowAnswerCreate from "@/components/modal-windows/modal-window-answer-create";
 export default {
   name: "DepartmentApplication",
-  components: {FullNavbar},
+  components: {ModalWindowAnswerCreate, FullNavbar},
   data() {
     return {
+      isModalVisible: false,
       applicationFT: {},
       applicationPOPT: {},
       applicationPOT: {},
@@ -338,7 +351,16 @@ export default {
             this.applicationPOT = response.data.applicationPurchaseOfTrainingDTO
             console.log(this.applicationPOT)
           });
-    }
+    },
+    openModal(id) {
+      this.isModalVisible = true;
+      this.$refs.modal.id = id
+      console.log(this.$refs.modal.skills)
+    },
+    closeModal() {
+      this.isModalVisible = false;
+      this.checkApplicationFT()
+    },
   }
 }
 </script>

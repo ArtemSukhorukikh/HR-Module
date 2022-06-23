@@ -60,6 +60,8 @@
               <option value="1">Онлайн курс</option>
               <option value="2">Онлайн тренинг</option>
               <option value="3">Личный ресурс</option>
+              <option value="4">Онлайн курс компании</option>
+              <option value="5">Онлайн тренинг компании</option>
             </select>
 
             <button @click="newEdRes" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Создать ресурс</button>
@@ -114,6 +116,8 @@
               <option value="1">Онлайн курс</option>
               <option value="2">Онлайн тренинг</option>
               <option value="3">Личный ресурс</option>
+              <option value="4">Онлайн курс компании</option>
+              <option value="5">Онлайн тренинг компании</option>
             </select>
 
             <button @click="changeEdRes" class="w-100 btn btn-lg btn-primary mt-3" type="submit">Изменить компетенцию</button>
