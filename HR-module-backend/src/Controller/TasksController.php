@@ -4,10 +4,11 @@ namespace App\Controller;
 
 use App\Dto\AnswearDTO;
 use App\Dto\Transformer\Response\TasksResponseDTOTransformer;
-use App\Entity\Projects;
 use App\Entity\Task;
+use App\Entity\TimeEntries;
 use App\Repository\ProjectsRepository;
 use App\Repository\TaskRepository;
+use App\Repository\TimeEntriesRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,7 +24,7 @@ class TasksController extends AbstractController
     public TasksResponseDTOTransformer $tasksResponseDTOTransformer;
     public function __construct(TasksResponseDTOTransformer $tasksResponseDTOTransformer)
     {
-        $this->client = new NativeCurlClient(getenv('REDMINE_ADRESS'), getenv('REDMINE_TOKEN'));
+        $this->client = new NativeCurlClient($_ENV['REDMINE_ADRESS'], $_ENV['REDMINE_TOKEN']);
         $this->tasksResponseDTOTransformer = $tasksResponseDTOTransformer;
 
     }
@@ -32,6 +33,7 @@ class TasksController extends AbstractController
     public function syncTasks(ProjectsRepository $projectsRepository,
                           UserRepository $userRepository,
                           EntityManagerInterface $entityManager,
+                          TimeEntriesRepository $timeEntriesRepository,
                           TaskRepository $taskRepository): Response
     {
         $tasks = $this->client->getApi('issue')->all();
@@ -77,6 +79,21 @@ class TasksController extends AbstractController
             }
             $taskHR->setProjectTask($projectsRepository->find($task['project']['id']));
             $entityManager->persist($taskHR);
+            $entityManager->flush();
+        }
+        $timeEntities = $this->client->getApi('time_entry')->all();
+        foreach ($timeEntities['time_entries'] as $timeEntity) {
+
+            if (!$timeEntriesRepository->find($timeEntity['id'])) {
+                $timeEntityHr = new TimeEntries();
+                $timeEntityHr->setId($timeEntity['id']);
+            }
+            else {
+                $timeEntityHr = $timeEntriesRepository->find($timeEntity['id']);
+            }
+            $timeEntityHr->setHours($timeEntity['hours']);
+            $timeEntityHr->setTaskAdded($taskRepository->find($timeEntity['issue']['id']));
+            $entityManager->persist($timeEntityHr);
             $entityManager->flush();
         }
         $answer = new AnswearDTO();
