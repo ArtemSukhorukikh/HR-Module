@@ -25,7 +25,7 @@
                     <div class="row justify-content-center">
                       <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-                        <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Заявление на прохождение обучения</p>
+                        <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Заявка на прохождение обучения</p>
 
                         <form class="mx-1 mx-md-4">
 
@@ -86,7 +86,7 @@
                     <div class="row justify-content-center">
                       <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-                        <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Заявление на покупку личного обучения</p>
+                        <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Заявка на покупку личного обучения</p>
 
                         <form class="mx-1 mx-md-4">
 
@@ -130,7 +130,7 @@
                     <div class="row justify-content-center">
                       <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-                        <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Заявление на покупку обучения</p>
+                        <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Заявка на покупку обучения</p>
 
                         <form class="mx-1 mx-md-4">
 

@@ -17,7 +17,7 @@
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade show active" id="FT" role="tabpanel" aria-labelledby="home-tab">
 
-        <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Заявление на прохождение обучения</p>
+        <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Заявка на прохождение обучения</p>
 
         <div class="container mt-2" style="max-width: 200px">
           <div class="form-check">
@@ -44,7 +44,7 @@
           <div class="container mt-2">
             <div class="row d-flex justify-content-center align-items-center h-100">
               <div class="col-lg-12 col-xl-11" v-for="item in applicationFT" v-bind:key="item">
-                <div class="card text-black" style="border-radius: 25px;" v-if="item.status === status">
+                <div class="card text-black m-2" style="border-radius: 25px;" v-if="item.status === status">
                   <div class="card-body p-md-5" >
                     <div class="row justify-content-center">
                       <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
@@ -106,7 +106,7 @@
 
 
       <div class="tab-pane fade" id="POPT" role="tabpanel" aria-labelledby="profile-tab">
-        <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Заявление на покупку личного обучения</p>
+        <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Заявка на покупку личного обучения</p>
 
         <div class="container mt-2" style="max-width: 200px">
           <div class="form-check">
@@ -141,7 +141,7 @@
             <div class="row d-flex justify-content-center align-items-center h-100">
               <div class="col-lg-12 col-xl-11">
                 <div v-for="item in applicationPOPT" v-bind:key="item">
-                  <div class="card text-black" style="border-radius: 25px;" v-if="item.status === status" >
+                  <div class="card text-black m-2" style="border-radius: 25px;" v-if="item.status === status" >
                     <div class="card-body p-md-5" >
                       <div class="row justify-content-center">
                         <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
@@ -182,7 +182,7 @@
       </div>
       <div class="tab-pane fade" id="POT" role="tabpanel" aria-labelledby="contact-tab">
 
-        <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Заявления на покупку обучения</p>
+        <p class="text-center h1 fw-bold mb-1 mx-1 mx-md-4 mt-4">Заявка на покупку обучения</p>
 
         <div class="container mt-2" style="max-width: 200px">
           <div class="form-check">
@@ -216,7 +216,7 @@
           <div class="container mt-2">
             <div class="row d-flex justify-content-center align-items-center h-100">
               <div class="col-lg-12 col-xl-11" v-for="item in applicationPOT" v-bind:key="item">
-                <div class="card text-black" style="border-radius: 25px;" v-if="item.status === status">
+                <div class="card text-black m-2" style="border-radius: 25px;" v-if="item.status === status">
                   <div class="card-body p-md-5" >
                     <div class="row justify-content-center">
                       <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">

@@ -80,16 +80,21 @@ class DepartmentController extends AbstractController
     {
         $data = $this->serializer->deserialize($request->getContent(), DepartmentDTO::class, 'json');
         $department = $this->departmentRequest->transformToObject($data);
-        if ($data->main_competence_name){
-            $competence = new Competence();
-            $competence->setName($data->main_competence_name);
-            $competence->setType(1);
-            $competence->setNeedRating(0);
-            $competence->setDescription("Старовая компетенция отдела ".$department->getName());
-            $entityManager->persist($competence);
-            $entityManager->flush();
-            $department->setMainCompetence($competence);
+
+        $competence = new Competence();
+        $competence->setName($data->main_competence_name);
+        $competence->setType(1);
+        $competence->setNeedRating(0);
+        if (!$data->main_competence_name){
+            $competence->setName($department->getName()." стартовый грейд");
+            $competence->setType(0);
         }
+        $competence->setDescription("Старовый грейд отдела ".$department->getName());
+        $entityManager->persist($competence);
+        $entityManager->flush();
+        $department->setMainCompetence($competence);
+
+
         if ($data->obeys_id != null){
             $department->setObeys($departmentRepository->find($data->obeys_id));
         }
@@ -106,15 +111,20 @@ class DepartmentController extends AbstractController
 
         $data = $this->serializer->deserialize($request->getContent(), DepartmentDTO::class, 'json');
 
-        if ($data->main_competence_name && !$department->getMainCompetence()){
-            $competence = new Competence();
-            $competence->setName($data->main_competence_name);
+        if ($data->main_competence_name){
+            $competence = $entityManager->getRepository(Competence::class)->find($department->getMainCompetence()->getId());
+            //$competence = $department->getMainCompetence();
             $competence->setType(1);
-            $competence->setNeedRating(0);
-            $competence->setDescription($data->main_competence_name);
-            $entityManager->persist($competence);
+            $competence->setName($data->main_competence_name);
+
+//            $competence = new Competence();
+//            $competence->setName($data->main_competence_name);
+//            $competence->setType(1);
+//            $competence->setNeedRating(0);
+//            $competence->setDescription($data->main_competence_name);
+            //$entityManager->persist($competence);
             $entityManager->flush();
-            $department->setMainCompetence($competence);
+            //$department->setMainCompetence($competence);
         }
         if ($data->obeys_id){
             $department->setObeys($departmentRepository->find($data->obeys_id));
