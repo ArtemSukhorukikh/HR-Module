@@ -47,6 +47,11 @@ class TasksResponseDTOTransformer extends AbstractResponceDTOTransformer
         if ($task->getTaskEvaluation()) {
             $dto->evaluation = $this->evaluationResponseDTOTransformer->transformFromObject($task->getTaskEvaluation());
         }
+        $taskTimeEntites = $task->getTimeEntries();
+        $dto->timeEntity = 0.0;
+        foreach ($taskTimeEntites as $timeEntity) {
+            $dto->timeEntity += $timeEntity->getHours();
+        }
         return $dto;
     }
 }

@@ -70,10 +70,17 @@ class Task
      */
     private $update_on;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TimeEntries::class, mappedBy="taskAdded")
+     */
+    private $timeEntries;
+
+
     public function __construct()
     {
         $this->userToDo = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->timeEntries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -256,4 +263,35 @@ class Task
         }
         return $woweekends * 8;
     }
+
+    /**
+     * @return Collection<int, TimeEntries>
+     */
+    public function getTimeEntries(): Collection
+    {
+        return $this->timeEntries;
+    }
+
+    public function addTimeEntry(TimeEntries $timeEntry): self
+    {
+        if (!$this->timeEntries->contains($timeEntry)) {
+            $this->timeEntries[] = $timeEntry;
+            $timeEntry->setTaskAdded($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimeEntry(TimeEntries $timeEntry): self
+    {
+        if ($this->timeEntries->removeElement($timeEntry)) {
+            // set the owning side to null (unless already changed)
+            if ($timeEntry->getTaskAdded() === $this) {
+                $timeEntry->setTaskAdded(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

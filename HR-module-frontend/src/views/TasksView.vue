@@ -27,7 +27,7 @@
             </ul>
             <ul class="list-group">
               <li class="list-group-item">Трудозатраты:{{ task.estimated_hours }}</li>
-              <li v-if="task.updated_on" class="list-group-item">Итоговые трудозатраты: {{ task.taskHours }}</li>
+              <li v-if="task.updated_on" class="list-group-item">Итоговые трудозатраты: {{ task.timeEntity }}</li>
             </ul>
             <div v-if="!task.evaluation && checkPM && task.closed_on">
               <div class="accordion" id="accordionExample">
@@ -121,6 +121,7 @@ export default {
           updated_on: "",
           estimated_hours: 0,
           taskHours: 0,
+          timeEntity:0,
           evaluation: {
             description:"",
             value:"",
@@ -184,11 +185,11 @@ export default {
       if (this.onlyBad === true) {
         this.tasks.forEach(el =>{
           if (this.onlyNew === true) {
-            if (el.estimated_hours < el.taskHours && el.status === "Новая") {
+            if (el.estimated_hours < el.timeEntity && el.status === "Новая") {
               arr.push(el)
             }
           } else {
-            if (el.estimated_hours < el.taskHours) {
+            if (el.estimated_hours < el.timeEntity) {
               arr.push(el)
             }
           }

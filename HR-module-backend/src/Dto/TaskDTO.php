@@ -33,6 +33,9 @@ class TaskDTO
     #[Serializer\Type("float")]
     public float $taskHours;
 
+    #[Serializer\Type("float")]
+    public float $timeEntity;
+
     #[Serializer\Type("string")]
     public array $users;
 
