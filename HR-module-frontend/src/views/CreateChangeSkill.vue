@@ -29,7 +29,7 @@
             </div>
 
             <div class="form-floating  mt-3">
-              <input v-model="skill.description" type="text" class="form-control" id="description" placeholder="Описание">
+              <textarea v-model="skill.description" type="text" class="form-control" id="description" placeholder="Описание"></textarea>
               <label for="description">Описание</label>
             </div>
 
@@ -59,7 +59,7 @@
             </div>
 
             <div class="form-floating  mt-3">
-              <input v-model="skill.description" type="text" class="form-control" id="description" placeholder="Описание">
+              <textarea v-model="skill.description" type="text" class="form-control" id="description" placeholder="Описание"></textarea>
               <label for="description">Описание</label>
             </div>
 
