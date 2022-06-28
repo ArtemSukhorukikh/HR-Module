@@ -78,10 +78,10 @@ export default {
           type: "All",
 
         }
-        axios.post("http://localhost:84/api/v1/notification/new", data).then(responce => {
+        axios.post("http://194.67.93.27:84/api/v1/notification/new", data).then(responce => {
           console.log(responce)
           setTimeout(function (){console.log(responce)},2000)
-          axios.get("http://localhost:84/api/v1/notification/all").then(responce => {
+          axios.get("http://194.67.93.27:84/api/v1/notification/all").then(responce => {
             this.notifications = responce.data
           })
         })
@@ -93,10 +93,10 @@ export default {
           type: "Department",
           department: this.toSend,
         }
-        axios.post("http://localhost:84/api/v1/notification/new", data).then(responce => {
+        axios.post("http://194.67.93.27:84/api/v1/notification/new", data).then(responce => {
           console.log(responce)
           setTimeout(function (){console.log(responce)},2000)
-          axios.get("http://localhost:84/api/v1/notification/all").then(responce => {
+          axios.get("http://194.67.93.27:84/api/v1/notification/all").then(responce => {
             this.notifications = responce.data
           })
         })
@@ -108,10 +108,10 @@ export default {
           type: "User",
           username: this.toSend,
         }
-        axios.post("http://localhost:84/api/v1/notification/new", data).then(responce => {
+        axios.post("http://194.67.93.27:84/api/v1/notification/new", data).then(responce => {
 
           setTimeout(function (){console.log(responce)},2000)
-          axios.get("http://localhost:84/api/v1/notification/all").then(responce => {
+          axios.get("http://194.67.93.27:84/api/v1/notification/all").then(responce => {
             this.notifications = responce.data
           })
         })
@@ -120,15 +120,15 @@ export default {
 
     },
     del (id){
-      axios.post(`http://localhost:84/api/v1/notification/delete/${id}`,{})
-      axios.get("http://localhost:84/api/v1/notification/all").then(responce => {
+      axios.post(`http://194.67.93.27:84/api/v1/notification/delete/${id}`,{})
+      axios.get("http://194.67.93.27:84/api/v1/notification/all").then(responce => {
         this.notifications = responce.data
       })
     }
   },
   components: {FullNavbar},
   beforeCreate() {
-    axios.get("http://localhost:84/api/v1/notification/all").then(responce => {
+    axios.get("http://194.67.93.27:84/api/v1/notification/all").then(responce => {
       this.notifications = responce.data
     })
   }

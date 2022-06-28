@@ -52,13 +52,13 @@ export default {
   beforeCreate() {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
-        .get("http://localhost:84/api/v1/developmentPlan/" + localStorage.getItem('id'))
+        .get("http://194.67.93.27:84/api/v1/developmentPlan/" + localStorage.getItem('id'))
         .then(response => {
           this.developmentPlan = response.data.dev_plan
           console.log(response.data)
         });
     axios
-        .get("http://localhost:84/api/v1/department/findAll")
+        .get("http://194.67.93.27:84/api/v1/department/findAll")
         .then(response => {
           this.departments = response.data
           console.log(this.departments)
@@ -85,7 +85,7 @@ export default {
   methods: {
     checkPlan() {
       axios
-          .get("http://localhost:84/api/v1/developmentPlan/department/" + this.department_id)
+          .get("http://194.67.93.27:84/api/v1/developmentPlan/department/" + this.department_id)
           .then(response => {
             this.developmentPlan = response.data.dev_plan
             console.log(response)

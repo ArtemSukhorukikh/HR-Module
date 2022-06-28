@@ -284,7 +284,7 @@ export default {
   methods:{
     deleteApplicationFT(id) {
       axios
-          .post("http://localhost:84/api/v1/applicationFT/delete/" + id)
+          .post("http://194.67.93.27:84/api/v1/applicationFT/delete/" + id)
           .then(response => {
             console.log(response.data)
             this.checkApplicationFT()
@@ -292,7 +292,7 @@ export default {
     },
     deleteApplicationPOPT(id) {
       axios
-          .post("http://localhost:84/api/v1/applicationPOPT/remove/" + id)
+          .post("http://194.67.93.27:84/api/v1/applicationPOPT/remove/" + id)
           .then(response => {
             console.log(response.data)
             this.checkApplicationPOPT()
@@ -300,7 +300,7 @@ export default {
     },
     deleteApplicationPOT(id) {
       axios
-          .post("http://localhost:84/api/v1/applicationPOT/remove/" + id)
+          .post("http://194.67.93.27:84/api/v1/applicationPOT/remove/" + id)
           .then(response => {
             console.log(response.data)
             this.checkApplicationPOT()
@@ -315,7 +315,7 @@ export default {
     },
     checkApplicationFT() {
       axios
-          .get("http://localhost:84/api/v1/applicationFT/user/" + localStorage.getItem('id'))
+          .get("http://194.67.93.27:84/api/v1/applicationFT/user/" + localStorage.getItem('id'))
           .then(response => {
             this.applicationFT = response.data.applicationForTrainingDTO
             console.log(this.applicationFT)
@@ -323,7 +323,7 @@ export default {
     },
     checkApplicationPOPT() {
       axios
-          .get("http://localhost:84/api/v1/applicationPOPT/user/" + localStorage.getItem('id'))
+          .get("http://194.67.93.27:84/api/v1/applicationPOPT/user/" + localStorage.getItem('id'))
           .then(response => {
             this.applicationPOPT = response.data.applicationPurchaseOfPersonalTrainingDTO
             console.log(this.applicationPOPT)
@@ -331,7 +331,7 @@ export default {
     },
     checkApplicationPOT() {
       axios
-          .get("http://localhost:84/api/v1/applicationPOT/user/" + localStorage.getItem('id'))
+          .get("http://194.67.93.27:84/api/v1/applicationPOT/user/" + localStorage.getItem('id'))
           .then(response => {
             this.applicationPOT = response.data.applicationPurchaseOfTrainingDTO
             console.log(this.applicationPOT)

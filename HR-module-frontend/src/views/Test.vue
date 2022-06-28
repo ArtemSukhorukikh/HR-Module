@@ -54,13 +54,13 @@ export default {
   beforeCreate() {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
-        .get("http://localhost:84/api/v1/department")
+        .get("http://194.67.93.27:84/api/v1/department")
         .then(response => {
           this.vehicules = response.data
           console.log(this.vehicules)
         });
     axios
-        .get("http://localhost:84/api/v1/department/findAll")
+        .get("http://194.67.93.27:84/api/v1/department/findAll")
         .then(response => {
           this.departments = response.data
           console.log(this.vehicules)
@@ -88,13 +88,13 @@ export default {
       this.isModalCreateVisible = false;
       this.isModalUpdateTargVisible = false;
       axios
-          .get("http://localhost:84/api/v1/department")
+          .get("http://194.67.93.27:84/api/v1/department")
           .then(response => {
             this.vehicules = response.data
             console.log(this.vehicules)
           });
       axios
-          .get("http://localhost:84/api/v1/department/findAll")
+          .get("http://194.67.93.27:84/api/v1/department/findAll")
           .then(response => {
             this.departments = response.data
             console.log(this.vehicules)
@@ -102,16 +102,16 @@ export default {
     },
     deleteDep(id){
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-      axios.post(`http://localhost:84/api/v1/department/delete/` + id).then(responce => {
+      axios.post(`http://194.67.93.27:84/api/v1/department/delete/` + id).then(responce => {
         console.log(responce)
         axios
-            .get("http://localhost:84/api/v1/department")
+            .get("http://194.67.93.27:84/api/v1/department")
             .then(response => {
               this.vehicules = response.data
               console.log(this.vehicules)
             });
         axios
-            .get("http://localhost:84/api/v1/department/findAll")
+            .get("http://194.67.93.27:84/api/v1/department/findAll")
             .then(response => {
               this.departments = response.data
               console.log(this.vehicules)
@@ -120,13 +120,13 @@ export default {
         console.log(errors)
       })
       axios
-          .get("http://localhost:84/api/v1/department")
+          .get("http://194.67.93.27:84/api/v1/department")
           .then(response => {
             this.vehicules = response.data
             console.log(this.vehicules)
           });
       axios
-          .get("http://localhost:84/api/v1/department/findAll")
+          .get("http://194.67.93.27:84/api/v1/department/findAll")
           .then(response => {
             this.departments = response.data
             console.log(this.vehicules)

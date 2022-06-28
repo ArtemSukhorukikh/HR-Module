@@ -247,7 +247,7 @@ export default {
     console.log(localStorage.getItem('userId'))
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
-        .get("http://localhost:84/api/v1/competence/list/" + localStorage.getItem('id'))
+        .get("http://194.67.93.27:84/api/v1/competence/list/" + localStorage.getItem('id'))
         .then(response => {
           this.competences = response.data.competence_dto_s
           console.log(this.competences)
@@ -268,7 +268,7 @@ export default {
     },
     findAllResource() {
       axios
-          .get("http://localhost:84/api/v1/educationalResources/findAll")
+          .get("http://194.67.93.27:84/api/v1/educationalResources/findAll")
           .then(response => {
             this.educationResources = response.data.educationResourcesCompetence
             console.log(this.educationResources)
@@ -276,7 +276,7 @@ export default {
     },
     findResource() {
       axios
-          .get("http://localhost:84/api/v1/educationalResources/findCompetence/" + this.competence.id)
+          .get("http://194.67.93.27:84/api/v1/educationalResources/findCompetence/" + this.competence.id)
           .then(response => {
             this.educationResources = response.data.educationResourcesCompetence
             console.log(this.competences)
@@ -284,7 +284,7 @@ export default {
     },
     findRes() {
       axios
-          .get("http://localhost:84/api/v1/educationalResources/" + this.idRes)
+          .get("http://194.67.93.27:84/api/v1/educationalResources/" + this.idRes)
           .then(response => {
             this.educationRes = response.data
             console.log(this.educationRes)
@@ -292,7 +292,7 @@ export default {
     },
     newEdRes(){
       axios
-          .post('http://localhost:84/api/v1/educationalResources/new/' + this.competence.id,{
+          .post('http://194.67.93.27:84/api/v1/educationalResources/new/' + this.competence.id,{
             name: this.educationRes.name,
             description: this.educationRes.description,
             link: this.educationRes.link,
@@ -306,7 +306,7 @@ export default {
     changeEdRes(){
       console.log(this.educationRes.type)
       axios
-          .post('http://localhost:84/api/v1/educationalResources/change/' + this.educationRes.id,{
+          .post('http://194.67.93.27:84/api/v1/educationalResources/change/' + this.educationRes.id,{
             name: this.educationRes.name,
             description: this.educationRes.description,
             link: this.educationRes.link,
@@ -320,7 +320,7 @@ export default {
     },
     deleteEdRes(){
       axios
-          .post('http://localhost:84/api/v1/educationalResources/delete/' + this.idRes)
+          .post('http://194.67.93.27:84/api/v1/educationalResources/delete/' + this.idRes)
           .then(response => {
             console.log(response.data)
             this.findRes()
@@ -328,7 +328,7 @@ export default {
     },
     compAddEdRes(){
       axios
-          .post('http://localhost:84/api/v1/educationalResources/add/' + this.competence.id  + "/" + this.idRes)
+          .post('http://194.67.93.27:84/api/v1/educationalResources/add/' + this.competence.id  + "/" + this.idRes)
           .then(response => {
             console.log(response.data)
             this.findRes()
@@ -336,7 +336,7 @@ export default {
     },
     compDeleteEdRes(){
       axios
-          .post('http://localhost:84/api/v1/educationalResources/delete/' + this.competence.id  + "/" + this.idRes)
+          .post('http://194.67.93.27:84/api/v1/educationalResources/delete/' + this.competence.id  + "/" + this.idRes)
           .then(response => {
             console.log(response.data)
             this.findRes()

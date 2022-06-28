@@ -69,7 +69,7 @@ export default {
   beforeCreate() {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
-        .get("http://localhost:84/api/v1/competenceMatrix/" + localStorage.getItem('id'))
+        .get("http://194.67.93.27:84/api/v1/competenceMatrix/" + localStorage.getItem('id'))
         .then(response => {
           this.users = response.data.users
           this.skillsAssessment = response.data.skill_assessment
@@ -78,19 +78,19 @@ export default {
           console.log(this.skillsAssessment)
         });
     axios
-        .get("http://localhost:84/api/v1/skills/department/" + localStorage.getItem('id'))
+        .get("http://194.67.93.27:84/api/v1/skills/department/" + localStorage.getItem('id'))
         .then(response => {
           this.skills = response.data.skills
           console.log(this.skills)
         });
     axios
-        .get("http://localhost:84/api/v1/department/users/" + localStorage.getItem('id'))
+        .get("http://194.67.93.27:84/api/v1/department/users/" + localStorage.getItem('id'))
         .then(response => {
           this.users0 = response.data.users
           console.log(this.users)
         });
     axios
-        .get("http://localhost:84/api/v1/department/findAll")
+        .get("http://194.67.93.27:84/api/v1/department/findAll")
         .then(response => {
           this.departments = response.data
           console.log(this.departments)
@@ -111,7 +111,7 @@ export default {
   methods: {
     checkMatr() {
       axios
-          .get("http://localhost:84/api/v1/competenceMatrix/department/" + this.department_id)
+          .get("http://194.67.93.27:84/api/v1/competenceMatrix/department/" + this.department_id)
           .then(response => {
             this.users = response.data.users
             this.skillsAssessment = response.data.skill_assessment
@@ -130,7 +130,7 @@ export default {
     closeModal() {
       this.isModalVisible = false;
       axios
-          .get("http://localhost:84/api/v1/competenceMatrix/" + localStorage.getItem('id'))
+          .get("http://194.67.93.27:84/api/v1/competenceMatrix/" + localStorage.getItem('id'))
           .then(response => {
             this.users = response.data.users
             this.skillsAssessment = response.data.skill_assessment

@@ -54,7 +54,7 @@ export default {
   methods: {
     createDep(){
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-      axios.post(`http://localhost:84/api/v1/department/new`,{
+      axios.post(`http://194.67.93.27:84/api/v1/department/new`,{
         name: this.dep_name,
         main_competence_name: this.comp_name,
         obeys_id: this.obeys_id

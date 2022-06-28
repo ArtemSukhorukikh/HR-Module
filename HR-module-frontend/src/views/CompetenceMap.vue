@@ -68,7 +68,7 @@ export default {
     console.log(localStorage.getItem('id'))
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
         axios
-            .get("http://localhost:84/api/v1/competence/department/" + localStorage.getItem('id'))
+            .get("http://194.67.93.27:84/api/v1/competence/department/" + localStorage.getItem('id'))
             .then(response => {
               this.competences = response.data.competence_dto_s
               this.rating = response.data.rating
@@ -93,7 +93,7 @@ export default {
       this.descriptions.description = item.description
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
       axios
-          .get("http://localhost:84/api/v1/educationalResources/findCompetence/" + item.id)
+          .get("http://194.67.93.27:84/api/v1/educationalResources/findCompetence/" + item.id)
           .then(response => {
             this.descriptions.educationResources = response.data.educationResourcesCompetence
             console.log(this.descriptions)

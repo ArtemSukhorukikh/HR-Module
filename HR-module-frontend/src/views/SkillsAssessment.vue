@@ -81,13 +81,13 @@ export default {
   beforeCreate() {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
-        .get("http://localhost:84/api/v1/skills/department/" + localStorage.getItem('userId'))
+        .get("http://194.67.93.27:84/api/v1/skills/department/" + localStorage.getItem('userId'))
         .then(response => {
           this.skills = response.data.skills
           console.log(this.skills)
         });
     axios
-        .get("http://localhost:84/api/v1/department/users/" + localStorage.getItem('userId'))
+        .get("http://194.67.93.27:84/api/v1/department/users/" + localStorage.getItem('userId'))
         .then(response => {
           this.users = response.data.users
           console.log(this.users)
@@ -99,7 +99,7 @@ export default {
       console.log(this.skill)
       console.log(this.estimation)
       axios
-          .post('http://localhost:84/api/v1/skillAssessment/new',{
+          .post('http://194.67.93.27:84/api/v1/skillAssessment/new',{
             user_id: this.user,
             skills_id: this.skill,
             estimation: this.estimation})

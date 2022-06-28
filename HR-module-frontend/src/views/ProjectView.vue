@@ -125,7 +125,7 @@ export default {
   },
   components: {FullNavbar},
   beforeCreate() {
-    axios.get(`http://localhost:84/api/v1/project/${this.$route.params.id}`).then(responce => {
+    axios.get(`http://194.67.93.27:84/api/v1/project/${this.$route.params.id}`).then(responce => {
       console.log(responce)
       this.name = responce.data.name
       this.team = responce.data.team

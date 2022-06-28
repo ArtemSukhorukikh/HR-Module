@@ -57,7 +57,7 @@ export default {
   },
   components: {FullNavbar},
   beforeCreate() {
-    axios.get("http://localhost:84/api/v1/users/all").then(responce => {
+    axios.get("http://194.67.93.27:84/api/v1/users/all").then(responce => {
       console.log(responce)
 
       this.users = responce.data.users

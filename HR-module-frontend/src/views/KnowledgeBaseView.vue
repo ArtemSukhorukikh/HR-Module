@@ -120,7 +120,7 @@ export default {
   beforeCreate() {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
-        .get("http://localhost:84/api/v1/educationalResources/all",)
+        .get("http://194.67.93.27:84/api/v1/educationalResources/all",)
         .then(response => {
           this.educationResourcesAll = response.data.educationResourcesAll
           console.log(this.educationResourcesAll)
@@ -151,7 +151,7 @@ export default {
     },
     deleteFeedback(){
       axios
-          .post("http://localhost:84/api/v1/feedback/delete/" + this.userFeedback.id)
+          .post("http://194.67.93.27:84/api/v1/feedback/delete/" + this.userFeedback.id)
           .then(response => {
             console.log(response.data)
             this.checkFeedback(this.educationResources.id)
@@ -162,20 +162,20 @@ export default {
     },
     checkFeedback(id_) {
       axios
-          .get("http://localhost:84/api/v1/feedback/resource/" + id_)
+          .get("http://194.67.93.27:84/api/v1/feedback/resource/" + id_)
           .then(response => {
             this.feedbacks = response.data.feedbackDTO
             console.log(this.feedbacks)
           });
       axios
-          .get("http://localhost:84/api/v1/educationalResources/" + id_)
+          .get("http://194.67.93.27:84/api/v1/educationalResources/" + id_)
           .then(response => {
             this.educationResources = response.data
             console.log(this.educationResources)
           });
       console.log(id_, localStorage.getItem('id'))
       axios
-          .get("http://localhost:84/api/v1/feedback/user/" + id_ + "/" + localStorage.getItem('id'))
+          .get("http://194.67.93.27:84/api/v1/feedback/user/" + id_ + "/" + localStorage.getItem('id'))
           .then(response => {
             this.userFeedback = response.data
             console.log(this.userFeedback)
@@ -189,7 +189,7 @@ export default {
       this.feedbackDTO.educationalResourcesId = this.educationResources.id
       console.log(this.feedbackDTO)
       axios
-          .post('http://localhost:84/api/v1/feedback/new',{
+          .post('http://194.67.93.27:84/api/v1/feedback/new',{
             id: "",
             userFIO: "",
             user_id: this.feedbackDTO.userId,

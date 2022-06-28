@@ -61,7 +61,7 @@ export default {
   methods: {
     change(){
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-      axios.get(`http://localhost:84/api/v1/department/` + this.id,{
+      axios.get(`http://194.67.93.27:84/api/v1/department/` + this.id,{
       }).then(responce => {
         this.dep_name = responce.data.name
         console.log(responce)
@@ -69,7 +69,7 @@ export default {
     },
     createDep(){
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-      axios.post(`http://localhost:84/api/v1/department/update/` + this.id,{
+      axios.post(`http://194.67.93.27:84/api/v1/department/update/` + this.id,{
         name: this.dep_name,
         main_competence_name: this.comp_name,
         obeys_id: this.obeys_id

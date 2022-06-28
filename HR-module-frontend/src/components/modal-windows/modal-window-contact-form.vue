@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     deleteContactInfo(){
-      axios.post(`http://localhost:84/api/v1/contacts/delete/${this.id}`,{
+      axios.post(`http://194.67.93.27:84/api/v1/contacts/delete/${this.id}`,{
       }).then(responce => {
         console.log(responce)
         this.ok = true
@@ -80,7 +80,7 @@ export default {
       })
     },
     updateContactInfo(){
-        axios.post(`http://localhost:84/api/v1/contacts/${this.method}`,{
+        axios.post(`http://194.67.93.27:84/api/v1/contacts/${this.method}`,{
           id:this.id,
           username: this.username,
           link: this.link,

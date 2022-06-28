@@ -154,7 +154,7 @@ export default {
       console.log(this.v$)
       if(!this.v$.error){
         console.log(this.dateofhiring)
-        axios.post('http://localhost:84/api/v1/register',{
+        axios.post('http://194.67.93.27:84/api/v1/register',{
           username: this.username,
           password: this.password,
           lastname: this.lastname,

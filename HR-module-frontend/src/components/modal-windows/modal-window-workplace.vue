@@ -123,7 +123,7 @@ export default {
 
     },
     setPlace() {
-      axios.post(`http://localhost:84/api/v1/offices/set/workplace/${this.office.workplaces.id}`,{
+      axios.post(`http://194.67.93.27:84/api/v1/offices/set/workplace/${this.office.workplaces.id}`,{
         'username':localStorage.getItem('username')
       }).then(response => {
         console.log(response.data)
@@ -141,7 +141,7 @@ export default {
       })
     },
     unsetPlace() {
-      axios.post(`http://localhost:84/api/v1/offices/unset/workplace/${this.office.workplaces.id}`,{}).then(response => {
+      axios.post(`http://194.67.93.27:84/api/v1/offices/unset/workplace/${this.office.workplaces.id}`,{}).then(response => {
         console.log(response.data)
       }).catch(errors =>{
         if (errors.request.status === 401) {

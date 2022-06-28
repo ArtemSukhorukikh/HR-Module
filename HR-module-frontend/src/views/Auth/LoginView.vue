@@ -40,13 +40,13 @@ export default {
   },
   methods: {
     login() {
-      axios.post('http://localhost:84/api/v1/auth',{username: this.username, password: this.password}).then(responce => {
+      axios.post('http://194.67.93.27:84/api/v1/auth',{username: this.username, password: this.password}).then(responce => {
         localStorage.setItem('token', responce.data.token)
         let date;
         date = new Date()
         localStorage.setItem('date', date.toString())
         axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-        axios.get("http://localhost:84/api/v1/users/current").then( responce => {
+        axios.get("http://194.67.93.27:84/api/v1/users/current").then( responce => {
           this.userData = responce.data
           localStorage.setItem('roles', JSON.stringify(responce.data['roles']))
           localStorage.setItem('username', responce.data.username)

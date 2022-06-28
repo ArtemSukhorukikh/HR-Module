@@ -126,7 +126,7 @@ export default {
   components: {ModalWindowWorkplace, FullNavbar},
   beforeCreate() {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-    axios.get('http://localhost:84/api/v1/offices').then(response => {
+    axios.get('http://194.67.93.27:84/api/v1/offices').then(response => {
       console.log(response.data)
       this.dataOffices = (response.data)
       this.loaded = true
@@ -164,7 +164,7 @@ export default {
     closeModal() {
       this.isModalVisible = false;
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-      axios.get('http://localhost:84/api/v1/offices').then(response => {
+      axios.get('http://194.67.93.27:84/api/v1/offices').then(response => {
         console.log(response.data)
         this.dataOffices = (response.data)
         this.loaded = true
