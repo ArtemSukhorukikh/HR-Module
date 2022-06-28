@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     updateUserInfo(){
-      axios.post(`http://localhost:84/api/v1/users/update/${this.id}`,{
+      axios.post(`http://194.67.93.27:84/api/v1/users/update/${this.id}`,{
         username: this.username,
         lastname: this.lastname,
         firstname: this.firstname,

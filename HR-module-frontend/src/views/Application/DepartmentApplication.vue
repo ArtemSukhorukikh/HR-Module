@@ -289,7 +289,7 @@ export default {
   methods:{
     statusApplicationFT(id, status) {
       axios
-          .post("http://localhost:84/api/v1/applicationFT/status",{
+          .post("http://194.67.93.27:84/api/v1/applicationFT/status",{
             id: id,
             status: status
           })
@@ -300,7 +300,7 @@ export default {
     },
     statusApplicationPOPT(id, status) {
       axios
-          .post("http://localhost:84/api/v1/applicationPOPT/status",{
+          .post("http://194.67.93.27:84/api/v1/applicationPOPT/status",{
             id: id,
             status: status
           })
@@ -312,7 +312,7 @@ export default {
     statusApplicationPOT(id, status) {
       console.log(id)
       axios
-          .post("http://localhost:84/api/v1/applicationPOT/status",{
+          .post("http://194.67.93.27:84/api/v1/applicationPOT/status",{
             id: id,
             status: status
           })
@@ -330,7 +330,7 @@ export default {
     },
     checkApplicationFT() {
       axios
-          .get("http://localhost:84/api/v1/applicationFT/department/" + localStorage.getItem('id'))
+          .get("http://194.67.93.27:84/api/v1/applicationFT/department/" + localStorage.getItem('id'))
           .then(response => {
             this.applicationFT = response.data.applicationForTrainingDTO
             console.log(this.applicationFT)
@@ -338,7 +338,7 @@ export default {
     },
     checkApplicationPOPT() {
       axios
-          .get("http://localhost:84/api/v1/applicationPOPT/department/" + localStorage.getItem('id'))
+          .get("http://194.67.93.27:84/api/v1/applicationPOPT/department/" + localStorage.getItem('id'))
           .then(response => {
             this.applicationPOPT = response.data.applicationPurchaseOfPersonalTrainingDTO
             console.log(this.applicationPOPT)
@@ -346,7 +346,7 @@ export default {
     },
     checkApplicationPOT() {
       axios
-          .get("http://localhost:84/api/v1/applicationPOT/department/" + localStorage.getItem('id'))
+          .get("http://194.67.93.27:84/api/v1/applicationPOT/department/" + localStorage.getItem('id'))
           .then(response => {
             this.applicationPOT = response.data.applicationPurchaseOfTrainingDTO
             console.log(this.applicationPOT)

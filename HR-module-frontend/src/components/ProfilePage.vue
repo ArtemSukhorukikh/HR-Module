@@ -379,22 +379,22 @@ export default {
   },
   methods: {
     updateAchivment(id, name, description, value) {
-      axios.post(`http://localhost:84/api/v1/achievements/update/${id}`,{name:name,description:description,value:value}).then(this.update())
+      axios.post(`http://194.67.93.27:84/api/v1/achievements/update/${id}`,{name:name,description:description,value:value}).then(this.update())
     },
     addAchivment(username){
-      axios.post("http://localhost:84/api/v1/achievements/new",{
+      axios.post("http://194.67.93.27:84/api/v1/achievements/new",{
         name:this.achivment.name,
         description:this.achivment.description,
         value:this.achivment.value
       }).then(response => {
-        axios.post("http://localhost:84/api/v1/achievements/add",{
+        axios.post("http://194.67.93.27:84/api/v1/achievements/add",{
           id:response.data,
           username:username,
         }).then(this.update())
       })
     },
     deleteAchivmebt(id,username) {
-      axios.post("http://localhost:84/api/v1/achievements/unset",{
+      axios.post("http://194.67.93.27:84/api/v1/achievements/unset",{
         id:id,
         username:username
       }).then(this.update())
@@ -435,7 +435,7 @@ export default {
     update() {
       if (this.currentUser === false) {
         axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-        axios.post("http://localhost:84/api/v1/users/search", {"username": this.userName}).then(responce => {
+        axios.post("http://194.67.93.27:84/api/v1/users/search", {"username": this.userName}).then(responce => {
           this.userData = responce.data
           this.noError = true
 
@@ -453,7 +453,7 @@ export default {
       }
       else {
         axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-        axios.get("http://localhost:84/api/v1/users/current").then( responce => {
+        axios.get("http://194.67.93.27:84/api/v1/users/current").then( responce => {
           this.userData = responce.data
           localStorage.setItem('roles', JSON.stringify(responce.data['roles']))
           localStorage.setItem('username', responce.data.username)
@@ -472,7 +472,7 @@ export default {
   beforeCreate() {
     if (this.currentUser === false) {
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-      axios.post("http://localhost:84/api/v1/users/search", {"username": this.$route.params.username}).then(responce => {
+      axios.post("http://194.67.93.27:84/api/v1/users/search", {"username": this.$route.params.username}).then(responce => {
         this.userData = responce.data
         this.noError = true
         console.log(this.userData)
@@ -489,7 +489,7 @@ export default {
     }
     else {
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-      axios.get("http://localhost:84/api/v1/users/current").then( responce => {
+      axios.get("http://194.67.93.27:84/api/v1/users/current").then( responce => {
         this.userData = responce.data
         localStorage.setItem('roles', JSON.stringify(responce.data['roles']))
         localStorage.setItem('username', responce.data.username)

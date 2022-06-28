@@ -50,7 +50,7 @@ export default {
   methods: {
     createAnsw(){
       axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
-      axios.post(`http://localhost:84/api/v1/applicationFT/status`,{
+      axios.post(`http://194.67.93.27:84/api/v1/applicationFT/status`,{
         id: this.id,
         status: 1,
         application_answer: this.answer

@@ -71,7 +71,7 @@ export default {
   beforeCreate() {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
-        .get("http://localhost:84/api/v1/competence/all",)
+        .get("http://194.67.93.27:84/api/v1/competence/all",)
         .then(response => {
           this.competences = response.data.competence_dto_s
           console.log(this.competences)
@@ -80,7 +80,7 @@ export default {
   methods: {
     createEdRes(){
       axios
-          .post('http://localhost:84/api/v1/educationalResources/new',{
+          .post('http://194.67.93.27:84/api/v1/educationalResources/new',{
             id: "",
             id_competence: this.educationalResource.id_competence,
             name: this.educationalResource.name,

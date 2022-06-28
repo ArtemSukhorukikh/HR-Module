@@ -90,7 +90,7 @@ export default {
   methods: {
     check(){
       axios
-          .get('http://localhost:84/api/v1/skills/' + this.skill)
+          .get('http://194.67.93.27:84/api/v1/skills/' + this.skill)
           .then(response => {
             this.skill_node = response.data.description
             console.log(this.skill_node)
@@ -101,7 +101,7 @@ export default {
       console.log(this.skill)
       console.log(this.estimation)
       axios
-          .post('http://localhost:84/api/v1/skillAssessment/new',{
+          .post('http://194.67.93.27:84/api/v1/skillAssessment/new',{
             user_id: this.user,
             skills_id: this.skill,
             estimation: this.estimation})

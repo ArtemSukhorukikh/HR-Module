@@ -130,7 +130,7 @@ export default {
   beforeCreate() {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
-        .get("http://localhost:84/api/v1/competence/list/" + localStorage.getItem('id'))
+        .get("http://194.67.93.27:84/api/v1/competence/list/" + localStorage.getItem('id'))
         .then(response => {
           this.competences = response.data.competence_dto_s
           console.log(this.competences)
@@ -139,7 +139,7 @@ export default {
   methods: {
     checkComps(){
       axios
-          .get("http://localhost:84/api/v1/competence/list/" + localStorage.getItem('id'))
+          .get("http://194.67.93.27:84/api/v1/competence/list/" + localStorage.getItem('id'))
           .then(response => {
             this.competences = response.data.competence_dto_s
             console.log(this.competences)
@@ -147,7 +147,7 @@ export default {
     },
     checkComp(){
       axios
-          .get("http://localhost:84/api/v1/competence/" + this.competence.id)
+          .get("http://194.67.93.27:84/api/v1/competence/" + this.competence.id)
           .then(response => {
             this.competence = response.data
             console.log(this.competences)
@@ -155,7 +155,7 @@ export default {
     },
     createComp(){
       axios
-          .post('http://localhost:84/api/v1/competence/add/' + this.competences[0].id,{
+          .post('http://194.67.93.27:84/api/v1/competence/add/' + this.competences[0].id,{
             name: this.competence.name,
             description: this.competence.description,
             need_rating: this.competence.need_rating,
@@ -168,7 +168,7 @@ export default {
     },
     changeComp(){
       axios
-          .post('http://localhost:84/api/v1/competence/change/' + this.competence.id,{
+          .post('http://194.67.93.27:84/api/v1/competence/change/' + this.competence.id,{
             name: this.competence.name,
             description: this.competence.description,
             need_rating: this.competence.need_rating,
@@ -181,7 +181,7 @@ export default {
     },
     deleteComp(){
       axios
-          .post('http://localhost:84/api/v1/competence/delete/' + this.competence.id)
+          .post('http://194.67.93.27:84/api/v1/competence/delete/' + this.competence.id)
           .then(response => {
             console.log(response.data)
 

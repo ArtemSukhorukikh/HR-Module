@@ -209,7 +209,7 @@ export default {
   beforeCreate() {
     axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token')
     axios
-        .get("http://localhost:84/api/v1/educationalResources/findAllEB",)
+        .get("http://194.67.93.27:84/api/v1/educationalResources/findAllEB",)
         .then(response => {
           this.educationResourcesAll = response.data.educationResourcesCompetence
           console.log(this.educationResourcesAll)
@@ -221,7 +221,7 @@ export default {
       console.log(this.method_of_passage)
       console.log(this.applicationDTO)
       axios
-          .post('http://localhost:84/api/v1/applicationFT/new',{
+          .post('http://194.67.93.27:84/api/v1/applicationFT/new',{
             id: this.applicationDTO.id,
             user_id: this.applicationDTO.user_id,
             ed_res_id: String(this.applicationDTO.ed_res_id),
@@ -238,7 +238,7 @@ export default {
       this.user_id =  localStorage.getItem('id')
       console.log(this.applicationDTO)
       axios
-          .post('http://localhost:84/api/v1/applicationPOPT/new',{
+          .post('http://194.67.93.27:84/api/v1/applicationPOPT/new',{
             id: '',
             user_id: localStorage.getItem('id'),
             link: this.applicationPOPTDTO.link,
@@ -252,7 +252,7 @@ export default {
       this.user_id =  localStorage.getItem('id')
       console.log(this.applicationDTO)
       axios
-          .post('http://localhost:84/api/v1/applicationPOT/new',{
+          .post('http://194.67.93.27:84/api/v1/applicationPOT/new',{
             id: '',
             user_id: localStorage.getItem('id'),
             description: this.applicationPOTDTO.description,

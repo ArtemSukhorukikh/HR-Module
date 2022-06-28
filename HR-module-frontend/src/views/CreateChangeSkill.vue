@@ -124,7 +124,7 @@ export default {
   methods: {
       checkSkills(){
         axios
-            .get("http://localhost:84/api/v1/skills/competence/" + localStorage.getItem('id'))
+            .get("http://194.67.93.27:84/api/v1/skills/competence/" + localStorage.getItem('id'))
             .then(response => {
               this.skills = response.data.skills
               console.log(this.skills)
@@ -132,7 +132,7 @@ export default {
       },
     checkSkill(){
       axios
-          .get("http://localhost:84/api/v1/skills/" + this.skill.id)
+          .get("http://194.67.93.27:84/api/v1/skills/" + this.skill.id)
           .then(response => {
             this.skill.name = response.data.name
             this.skill.description = response.data.description
@@ -141,7 +141,7 @@ export default {
     },
     createSkill(){
       axios
-          .post('http://localhost:84/api/v1/skills/new/' + localStorage.getItem('id'),{
+          .post('http://194.67.93.27:84/api/v1/skills/new/' + localStorage.getItem('id'),{
             name: this.skill.name,
             description: this.skill.description
           })
@@ -151,7 +151,7 @@ export default {
     },
     changeSkill(){
       axios
-          .post('http://localhost:84/api/v1/skills/change/' + this.skill.id,{
+          .post('http://194.67.93.27:84/api/v1/skills/change/' + this.skill.id,{
             name: this.skill.name,
             description: this.skill.description,
             competence_id: this.competence.id
@@ -162,7 +162,7 @@ export default {
     },
     deleteSkill(){
       axios
-          .post('http://localhost:84/api/v1/skills/delete/' + this.skill.id)
+          .post('http://194.67.93.27:84/api/v1/skills/delete/' + this.skill.id)
           .then(response => {
             console.log(response.data)
           });
